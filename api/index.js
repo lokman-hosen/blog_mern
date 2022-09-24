@@ -24,7 +24,7 @@ app.get("/", (req, res) =>{
 })
 
 //middleware
-app.use("/auth", authRoute);
+app.use("/api/auth", authRoute);
 
 app.listen(8800, () =>{
     connect()
