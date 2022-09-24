@@ -1,0 +1,19 @@
+{
+  "name": "blog_node",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "nodemon index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.2",
+    "express": "^4.17.2",
+    "mongoose": "^6.6.1",
+    "nodemon": "^2.0.20"
+  }
+}
