@@ -27,7 +27,7 @@ app.get("/", (req, res) =>{
 //middleware
 app.use(express.json())
 //app.use("/api/auth", authRoute);
-app.use("/api/category/create", categoryRoute);
+app.use("/api/categories", categoryRoute);
 
 app.listen(8800, () =>{
     connect()
