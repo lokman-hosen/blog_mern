@@ -30,4 +30,14 @@ router.put("/:id", async (req, res) =>{
     }
 });
 
+ //delete
+router.delete("/:id", async (req, res) =>{
+    try {
+        await Category.findByIdAndDelete(req.params.id);
+        res.status(200).json('Category Deleted')
+    }catch (error){
+        res.status(500).json(error)
+    }
+});
+
 export default router
