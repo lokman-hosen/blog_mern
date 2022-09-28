@@ -40,4 +40,24 @@ router.delete("/:id", async (req, res) =>{
     }
 });
 
+//detail
+router.get("/:id", async (req, res) =>{
+    try {
+      const category = await Category.findById(req.params.id);
+        res.status(200).json(category)
+    }catch (error){
+        res.status(500).json(error)
+    }
+});
+
+//get all
+router.get("/", async (req, res) =>{
+    try {
+      const categories = await Category.find();
+        res.status(200).json(categories)
+    }catch (error){
+        res.status(500).json(error)
+    }
+});
+
 export default router
