@@ -22,6 +22,10 @@ const userSchema = new Schema(
             unique: true,
             required: true
         },
+        password: {
+            type: String,
+            required: true
+        },
         status: {
             type: Number,
             default: 1,
