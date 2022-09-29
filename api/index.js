@@ -2,6 +2,7 @@ import express from "express"
 import mongoose from 'mongoose';
 //import authRoute from './routes/auth.js'
 import categoryRoute from './routes/category.js'
+import userRoute from './routes/users.js'
 
 const app = express()
 
@@ -28,6 +29,7 @@ app.get("/", (req, res) =>{
 app.use(express.json())
 //app.use("/api/auth", authRoute);
 app.use("/api/categories", categoryRoute);
+app.use("/api/users", userRoute);
 
 app.listen(8800, () =>{
     connect()
