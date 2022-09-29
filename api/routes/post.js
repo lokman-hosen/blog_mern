@@ -42,7 +42,11 @@ router.delete("/:id", async (req, res) =>{
 //detail
 router.get("/:id", async (req, res) =>{
     try {
-      const post = await Post.findById(req.params.id).populate("author", "name email");
+      const post = await Post.findById(req.params.id).populate([
+          // take limited column from relation
+          {path:"author", select:"name email"},
+          {path:"categories", select:"title"}
+      ]);
         res.status(200).json(post)
     }catch (error){
         res.status(500).json(error)
