@@ -34,7 +34,7 @@ export const login = async (req, res)=>{
                 const {password, ...otherDetails} = user._doc;
                 const token = jwt.sign({
                     email: user.email
-                }, process.env.JWT_TOKEN, { expiresIn: '1h' });
+                }, process.env.JWT_SECRET, { expiresIn: '1h' });
                 res.status(200).json({
                     'status': true,
                     'message': "Login Success",
