@@ -9,7 +9,10 @@ const router = express.Router();
      const newPost = new Post(req.body)
      try {
         const savedPost = await newPost.save()
-         res.status(200).json(savedPost)
+         res.status(200).json({
+             'status': true,
+             'data':savedPost
+         })
      }catch (error){
         res.status(500).json(error)
      }
@@ -23,7 +26,10 @@ router.put("/:id", async (req, res) =>{
             {$set: req.body},
             {new:true}
         );
-        res.status(200).json(updatePost)
+        res.status(200).json({
+            'status': true,
+            'data':updatePost
+        })
     }catch (error){
         res.status(500).json(error)
     }
@@ -33,7 +39,10 @@ router.put("/:id", async (req, res) =>{
 router.delete("/:id", async (req, res) =>{
     try {
         await Post.findByIdAndDelete(req.params.id);
-        res.status(200).json('Post Deleted')
+        res.status(200).json({
+            'status': true,
+            'data': 'Post Deleted'
+        })
     }catch (error){
         res.status(500).json(error)
     }
@@ -47,7 +56,10 @@ router.get("/:id", async (req, res) =>{
           {path:"author", select:"name email"},
           {path:"categories", select:"title"}
       ]);
-        res.status(200).json(post)
+        res.status(200).json({
+            'status':true,
+            'data': post
+        })
     }catch (error){
         res.status(500).json(error)
     }
@@ -57,7 +69,10 @@ router.get("/:id", async (req, res) =>{
 router.get("/", async (req, res) =>{
     try {
       const posts = await Post.find();
-        res.status(200).json(posts)
+        res.status(200).json({
+            'status': true,
+            'data': posts
+        })
     }catch (error){
         res.status(500).json(error)
     }
