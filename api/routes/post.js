@@ -1,7 +1,5 @@
 import express from "express";
-import Category from "../model/Category.js";
-import Post from "../model/Post.js";
-import {categoryPost, createPost, deletePost, postList, updatePost} from "../controllers/postController.js";
+import {postDetail, createPost, deletePost, postList, updatePost} from "../controllers/postController.js";
 import {checkLogin} from "../middlewares/checkLogin.js";
 
 const router = express.Router();
@@ -9,12 +7,12 @@ const router = express.Router();
 //create
  router.post("/", checkLogin, createPost)
 //update
-router.put("/:id", updatePost);
+router.put("/:id", checkLogin, updatePost);
  //delete
 router.delete("/:id", deletePost);
 //detail
-router.get("/:id", categoryPost);
+router.get("/:id", postDetail);
 //get all
-router.get("/", postList);
+router.get("/", checkLogin, postList);
 
 export default router

@@ -15,19 +15,32 @@ export const createPost = async (req, res)=>{
 }
 
 export const updatePost = async (req, res)=>{
-    try {
-        const updatePost = await Post.findByIdAndUpdate(
-            req.params.id,
-            {$set: req.body},
-            {new:true}
-        );
+    // this user get from token from checkLogin middleware
+    const loginUser = req.user;
+    const post = await Post.findById(req.params.id).populate('author');
+
+    // post owner can edit post
+    if (post.author._id == loginUser.id){
+        try {
+            const updatePost = await Post.findByIdAndUpdate(
+                req.params.id,
+                {$set: req.body},
+                {new:true}
+            );
+            res.status(200).json({
+                'status': true,
+                'data':updatePost
+            })
+        }catch (error){
+            res.status(500).json(error)
+        }
+    }else {
         res.status(200).json({
-            'status': true,
-            'data':updatePost
+            'status': false,
+            'data': "You are unauthorized to update this post"
         })
-    }catch (error){
-        res.status(500).json(error)
     }
+
 }
 
 export const deletePost = async (req, res)=>{
@@ -42,7 +55,7 @@ export const deletePost = async (req, res)=>{
     }
 }
 
-export const categoryPost = async (req, res)=>{
+export const postDetail = async (req, res)=>{
     try {
         const post = await Post.findById(req.params.id).populate([
             // take limited column from relation
@@ -73,4 +86,9 @@ export const postList = async (req, res)=>{
         res.status(500).json(error)
     }
 }
+
+// export const findPostById = async (postId) =>{
+//    return  await Post.findById(req.params.id)
+//
+// }
 

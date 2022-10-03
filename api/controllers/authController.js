@@ -33,12 +33,14 @@ export const login = async (req, res)=>{
             if (passwordCorrect){
                 const {password, ...otherDetails} = user._doc;
                 const token = jwt.sign({
-                    email: user.email
+                    id: user._id,
+                    name: user.name
                 }, process.env.JWT_SECRET, { expiresIn: '1h' });
                 res.status(200).json({
                     'status': true,
                     'message': "Login Success",
-                    'token': token
+                    'token': token,
+                    'data' : otherDetails
                 })
             }else {
                 res.status(400).json({
