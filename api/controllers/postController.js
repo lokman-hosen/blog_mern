@@ -19,8 +19,8 @@ export const updatePost = async (req, res)=>{
     const loginUser = req.user;
     const post = await Post.findById(req.params.id).populate('author');
 
-    // post owner can edit post
-    if (post.author._id == loginUser.id){
+    // admin post owner can edit post
+    if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
         try {
             const updatePost = await Post.findByIdAndUpdate(
                 req.params.id,
@@ -35,7 +35,7 @@ export const updatePost = async (req, res)=>{
             res.status(500).json(error)
         }
     }else {
-        res.status(200).json({
+        res.status(404).json({
             'status': false,
             'data': "You are unauthorized to update this post"
         })
@@ -44,14 +44,25 @@ export const updatePost = async (req, res)=>{
 }
 
 export const deletePost = async (req, res)=>{
-    try {
-        await Post.findByIdAndDelete(req.params.id);
-        res.status(200).json({
-            'status': true,
-            'data': 'Post Deleted'
+    const loginUser = req.user;
+    const post = await Post.findById(req.params.id).populate('author');
+
+    // admin post owner can edit post
+    if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
+        try {
+            await Post.findByIdAndDelete(req.params.id);
+            res.status(200).json({
+                'status': true,
+                'data': 'Post Deleted'
+            })
+        }catch (error){
+            res.status(500).json(error)
+        }
+    }else {
+        res.status(404).json({
+            'status': false,
+            'data': "You are unauthorized to delete this post"
         })
-    }catch (error){
-        res.status(500).json(error)
     }
 }
 
@@ -87,7 +98,7 @@ export const postList = async (req, res)=>{
     }
 }
 
-// export const findPostById = async (postId) =>{
+// export const findPostById = async (req, res) =>{
 //    return  await Post.findById(req.params.id)
 //
 // }

@@ -9,7 +9,7 @@ const router = express.Router();
 //update
 router.put("/:id", checkLogin, updatePost);
  //delete
-router.delete("/:id", deletePost);
+router.delete("/:id", checkLogin, deletePost);
 //detail
 router.get("/:id", postDetail);
 //get all
