@@ -17,6 +17,7 @@ router.delete("/:id", deleteUser);
 //detail
 router.get("/:id", userDetail);
 //get all
-router.get("/", checkLogin, userList);
+//router.get("/", checkLogin, userList);
+router.get("/", userList);
 
 export default router

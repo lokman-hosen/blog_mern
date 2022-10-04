@@ -7,7 +7,8 @@ import ContentWrapper from "./components/content-wrapper/content_wrapper";
 import { Routes, Route, Link } from "react-router-dom";
 import AdminDashboard from "./components/dashboard/admin";
 import UserList from "./components/users";
-
+import {Axios} from "axios";
+//Axios.defaults.baseURL = "http://localhost:8800/";
 
 function App() {
   return (

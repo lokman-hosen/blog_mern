@@ -1,4 +1,23 @@
+import React, {useEffect, useState} from 'react';
+import axios from "axios";
+
 function UserList(){
+    const [users, setUsers] = useState([]);
+    const [loader, setLoader] = useState(true);
+    useEffect( ()=>{
+        axios.get('http://localhost:8800/api/users')
+            .then(function (response) {
+                setUsers(response.data.data)
+                setLoader(false)
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .then(function () {
+                // always executed
+            });
+    } , [])
     return(
         <section className="content">
             <div className="container-fluid">
@@ -8,25 +27,38 @@ function UserList(){
                             <div className="card-header">
                                 <h3 className="card-title">Bordered Table</h3>
                             </div>
-                            <div className="card-body">
+                            <div className="card-body" style={{minHeight: '200px'}}>
                                 <table className="table table-bordered">
                                     <thead>
                                     <tr>
                                         <th>#</th>
-                                        <th>Task</th>
-                                        <th>Progress</th>
-                                        <th>Label</th>
+                                        <th>Name</th>
+                                        <th>Email</th>
+                                        <th>Role</th>
+                                        <th>Join At</th>
+                                        <th>Status</th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td>1.</td>
-                                        <td>Update software</td>
-                                        <td>
-                                           dfgdfg
-                                        </td>
-                                        <td><span className="badge bg-danger">55%</span></td>
-                                    </tr>
+                                    {!loader ?
+                                            users.map((user,index) =>
+                                                <tr>
+                                                    <td>{index+1}</td>
+                                                    <td>{user.name}</td>
+                                                    <td>{user.email}</td>
+                                                    <td>{user.user_type}</td>
+                                                    <td>{user.createdAt}</td>
+                                                    <td>
+                                                        {user.status == 1 ?
+                                                            <span className="badge bg-success">Active</span>
+                                                            :<span className="badge bg-danger">Inactive</span>
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            ) : <tr><td colSpan="4" className="text-center">
+                                                <i className="fas fa-spinner fa-spin fa-3x"></i>
+                                            </td></tr>
+                                    }
 
                                     </tbody>
                                 </table>
