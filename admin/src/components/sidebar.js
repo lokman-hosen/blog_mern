@@ -33,7 +33,7 @@ function Sidebar(){
                 <nav className="mt-2">
                     <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
                         <li className="nav-item">
-                            <Link to="/" className="nav-link">
+                            <Link to="/dashboard" className="nav-link">
                                 <i className="nav-icon fas fa-tachometer-alt"></i>
                                 <p>Dashboard</p>
                             </Link>
@@ -66,12 +66,6 @@ function Sidebar(){
                                         <i className="far fa-circle nav-icon"></i>
                                         <p>Post Category</p>
                                     </Link>
-                                </li>
-                                <li className="nav-item">
-                                    <a href="./index3.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v3</p>
-                                    </a>
                                 </li>
                             </ul>
                         </li>
