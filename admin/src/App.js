@@ -8,6 +8,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import AdminDashboard from "./components/dashboard/admin";
 import UserList from "./components/users";
 import {Axios} from "axios";
+import PostList from "./components/posts";
 //Axios.defaults.baseURL = "http://localhost:8800/";
 
 function App() {
@@ -36,6 +37,7 @@ function App() {
                 <Routes>
                     <Route path="/" exact element={<AdminDashboard />} />
                     <Route path="/users" exact element={<UserList />} />
+                    <Route path="/posts" exact element={<PostList />} />
                 </Routes>
                 {/*<AdminDashboard/>*/}
                 {/*<UserList></UserList>*/}
