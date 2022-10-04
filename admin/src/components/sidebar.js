@@ -62,10 +62,10 @@ function Sidebar(){
                                     </Link>
                                 </li>
                                 <li className="nav-item">
-                                    <a href="./index2.html" className="nav-link">
+                                    <Link to="categories" className="nav-link">
                                         <i className="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v2</p>
-                                    </a>
+                                        <p>Post Category</p>
+                                    </Link>
                                 </li>
                                 <li className="nav-item">
                                     <a href="./index3.html" className="nav-link">

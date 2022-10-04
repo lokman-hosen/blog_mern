@@ -9,6 +9,7 @@ import AdminDashboard from "./components/dashboard/admin";
 import UserList from "./components/users";
 import {Axios} from "axios";
 import PostList from "./components/posts";
+import PostCategoryList from "./components/post-category";
 //Axios.defaults.baseURL = "http://localhost:8800/";
 
 function App() {
@@ -38,6 +39,7 @@ function App() {
                     <Route path="/" exact element={<AdminDashboard />} />
                     <Route path="/users" exact element={<UserList />} />
                     <Route path="/posts" exact element={<PostList />} />
+                    <Route path="/categories" exact element={<PostCategoryList />} />
                 </Routes>
                 {/*<AdminDashboard/>*/}
                 {/*<UserList></UserList>*/}
