@@ -1,4 +1,6 @@
 import react from 'react'
+import {Link } from "react-router-dom";
+
 function Sidebar(){
     return(
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
@@ -30,35 +32,51 @@ function Sidebar(){
 
                 <nav className="mt-2">
                     <ul className="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-                        <li className="nav-item menu-open">
-                            <a href="#" className="nav-link active">
+                        <li className="nav-item">
+                            <Link to="/" className="nav-link">
                                 <i className="nav-icon fas fa-tachometer-alt"></i>
-                                <p>
-                                    Dashboard
-                                    <i className="right fas fa-angle-left"></i>
-                                </p>
-                            </a>
-                            <ul className="nav nav-treeview">
-                                <li className="nav-item">
-                                    <a href="./index.html" className="nav-link active">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v1</p>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a href="./index2.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v2</p>
-                                    </a>
-                                </li>
-                                <li className="nav-item">
-                                    <a href="./index3.html" className="nav-link">
-                                        <i className="far fa-circle nav-icon"></i>
-                                        <p>Dashboard v3</p>
-                                    </a>
-                                </li>
-                            </ul>
+                                <p>Dashboard</p>
+                            </Link>
                         </li>
+
+                        {/*<li className="nav-item menu-open">*/}
+                        {/*    <a href="#" className="nav-link active">*/}
+                        {/*        <i className="nav-icon fas fa-tachometer-alt"></i>*/}
+                        {/*        <p>*/}
+                        {/*            Dashboard*/}
+                        {/*            <i className="right fas fa-angle-left"></i>*/}
+                        {/*        </p>*/}
+                        {/*    </a>*/}
+                        {/*    <ul className="nav nav-treeview">*/}
+                        {/*        <li className="nav-item">*/}
+                        {/*            <a href="./index.html" className="nav-link active">*/}
+                        {/*                <i className="far fa-circle nav-icon"></i>*/}
+                        {/*                <p>Dashboard v1</p>*/}
+                        {/*            </a>*/}
+                        {/*        </li>*/}
+                        {/*        <li className="nav-item">*/}
+                        {/*            <a href="./index2.html" className="nav-link">*/}
+                        {/*                <i className="far fa-circle nav-icon"></i>*/}
+                        {/*                <p>Dashboard v2</p>*/}
+                        {/*            </a>*/}
+                        {/*        </li>*/}
+                        {/*        <li className="nav-item">*/}
+                        {/*            <a href="./index3.html" className="nav-link">*/}
+                        {/*                <i className="far fa-circle nav-icon"></i>*/}
+                        {/*                <p>Dashboard v3</p>*/}
+                        {/*            </a>*/}
+                        {/*        </li>*/}
+                        {/*    </ul>*/}
+                        {/*</li>*/}
+                        <li className="nav-item">
+                            <Link to="/users" className="nav-link">
+                                <i className="nav-icon fas fa-th"></i>
+                                <p>
+                                    Users
+                                </p>
+                            </Link>
+                        </li>
+
                         <li className="nav-item">
                             <a href="pages/widgets.html" className="nav-link">
                                 <i className="nav-icon fas fa-th"></i>
