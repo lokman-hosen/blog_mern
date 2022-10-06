@@ -12,11 +12,8 @@ function Login(){
         email: "",
         password: "",
     })
-    let navigate = useNavigate();
-
-
+    const navigate = useNavigate();
     const dispatch =  useDispatch();
-    //console.log(formData.email, formData.password)
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -26,19 +23,22 @@ function Login(){
             password: formData.password,
         })
             .then((response) => {
-                console.log(response)
-                dispatch(login({
-                    'name' : 'Lokman Hosen',
-                    'email' : 'lokman@gmai.com',
-                }))
-                navigate("/users")
-                if (response.status) {
+                if (response.data.status) {
+                    localStorage.setItem('name', response.data.data.name)
+                    localStorage.setItem('email', response.data.data.email)
+                    localStorage.setItem('login', true)
+                    localStorage.setItem('token', response.data.token)
+                    dispatch(login({
+                        'name' : response.data.data.name,
+                        'email' : response.data.data.email,
+                        'login' : true,
+                        'token' : response.data.token,
+                    }))
 
                     // clear form data
                     formData.name = '';
-                    formData.email = '';
-                    formData.subject = '';
-                    formData.message = '';
+                    formData.password = '';
+                    navigate("/dashboard")
                 }
             })
             .catch((err) => {

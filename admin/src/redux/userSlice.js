@@ -2,10 +2,10 @@ import { createSlice } from '@reduxjs/toolkit'
 const userSlice = createSlice({
     name: 'user',
     initialState: {
-        name: 'Default User',
-        email: 'default@gmail.com',
-        login: false,
-        token: '123456789',
+        name: localStorage.getItem('name'),
+        email: localStorage.getItem('email'),
+        login: localStorage.getItem('login'),
+        token: localStorage.getItem('token'),
     },
     reducers: {
         login: (state, action) => {
