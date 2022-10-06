@@ -9,7 +9,7 @@ import UserList from "./components/users";
 import {Axios} from "axios";
 import PostList from "./components/posts";
 import PostCategoryList from "./components/post-category";
-import Registration from "./components/auth/registration";
+import Login from "./components/auth/login";
 //Axios.defaults.baseURL = "http://localhost:8800/";
 
 function App() {
@@ -17,38 +17,42 @@ function App() {
     const currentRoute = location.pathname;
   return (
     <div className="App">
-        {
-
-        }
-        <div className="wrapper">
-            <Navbar></Navbar>
-            <Sidebar/>
-            <div className="content-wrapper">
-                <div className="content-header">
-                    <div className="container-fluid">
-                        <div className="row mb-2">
-                            <div className="col-sm-6">
-                                <h1 className="m-0">Dashboard</h1>
-                            </div>
-                            <div className="col-sm-6">
-                                <ol className="breadcrumb float-sm-right">
-                                    <li className="breadcrumb-item"><a href="#">Home</a></li>
-                                    <li className="breadcrumb-item active">Dashboard v1</li>
-                                </ol>
+        { currentRoute == '/login' ?
+            <div>
+                <Routes>
+                    <Route path="/login" exact element={<Login />} />
+                </Routes>
+            </div> :
+            <div className="wrapper">
+                <Navbar></Navbar>
+                <Sidebar/>
+                <div className="content-wrapper">
+                    <div className="content-header">
+                        <div className="container-fluid">
+                            <div className="row mb-2">
+                                <div className="col-sm-6">
+                                    <h1 className="m-0">Dashboard</h1>
+                                </div>
+                                <div className="col-sm-6">
+                                    <ol className="breadcrumb float-sm-right">
+                                        <li className="breadcrumb-item"><a href="#">Home</a></li>
+                                        <li className="breadcrumb-item active">Dashboard v1</li>
+                                    </ol>
+                                </div>
                             </div>
                         </div>
                     </div>
+                    <Routes>
+                        <Route path="/dashboard" exact element={<AdminDashboard />} />
+                        <Route path="/users" exact element={<UserList />} />
+                        <Route path="/posts" exact element={<PostList />} />
+                        <Route path="/categories" exact element={<PostCategoryList />} />
+                    </Routes>
                 </div>
-                <Routes>
-                    <Route path="/registration" exact element={<Registration />} />
-                    <Route path="/dashboard" exact element={<AdminDashboard />} />
-                    <Route path="/users" exact element={<UserList />} />
-                    <Route path="/posts" exact element={<PostList />} />
-                    <Route path="/categories" exact element={<PostCategoryList />} />
-                </Routes>
+                <Footer/>
             </div>
-            <Footer/>
-        </div>
+        }
+
     </div>
   );
 }
