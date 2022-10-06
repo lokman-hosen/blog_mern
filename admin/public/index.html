@@ -50,6 +50,12 @@
       /*.nav-sidebar>.nav-item .nav-icon {*/
       /*  margin-left: -4.95rem;*/
       /*}*/
+      .login-box, .register-box {
+        width: 360px;
+        margin: auto;
+        /* height: 58vw; */
+        margin-top: 13vw;
+      }
     </style>
   </head>
   <body class="hold-transition sidebar-mini layout-fixed" id="body">
@@ -101,13 +107,15 @@
     <!-- AdminLTE dashboard demo (This is only for demo purposes) -->
 <!--    <script src="dist/js/pages/dashboard.js"></script>-->
   <script>
-    let url = window.location.href;
-    if (url.includes('login')){
-      $('#body').removeClass('sidebar-mini layout-fixed');
-      $('#body').addClass('login-page');
-
-    }
-    console.log(window.location.href)
+    // let url = window.location.href;
+    // if (url.includes('login')){
+    //   $('#body').removeClass('sidebar-mini layout-fixed');
+    //   $('#body').addClass('login-page');
+    //
+    // }else {
+    //   $('#body').addClass('hold-transition sidebar-mini layout-fixed');
+    // }
+    // console.log('Url: '+window.location.href)
   </script>
   </body>
 </html>

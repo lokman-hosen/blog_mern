@@ -1,7 +1,9 @@
 import react from 'react'
 import {Link } from "react-router-dom";
+import {useSelector} from "react-redux";
 
 function Sidebar(){
+    const name =useSelector((state) => state.user.name)
     return(
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <a href="index3.html" className="brand-link">
@@ -15,7 +17,7 @@ function Sidebar(){
                         <img src="https://adminlte.io/themes/v3/dist/img/user2-160x160.jpg" className="img-circle elevation-2" alt="User Image"></img>
                     </div>
                     <div className="info">
-                        <a href="#" className="d-block">Alexander Pierce</a>
+                        <a href="#" className="d-block">{name}</a>
                     </div>
                 </div>
 

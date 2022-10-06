@@ -8,6 +8,7 @@ import postRoute from './routes/post.js'
 const app = express()
 
 import dotenv from "dotenv"
+import cors from "cors";
 dotenv.config()
 const connect = async () =>{
     try {
@@ -28,6 +29,7 @@ app.get("/", (req, res) =>{
 
 //middleware
 app.use(express.json())
+app.use(cors())
 app.use("/api/auth", authRoute);
 app.use("/api/categories", categoryRoute);
 app.use("/api/users", userRoute);

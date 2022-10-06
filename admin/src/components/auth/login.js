@@ -1,23 +1,54 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
+import {useDispatch} from "react-redux";
+import {login} from "../../redux/userSlice";
+import { useNavigate } from "react-router-dom";
+
 function Login(){
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    //const [email, setEmail] = useState('');
+    //const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(true);
-    useEffect( ()=>{
-        axios.get('http://localhost:8800/api/login')
-            .then(function (response) {
-                setPosts(response.data.data)
-                setLoader(false)
+    const [formData, setFormData] = useState({
+        email: "",
+        password: "",
+    })
+    let navigate = useNavigate();
+
+
+    const dispatch =  useDispatch();
+    //console.log(formData.email, formData.password)
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        axios.post('http://localhost:8800/api/auth/login', {
+            email: formData.email,
+            password: formData.password,
+        })
+            .then((response) => {
+                console.log(response)
+                dispatch(login({
+                    'name' : 'Lokman Hosen',
+                    'email' : 'lokman@gmai.com',
+                }))
+                navigate("/users")
+                if (response.status) {
+
+                    // clear form data
+                    formData.name = '';
+                    formData.email = '';
+                    formData.subject = '';
+                    formData.message = '';
+                }
             })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
+            .catch((err) => {
+                console.log(err)
+
             })
-            .then(function () {
-                // always executed
-            });
-    } , [])
+
+    }
+
+
     return(
         <div className="login-box">
             <div className="login-logo">
@@ -27,9 +58,14 @@ function Login(){
                 <div className="card-body login-card-body">
                     <p className="login-box-msg">Sign in to start your session</p>
 
-                    <form action="../../index3.html" method="post">
+                    <form onSubmit={handleSubmit}>
                         <div className="input-group mb-3">
-                            <input type="email" className="form-control" placeholder="Email"></input>
+                            <input type="email" name="email" className="form-control"
+                                   onChange={(e) => setFormData({...formData, email: e.target.value})}
+                                   value={formData.email}
+                                   placeholder="Email">
+
+                            </input>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-envelope"></span>
@@ -37,7 +73,12 @@ function Login(){
                                 </div>
                         </div>
                         <div className="input-group mb-3">
-                            <input type="password" className="form-control" placeholder="Password"></input>
+                            <input type="password" name="password" className="form-control"
+                                   onChange={(e) => setFormData({...formData, password: e.target.value})}
+                                   value={formData.password}
+                                   placeholder="Password">
+
+                            </input>
                                 <div className="input-group-append">
                                     <div className="input-group-text">
                                         <span className="fas fa-lock"></span>
