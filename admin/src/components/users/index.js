@@ -1,19 +1,31 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {useSelector} from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 function UserList(){
+    const token = useSelector((state) => state.user.token)
     const [users, setUsers] = useState([]);
     const [loader, setLoader] = useState(true);
+    const navigate = useNavigate();
     useEffect( ()=>{
-        axios.get('http://localhost:8800/api/users')
-            .then(function (response) {
-                setUsers(response.data.data)
-                setLoader(false)
+        axios.get('http://localhost:8800/api/users', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+token
+            },
+        }).then(function (response) {
+                if (response.data.status){
+                    setUsers(response.data.data)
+                    setLoader(false)
+                }
             })
             .catch(function (error) {
                 // handle error
-                console.log(error);
+                console.log(error.response.data);
+                if (error.response.data.message == 'Authentication Fail'){
+                    navigate("/login")
+                }
             })
             .then(function () {
                 // always executed
