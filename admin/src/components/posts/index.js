@@ -1,18 +1,36 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
+import {useSelector} from "react-redux";
+import {useNavigate} from "react-router-dom";
 
 function PostList(){
+    const token = useSelector((state) => state.user.token)
+    const isLoggedIn = useSelector((state) => state.user.login)
+    const navigate = useNavigate();
+
     const [posts, setPosts] = useState([]);
     const [loader, setLoader] = useState(true);
     useEffect( ()=>{
-        axios.get('http://localhost:8800/api/posts')
+        if (isLoggedIn == 'false'){
+            navigate("/login")
+        }
+        axios.get('http://localhost:8800/api/posts', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+token
+            },
+        })
             .then(function (response) {
                 setPosts(response.data.data)
                 setLoader(false)
             })
             .catch(function (error) {
                 // handle error
-                console.log(error);
+                //console.log(error);
+                if (error.response.data.message == 'Authentication Fail'){
+                    localStorage.setItem('login', false)
+                    // navigate("/login")
+                }
             })
             .then(function () {
                 // always executed

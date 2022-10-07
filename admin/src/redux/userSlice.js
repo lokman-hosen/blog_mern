@@ -4,7 +4,7 @@ const userSlice = createSlice({
     initialState: {
         name: localStorage.getItem('name'),
         email: localStorage.getItem('email'),
-        login: localStorage.getItem('login'),
+        login: localStorage.getItem('login') ? localStorage.getItem('login') : false,
         token: localStorage.getItem('token'),
     },
     reducers: {

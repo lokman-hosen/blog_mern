@@ -3,7 +3,7 @@ import logo from './logo.svg';
 import Navbar from "./components/header/navbar";
 import Footer from "./components/footer/footer";
 import Sidebar from "./components/sidebar";
-import { Routes, Route, Link, useLocation } from "react-router-dom";
+import {Routes, Route, Link, useLocation, Navigate} from "react-router-dom";
 import AdminDashboard from "./components/dashboard/admin";
 import UserList from "./components/users";
 import {Axios} from "axios";
@@ -43,6 +43,7 @@ function App() {
                         </div>
                     </div>
                     <Routes>
+                        <Route path="/" exact element={<Navigate to="/login" />} />
                         <Route path="/dashboard" exact element={<AdminDashboard />} />
                         <Route path="/users" exact element={<UserList />} />
                         <Route path="/posts" exact element={<PostList />} />
