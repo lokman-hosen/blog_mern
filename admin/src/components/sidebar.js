@@ -1,10 +1,25 @@
 import react from 'react'
-import {Link } from "react-router-dom";
-import {useSelector} from "react-redux";
+import {Link, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+import {login} from "../redux/userSlice";
 
 function Sidebar(){
-    const name =useSelector((state) => state.user.name)
-    return(
+    const name = useSelector((state) => state.user.name)
+    const navigate = useNavigate();
+    const dispatch =  useDispatch();
+    const logoutUser = (e) => {
+        e.preventDefault();
+        // remove user info from local storage
+        localStorage.setItem('name', null)
+        localStorage.setItem('email', null)
+        localStorage.setItem('login', false)
+        localStorage.setItem('token', null)
+
+        navigate("/login")
+    }
+
+
+        return(
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <a href="index3.html" className="brand-link">
                 <img src="https://adminlte.io/themes/v3/dist/img/AdminLTELogo.png" alt="AdminLTE Logo" className="brand-image img-circle elevation-3" ></img>
@@ -109,6 +124,17 @@ function Sidebar(){
                                 <p>
                                     Widgets
                                     <span className="right badge badge-danger">New</span>
+                                </p>
+                            </a>
+                        </li>
+
+                        <li className="nav-item">
+                            <a onClick={logoutUser} className="nav-link" style={{
+                                cursor: 'pointer'
+                            }}>
+                                <i className="nav-icon fas fa-th"></i>
+                                <p>
+                                    Logout
                                 </p>
                             </a>
                         </li>
