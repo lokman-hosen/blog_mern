@@ -1,19 +1,35 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {Link} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
+import {useSelector} from "react-redux";
 
 function PostCategoryList(){
+    const token = useSelector((state) => state.user.token)
+    const isLoggedIn = useSelector((state) => state.user.login)
+    const navigate = useNavigate();
+
     const [categories, setCategories] = useState([]);
     const [loader, setLoader] = useState(true);
     useEffect( ()=>{
-        axios.get('http://localhost:8800/api/categories')
-            .then(function (response) {
+        if (isLoggedIn == 'false'){
+            navigate("/login")
+        }
+
+        axios.get('http://localhost:8800/api/categories', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+token
+            }
+        }).then(function (response) {
                 setCategories(response.data.data)
                 setLoader(false)
             })
             .catch(function (error) {
                 // handle error
                 console.log(error);
+                if (error.response.data.message == 'Authentication Fail'){
+                    localStorage.setItem('login', false)
+                }
             })
             .then(function () {
                 // always executed
