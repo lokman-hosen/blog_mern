@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
+import {API_BASE_URL} from "../../config";
 
 function PostCategoryList(){
     const token = useSelector((state) => state.user.token)
@@ -10,7 +11,7 @@ function PostCategoryList(){
 
     const [categories, setCategories] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [pages, setPages] = useState([]);
+    const [totalPage, setTotalPage] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [lastPage, setLastPage] = useState(1);
     useEffect( ()=>{
@@ -19,7 +20,7 @@ function PostCategoryList(){
         }
         setLoader(true)
 
-        axios.get('http://localhost:8800/api/categories?page='+currentPage, {
+        axios.get(API_BASE_URL+'api/categories?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
@@ -44,14 +45,15 @@ function PostCategoryList(){
 
    function pageNumber(totalRecord){
         let pageNumbers =[];
+        //if total record 24 then made page 3
         let totalPageNumber = Number.isInteger(totalRecord/10) ? totalRecord/10 : totalRecord/10 +1;
+        // if page is 3.4 then made this 3 for lst page
        setLastPage(Number.isInteger(totalPageNumber) ? totalPageNumber : totalPageNumber.toString().split(".")[0])
-       console.log(Number.isInteger(totalPageNumber) ? totalPageNumber : totalPageNumber.toString().split(".")[0])
-
+       // create page number array to generate pagination
        for (let i = 1; i <= totalPageNumber; i++) {
             pageNumbers.push(i);
         }
-        setPages(pageNumbers);
+       setTotalPage(pageNumbers);
     }
     return(
         <section className="content">
@@ -77,7 +79,7 @@ function PostCategoryList(){
                                     {!loader ?
                                         categories.map((category,index) =>
                                                 <tr>
-                                                    <td>{index+1}</td>
+                                                    <td>{((currentPage-1)*10)+index+1}</td>
                                                     <td>{category.title}</td>
                                                     <td>{category.createdAt}</td>
                                                     <td>
@@ -105,7 +107,7 @@ function PostCategoryList(){
                                         <a className="page-link" onClick={()=> setCurrentPage(1)}>«</a>
                                     </li>
                                     {
-                                        pages.map((page) =>
+                                        totalPage.map((page) =>
                                             <li className={`page-item ${page == currentPage ? 'active' : ''}`}>
                                                 <a className="page-link active" onClick={()=> setCurrentPage(page)}>{page}</a>
                                             </li>
