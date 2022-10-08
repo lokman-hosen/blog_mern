@@ -11,11 +11,15 @@ function UserList(){
 
     const [users, setUsers] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [pages, setPages] = useState([1,2,3,4,5]);
+    const [currentPage, setCurrentPage] = useState(1);
+
+
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
         }
-        axios.get('http://localhost:8800/api/users', {
+        axios.get('http://localhost:8800/api/users?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
@@ -38,7 +42,9 @@ function UserList(){
                 // always executed
             });
 
-    } , [])
+    } , [currentPage])
+
+
     return(
         <section className="content">
             <div className="container-fluid">
@@ -93,9 +99,12 @@ function UserList(){
                             <div className="card-footer clearfix">
                                 <ul className="pagination pagination-sm m-0 float-right">
                                     <li className="page-item"><a className="page-link" href="#">«</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">3</a></li>
+                                    {
+                                        pages.map((page) =>
+                                            <li className="page-item"><a className="page-link" onClick={()=> setCurrentPage(page)}>{page}</a></li>
+                                        )
+                                    }
+
                                     <li className="page-item"><a className="page-link" href="#">»</a></li>
                                 </ul>
                             </div>

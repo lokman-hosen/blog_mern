@@ -64,13 +64,13 @@ function Sidebar(){
                         </li>
 
                         <li className="nav-item">
-                            <Link to="posts" className="nav-link">
+                            <a href="#" className="nav-link">
                                 <i className="nav-icon fas fa-address-book"></i>
                                 <p>
                                     Posts Management
                                     <i className="right fas fa-angle-left"></i>
                                 </p>
-                            </Link>
+                            </a>
                             <ul className="nav nav-treeview">
                                 <li className="nav-item">
                                     <Link to="posts" className="nav-link active">

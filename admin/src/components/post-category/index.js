@@ -10,18 +10,24 @@ function PostCategoryList(){
 
     const [categories, setCategories] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [pages, setPages] = useState([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
         }
+        setLoader(true)
 
-        axios.get('http://localhost:8800/api/categories', {
+        axios.get('http://localhost:8800/api/categories?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
             }
         }).then(function (response) {
                 setCategories(response.data.data)
+                //setPages()
+            pageNumber(response.data.totalRecord)
                 setLoader(false)
             })
             .catch(function (error) {
@@ -34,7 +40,19 @@ function PostCategoryList(){
             .then(function () {
                 // always executed
             });
-    } , [])
+    } , [currentPage])
+
+   function pageNumber(totalRecord){
+        let pageNumbers =[];
+        let totalPageNumber = Number.isInteger(totalRecord/10) ? totalRecord/10 : totalRecord/10 +1;
+       setLastPage(Number.isInteger(totalPageNumber) ? totalPageNumber : totalPageNumber.toString().split(".")[0])
+       console.log(Number.isInteger(totalPageNumber) ? totalPageNumber : totalPageNumber.toString().split(".")[0])
+
+       for (let i = 1; i <= totalPageNumber; i++) {
+            pageNumbers.push(i);
+        }
+        setPages(pageNumbers);
+    }
     return(
         <section className="content">
             <div className="container-fluid">
@@ -83,11 +101,19 @@ function PostCategoryList(){
                             </div>
                             <div className="card-footer clearfix">
                                 <ul className="pagination pagination-sm m-0 float-right">
-                                    <li className="page-item"><a className="page-link" href="#">«</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">»</a></li>
+                                    <li className="page-item">
+                                        <a className="page-link" onClick={()=> setCurrentPage(1)}>«</a>
+                                    </li>
+                                    {
+                                        pages.map((page) =>
+                                            <li className={`page-item ${page == currentPage ? 'active' : ''}`}>
+                                                <a className="page-link active" onClick={()=> setCurrentPage(page)}>{page}</a>
+                                            </li>
+                                        )
+                                    }
+                                    <li className="page-item">
+                                        <a className="page-link" onClick={()=> setCurrentPage(lastPage)}>»</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

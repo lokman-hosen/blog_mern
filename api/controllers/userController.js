@@ -56,8 +56,10 @@ export const userDetail = async (req, res)=>{
 }
 
 export const userList = async (req, res)=>{
+    console.log(req.query.page)
+    const skipRecord = req.query.page*10;
     try {
-        const users = await User.find();
+        const users = await User.find().skip(skipRecord).limit(3);
         res.status(200).json({
             'status' : true,
             'data': users,
