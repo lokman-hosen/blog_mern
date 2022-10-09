@@ -63,9 +63,9 @@ function UserList(){
     //     setTotalPage(pageNumbers);
     // }
 
-    const paginate = (pageNumber, pageNumbers) =>{
+    const paginate = (pageNumber) =>{
         setCurrentPage(pageNumber)
-        setTotalPage(pageNumbers);
+        //setTotalPage(pageNumbers);
     }
 
 

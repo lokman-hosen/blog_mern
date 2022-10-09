@@ -14,15 +14,15 @@ function Pagination({totalRecord, paginate}){
         //setTotalPage(pageNumbers);
     return(
         <ul className="pagination pagination-sm m-0 float-right">
-            <li className="page-item"><a className="page-link" onClick={()=> paginate(1, pageNumbers)}>«</a></li>
+            <li className="page-item"><a className="page-link" onClick={()=> paginate(1)}>«</a></li>
             {
                 pageNumbers.map((page) =>
                     <li className="page-item" key={page}>
-                        <a className="page-link active" onClick={()=> paginate(page, pageNumbers)}>{page}</a>
+                        <a className="page-link active" onClick={()=> paginate(page)}>{page}</a>
                     </li>
                 )
             }
-            <li className="page-item"><a className="page-link" onClick={()=> paginate(lastPageNumber, pageNumbers)}>»</a></li>
+            <li className="page-item"><a className="page-link" onClick={()=> paginate(lastPageNumber)}>»</a></li>
         </ul>
     )
 }
