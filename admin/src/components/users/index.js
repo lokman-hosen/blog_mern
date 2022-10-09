@@ -12,9 +12,9 @@ function UserList(){
 
     const [users, setUsers] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [totalPage, setTotalPage] = useState([]);
+   // const [totalPage, setTotalPage] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [lastPage, setLastPage] = useState(1);
+    //const [lastPage, setLastPage] = useState(1);
     const [totalRecord, setTotalRecord] = useState(0);
 
 
@@ -95,7 +95,7 @@ function UserList(){
                                     {!loader ?
                                             users.map((user,index) =>
                                                 <tr key={user._id}>
-                                                    <td>{index+1}</td>
+                                                    <td>{((currentPage-1)*10)+index+1}</td>
                                                     <td>{user.name}</td>
                                                     <td>{user.email}</td>
                                                     <td>{user.user_type}</td>

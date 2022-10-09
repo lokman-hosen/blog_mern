@@ -3,6 +3,7 @@ import axios from "axios";
 import {Link, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {API_BASE_URL} from "../../config";
+import Pagination from "../pagination";
 
 function PostCategoryList(){
     const token = useSelector((state) => state.user.token)
@@ -11,9 +12,8 @@ function PostCategoryList(){
 
     const [categories, setCategories] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [totalPage, setTotalPage] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
-    const [lastPage, setLastPage] = useState(1);
+    const [totalRecord, setTotalRecord] = useState(0);
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
@@ -27,8 +27,7 @@ function PostCategoryList(){
             }
         }).then(function (response) {
                 setCategories(response.data.data)
-                //setPages()
-            pageNumber(response.data.totalRecord)
+                setTotalRecord(response.data.totalRecord)
                 setLoader(false)
             })
             .catch(function (error) {
@@ -43,18 +42,11 @@ function PostCategoryList(){
             });
     } , [currentPage])
 
-   function pageNumber(totalRecord){
-        let pageNumbers =[];
-        //if total record 24 then made page 3
-        let totalPageNumber = Number.isInteger(totalRecord/10) ? totalRecord/10 : totalRecord/10 +1;
-        // if page is 3.4 then made this 3 for lst page
-       setLastPage(Number.isInteger(totalPageNumber) ? totalPageNumber : totalPageNumber.toString().split(".")[0])
-       // create page number array to generate pagination
-       for (let i = 1; i <= totalPageNumber; i++) {
-            pageNumbers.push(i);
-        }
-       setTotalPage(pageNumbers);
+    const paginate = (pageNumber) =>{
+        setCurrentPage(pageNumber)
     }
+
+
     return(
         <section className="content">
             <div className="container-fluid">
@@ -78,7 +70,7 @@ function PostCategoryList(){
                                     <tbody  style={{minHeight: '200px'}}>
                                     {!loader ?
                                         categories.map((category,index) =>
-                                                <tr>
+                                                <tr key={category._id}>
                                                     <td>{((currentPage-1)*10)+index+1}</td>
                                                     <td>{category.title}</td>
                                                     <td>{category.createdAt}</td>
@@ -102,21 +94,7 @@ function PostCategoryList(){
                                 </table>
                             </div>
                             <div className="card-footer clearfix">
-                                <ul className="pagination pagination-sm m-0 float-right">
-                                    <li className="page-item">
-                                        <a className="page-link" onClick={()=> setCurrentPage(1)}>«</a>
-                                    </li>
-                                    {
-                                        totalPage.map((page) =>
-                                            <li className={`page-item ${page == currentPage ? 'active' : ''}`}>
-                                                <a className="page-link active" onClick={()=> setCurrentPage(page)}>{page}</a>
-                                            </li>
-                                        )
-                                    }
-                                    <li className="page-item">
-                                        <a className="page-link" onClick={()=> setCurrentPage(lastPage)}>»</a>
-                                    </li>
-                                </ul>
+                                <Pagination totalRecord={totalRecord} paginate={paginate}></Pagination>
                             </div>
                         </div>
                     </div>
