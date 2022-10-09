@@ -11,14 +11,16 @@ function UserList(){
 
     const [users, setUsers] = useState([]);
     const [loader, setLoader] = useState(true);
-    const [pages, setPages] = useState([1,2,3,4,5]);
+    const [totalPage, setTotalPage] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
+    const [lastPage, setLastPage] = useState(1);
 
 
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
         }
+        setLoader(true)
         axios.get('http://localhost:8800/api/users?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
@@ -27,6 +29,7 @@ function UserList(){
         }).then(function (response) {
             if (response.data.status){
                 setUsers(response.data.data)
+                pageNumber(response.data.totalRecord)
                 setLoader(false)
             }
         })
@@ -43,6 +46,19 @@ function UserList(){
             });
 
     } , [currentPage])
+
+    function pageNumber(totalRecord){
+        let pageNumbers =[];
+        //if total record 24 then made page 3
+        let totalPageNumber = Number.isInteger(totalRecord/10) ? totalRecord/10 : totalRecord/10 +1;
+        // if page is 3.4 then made this 3 for lst page
+        setLastPage(Number.isInteger(totalPageNumber) ? totalPageNumber : totalPageNumber.toString().split(".")[0])
+        // create page number array to generate pagination
+        for (let i = 1; i <= totalPageNumber; i++) {
+            pageNumbers.push(i);
+        }
+        setTotalPage(pageNumbers);
+    }
 
 
     return(
@@ -98,14 +114,19 @@ function UserList(){
                             </div>
                             <div className="card-footer clearfix">
                                 <ul className="pagination pagination-sm m-0 float-right">
-                                    <li className="page-item"><a className="page-link" href="#">«</a></li>
+                                    <li className="page-item">
+                                        <a className="page-link" onClick={()=> setCurrentPage(1)}>«</a>
+                                    </li>
                                     {
-                                        pages.map((page) =>
-                                            <li className="page-item"><a className="page-link" onClick={()=> setCurrentPage(page)}>{page}</a></li>
+                                        totalPage.map((page) =>
+                                            <li className={`page-item ${page == currentPage ? 'active' : ''}`}>
+                                                <a className="page-link active" onClick={()=> setCurrentPage(page)}>{page}</a>
+                                            </li>
                                         )
                                     }
-
-                                    <li className="page-item"><a className="page-link" href="#">»</a></li>
+                                    <li className="page-item">
+                                        <a className="page-link" onClick={()=> setCurrentPage(lastPage)}>»</a>
+                                    </li>
                                 </ul>
                             </div>
                         </div>

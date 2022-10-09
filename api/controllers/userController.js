@@ -1,4 +1,5 @@
 import User from "../model/User.js";
+import Category from "../model/Category.js";
 
 export const createUser = async (req, res)=>{
     const newUser = new User(req.body)
@@ -56,13 +57,14 @@ export const userDetail = async (req, res)=>{
 }
 
 export const userList = async (req, res)=>{
-    console.log(req.query.page)
     const skipRecord = req.query.page*10;
     try {
-        const users = await User.find().skip(skipRecord).limit(3);
+        const users = await User.find().skip(skipRecord -10).limit(10);
+        const totalRecord = await User.countDocuments({});
         res.status(200).json({
             'status' : true,
             'data': users,
+            'totalRecord': totalRecord,
         })
     }catch (error){
         res.status(500).json(error)

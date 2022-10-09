@@ -70,7 +70,3 @@ export const categoryList = async (req, res)=>{
     }
 }
 
-// 1 = 1-10
-// 2 = 10-20
-// 3 = 20-30
-
