@@ -83,23 +83,22 @@ export const postDetail = async (req, res)=>{
 }
 
 export const postList = async (req, res)=>{
+    const skipRecord = req.query.page*10;
     try {
         const posts = await Post.find().populate([
             // take limited column from relation
             {path:"author", select:"name email"},
             {path:"categories", select:"title"}
-        ]);
+        ]).skip(skipRecord -10).limit(10);
+        const totalRecord = await Post.countDocuments({});
         res.status(200).json({
             'status': true,
-            'data': posts
+            'data': posts,
+            'totalRecord': totalRecord,
         })
     }catch (error){
         res.status(500).json(error)
     }
 }
 
-// export const findPostById = async (req, res) =>{
-//    return  await Post.findById(req.params.id)
-//
-// }
 

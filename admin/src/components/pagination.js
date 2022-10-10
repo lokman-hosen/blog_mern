@@ -11,7 +11,6 @@ function Pagination({totalRecord, paginate}){
         for (let i = 1; i <= totalPageNumber; i++) {
             pageNumbers.push(i);
         }
-        //setTotalPage(pageNumbers);
     return(
         <ul className="pagination pagination-sm m-0 float-right">
             <li className="page-item"><a className="page-link" onClick={()=> paginate(1)}>«</a></li>

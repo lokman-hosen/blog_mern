@@ -2,19 +2,23 @@ import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useSelector} from "react-redux";
 import {useNavigate} from "react-router-dom";
+import Pagination from "../pagination";
 
 function PostList(){
     const token = useSelector((state) => state.user.token)
     const isLoggedIn = useSelector((state) => state.user.login)
+
     const navigate = useNavigate();
 
     const [posts, setPosts] = useState([]);
     const [loader, setLoader] = useState(true);
+    const [currentPage, setCurrentPage] = useState(1);
+    const [totalRecord, setTotalRecord] = useState(0);
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
         }
-        axios.get('http://localhost:8800/api/posts', {
+        axios.get('http://localhost:8800/api/posts?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
@@ -22,6 +26,7 @@ function PostList(){
         })
             .then(function (response) {
                 setPosts(response.data.data)
+                setTotalRecord(response.data.totalRecord)
                 setLoader(false)
             })
             .catch(function (error) {
@@ -35,7 +40,12 @@ function PostList(){
             .then(function () {
                 // always executed
             });
-    } , [])
+    } , [currentPage])
+
+    const paginate = (pageNumber) =>{
+        setCurrentPage(pageNumber)
+        //setTotalPage(pageNumbers);
+    }
     return(
         <section className="content">
             <div className="container-fluid">
@@ -88,13 +98,7 @@ function PostList(){
                                 </table>
                             </div>
                             <div className="card-footer clearfix">
-                                <ul className="pagination pagination-sm m-0 float-right">
-                                    <li className="page-item"><a className="page-link" href="#">«</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">1</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">2</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">3</a></li>
-                                    <li className="page-item"><a className="page-link" href="#">»</a></li>
-                                </ul>
+                                <Pagination totalRecord={totalRecord} paginate={paginate}></Pagination>
                             </div>
                         </div>
                     </div>
