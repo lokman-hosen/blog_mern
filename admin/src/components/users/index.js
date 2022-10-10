@@ -121,7 +121,7 @@ function UserList(){
                                 </table>
                             </div>
                             <div className="card-footer clearfix">
-                                <Pagination totalRecord={totalRecord} paginate={paginate}></Pagination>
+                                <Pagination totalRecord={totalRecord} paginate={paginate} currentPage={currentPage}></Pagination>
                                 {/*<ul className="pagination pagination-sm m-0 float-right">*/}
                                 {/*    <li className="page-item">*/}
                                 {/*        <a className="page-link" onClick={()=> setCurrentPage(1)}>«</a>*/}

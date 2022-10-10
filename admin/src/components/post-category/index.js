@@ -94,7 +94,7 @@ function PostCategoryList(){
                                 </table>
                             </div>
                             <div className="card-footer clearfix">
-                                <Pagination totalRecord={totalRecord} paginate={paginate}></Pagination>
+                                <Pagination totalRecord={totalRecord} paginate={paginate} currentPage={currentPage}></Pagination>
                             </div>
                         </div>
                     </div>
