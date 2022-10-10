@@ -1,6 +1,6 @@
 import React from "react";
 
-function Pagination({totalRecord, paginate}){
+function Pagination({totalRecord, paginate, currentPage}){
         let pageNumbers =[];
         //if total record 24 then made page 3
         let totalPageNumber = Number.isInteger(totalRecord/10) ? totalRecord/10 : totalRecord/10 +1;
@@ -16,7 +16,7 @@ function Pagination({totalRecord, paginate}){
             <li className="page-item"><a className="page-link" onClick={()=> paginate(1)}>«</a></li>
             {
                 pageNumbers.map((page) =>
-                    <li className="page-item" key={page}>
+                    <li className={`page-item ${page == currentPage ? 'active' : ''}`} key={page}>
                         <a className="page-link active" onClick={()=> paginate(page)}>{page}</a>
                     </li>
                 )
