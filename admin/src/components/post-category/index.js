@@ -14,6 +14,9 @@ function PostCategoryList(){
     const [loader, setLoader] = useState(true);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalRecord, setTotalRecord] = useState(0);
+    const [modalVisibility, setModalVisibility] = useState("none");
+
+
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
@@ -46,6 +49,12 @@ function PostCategoryList(){
         setCurrentPage(pageNumber)
     }
 
+    //create modal
+    const createModal = () =>{
+        let modalState = modalVisibility == "none" ? "block" : "none";
+        setModalVisibility(modalState);
+    }
+
 
     return(
         <section className="content">
@@ -55,6 +64,11 @@ function PostCategoryList(){
                         <div className="card">
                             <div className="card-header">
                                 <h3 className="card-title">Post Category List</h3>
+                                <div className="input-group input-group-sm pt-1 mr-2">
+                                    <button type="button" className="btn btn-sm btn-info" onClick={createModal}>
+                                        <i className="fa fa-plus"></i> Add New
+                                    </button>
+                                </div>
                             </div>
                             <div className="card-body">
                                 <table className="table table-bordered">
@@ -100,6 +114,27 @@ function PostCategoryList(){
                     </div>
                 </div>
             </div>
+
+            <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
+                <div className="modal-dialog modal-lg">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h4 className="modal-title">Large Modal</h4>
+                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
+                                <span aria-hidden="true">×</span>
+                            </button>
+                        </div>
+                        <div className="modal-body">
+                            <p>One fine body…</p>
+                        </div>
+                        <div className="modal-footer justify-content-between">
+                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
+                            <button type="button" className="btn btn-primary">Save changes</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </section>
     );
 }
