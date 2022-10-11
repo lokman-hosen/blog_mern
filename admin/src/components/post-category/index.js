@@ -4,6 +4,7 @@ import {Link, useNavigate} from "react-router-dom";
 import {useSelector} from "react-redux";
 import {API_BASE_URL} from "../../config";
 import Pagination from "../pagination";
+import {login} from "../../redux/userSlice";
 
 function PostCategoryList(){
     const token = useSelector((state) => state.user.token)
@@ -16,23 +17,59 @@ function PostCategoryList(){
     const [totalRecord, setTotalRecord] = useState(0);
     const [modalVisibility, setModalVisibility] = useState("none");
 
+    //create modal
+    const [formData, setFormData] = useState({
+        title: "",
+        status: "",
+    })
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        axios.post('http://localhost:8800/api/categories', {
+            title: formData.title,
+            status: formData.password,
+        }).then((response) => {
+            if (response.data.status) {
+                // clear form data
+                formData.title = '';
+                setModalVisibility("none")
+                getCategoryList();
+            }
+        }).catch((err) => {
+            console.log(err)
+
+        })
+
+    }
+    const createModal = () =>{
+        let modalState = modalVisibility == "none" ? "block" : "none";
+        setModalVisibility(modalState);
+    }
 
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
             navigate("/login")
         }
         setLoader(true)
+        getCategoryList()
 
+    } , [currentPage])
+
+    const paginate = (pageNumber) =>{
+        setCurrentPage(pageNumber)
+    }
+
+    function getCategoryList(){
         axios.get(API_BASE_URL+'api/categories?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
             }
         }).then(function (response) {
-                setCategories(response.data.data)
-                setTotalRecord(response.data.totalRecord)
-                setLoader(false)
-            })
+            setCategories(response.data.data)
+            setTotalRecord(response.data.totalRecord)
+            setLoader(false)
+        })
             .catch(function (error) {
                 // handle error
                 console.log(error);
@@ -43,17 +80,10 @@ function PostCategoryList(){
             .then(function () {
                 // always executed
             });
-    } , [currentPage])
-
-    const paginate = (pageNumber) =>{
-        setCurrentPage(pageNumber)
     }
 
-    //create modal
-    const createModal = () =>{
-        let modalState = modalVisibility == "none" ? "block" : "none";
-        setModalVisibility(modalState);
-    }
+
+
 
 
     return(
@@ -118,19 +148,28 @@ function PostCategoryList(){
             <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
                 <div className="modal-dialog modal-lg">
                     <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title">Large Modal</h4>
-                            <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
-                                <span aria-hidden="true">×</span>
-                            </button>
-                        </div>
-                        <div className="modal-body">
-                            <p>One fine body…</p>
-                        </div>
-                        <div className="modal-footer justify-content-between">
-                            <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
-                            <button type="button" className="btn btn-primary">Save changes</button>
-                        </div>
+                        <form onSubmit={handleSubmit}>
+                            <div className="modal-header">
+                                <h4 className="modal-title">Large Modal</h4>
+                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
+                                    <span aria-hidden="true">×</span>
+                                </button>
+                            </div>
+                            <div className="modal-body">
+                                <div className="input-group mb-3">
+                                    <input type="text" name="title" className="form-control"
+                                           onChange={(e) => setFormData({...formData, title: e.target.value})}
+                                           value={formData.title}
+                                           placeholder="Post Category Title">
+
+                                    </input>
+                                </div>
+                            </div>
+                            <div className="modal-footer justify-content-between">
+                                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
+                                <button type="submit" className="btn btn-primary">Save changes</button>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
