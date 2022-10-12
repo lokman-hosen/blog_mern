@@ -5,6 +5,7 @@ import {useSelector} from "react-redux";
 import {API_BASE_URL} from "../../config";
 import Pagination from "../pagination";
 import {login} from "../../redux/userSlice";
+import ToastMessage from "../ToastMessage";
 
 function PostCategoryList(){
     const token = useSelector((state) => state.user.token)
@@ -16,6 +17,9 @@ function PostCategoryList(){
     const [currentPage, setCurrentPage] = useState(1);
     const [totalRecord, setTotalRecord] = useState(0);
     const [modalVisibility, setModalVisibility] = useState("none");
+    const [showToaster, setShowToaster] = useState(false);
+    const [messageType, setMessageType] = useState("");
+    const [message, setMessage] = useState("");
 
     //create modal
     const [formData, setFormData] = useState({
@@ -29,14 +33,20 @@ function PostCategoryList(){
             title: formData.title,
             status: formData.password,
         }).then((response) => {
+            setShowToaster(true)
             if (response.data.status) {
                 // clear form data
                 formData.title = '';
                 setModalVisibility("none")
+                setMessageType("success")
+                setMessage("Category created Successfully")
                 getCategoryList();
             }
         }).catch((err) => {
+            setMessageType("error")
+            setMessage("Something went wrong")
             console.log(err)
+            setShowToaster(false)
 
         })
 
@@ -69,8 +79,7 @@ function PostCategoryList(){
             setCategories(response.data.data)
             setTotalRecord(response.data.totalRecord)
             setLoader(false)
-        })
-            .catch(function (error) {
+        }).catch(function (error) {
                 // handle error
                 console.log(error);
                 if (error.response.data.message == 'Authentication Fail'){
@@ -83,37 +92,35 @@ function PostCategoryList(){
     }
 
 
-
-
-
     return(
-        <section className="content">
-            <div className="container-fluid">
-                <div className="row">
-                    <div className="col-12">
-                        <div className="card">
-                            <div className="card-header">
-                                <h3 className="card-title">Post Category List</h3>
-                                <div className="input-group input-group-sm pt-1 mr-2">
-                                    <button type="button" className="btn btn-sm btn-info" onClick={createModal}>
-                                        <i className="fa fa-plus"></i> Add New
-                                    </button>
+            <section className="content">
+                <div className="container-fluid">
+                    <div className="row">
+                        { showToaster &&  <ToastMessage messageType={messageType} message={message}/> }
+                        <div className="col-12">
+                            <div className="card">
+                                <div className="card-header">
+                                    <h3 className="card-title">Post Category List</h3>
+                                    <div className="input-group input-group-sm pt-1 mr-2">
+                                        <button type="button" className="btn btn-sm btn-info" onClick={createModal}>
+                                            <i className="fa fa-plus"></i> Add New
+                                        </button>
+                                    </div>
                                 </div>
-                            </div>
-                            <div className="card-body">
-                                <table className="table table-bordered">
-                                    <thead>
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Title</th>
-                                        <th>Created AT</th>
-                                        <th>Status</th>
-                                        <th className="text-center">Action</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody  style={{minHeight: '200px'}}>
-                                    {!loader ?
-                                        categories.map((category,index) =>
+                                <div className="card-body">
+                                    <table className="table table-bordered">
+                                        <thead>
+                                        <tr>
+                                            <th>#</th>
+                                            <th>Title</th>
+                                            <th>Created AT</th>
+                                            <th>Status</th>
+                                            <th className="text-center">Action</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody  style={{minHeight: '200px'}}>
+                                        {!loader ?
+                                            categories.map((category,index) =>
                                                 <tr key={category._id}>
                                                     <td>{((currentPage-1)*10)+index+1}</td>
                                                     <td>{category.title}</td>
@@ -132,49 +139,50 @@ function PostCategoryList(){
                                             ) : <tr><td colSpan="7" className="text-center">
                                                 <i className="fas fa-spinner fa-spin fa-3x"></i>
                                             </td></tr>
-                                    }
+                                        }
 
-                                    </tbody>
-                                </table>
-                            </div>
-                            <div className="card-footer clearfix">
-                                <Pagination totalRecord={totalRecord} paginate={paginate} currentPage={currentPage}></Pagination>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div className="card-footer clearfix">
+                                    <Pagination totalRecord={totalRecord} paginate={paginate} currentPage={currentPage}></Pagination>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
-                <div className="modal-dialog modal-lg">
-                    <div className="modal-content">
-                        <form onSubmit={handleSubmit}>
-                            <div className="modal-header">
-                                <h4 className="modal-title">Large Modal</h4>
-                                <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
-                                    <span aria-hidden="true">×</span>
-                                </button>
-                            </div>
-                            <div className="modal-body">
-                                <div className="input-group mb-3">
-                                    <input type="text" name="title" className="form-control"
-                                           onChange={(e) => setFormData({...formData, title: e.target.value})}
-                                           value={formData.title}
-                                           placeholder="Post Category Title">
-
-                                    </input>
+                {/*create Modal*/}
+                <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
+                    <div className="modal-dialog modal-lg">
+                        <div className="modal-content">
+                            <form onSubmit={handleSubmit}>
+                                <div className="modal-header">
+                                    <h4 className="modal-title">Large Modal</h4>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
+                                        <span aria-hidden="true">×</span>
+                                    </button>
                                 </div>
-                            </div>
-                            <div className="modal-footer justify-content-between">
-                                <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
-                                <button type="submit" className="btn btn-primary">Save changes</button>
-                            </div>
-                        </form>
+                                <div className="modal-body">
+                                    <div className="input-group mb-3">
+                                        <input type="text" name="title" className="form-control"
+                                               onChange={(e) => setFormData({...formData, title: e.target.value})}
+                                               value={formData.title}
+                                               placeholder="Post Category Title">
+
+                                        </input>
+                                    </div>
+                                </div>
+                                <div className="modal-footer justify-content-between">
+                                    <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
+                                    <button type="submit" className="btn btn-primary">Save changes</button>
+                                </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        </section>
+            </section>
     );
 }
 
