@@ -5,9 +5,8 @@ import {login} from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
 
 function Login(){
-    //const [email, setEmail] = useState('');
-    //const [password, setPassword] = useState('');
     const [loader, setLoader] = useState(true);
+    const [showErrorAlert, setShowErrorAlert] = useState(false);
     const [formData, setFormData] = useState({
         email: "",
         password: "",
@@ -17,6 +16,8 @@ function Login(){
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // hide error alert
+        setShowErrorAlert(false)
 
         axios.post('http://localhost:8800/api/auth/login', {
             email: formData.email,
@@ -42,6 +43,7 @@ function Login(){
                 }
             })
             .catch((err) => {
+                setShowErrorAlert(true)
                 console.log(err)
 
             })
@@ -51,8 +53,9 @@ function Login(){
 
     return(
         <div className="login-box">
+            { showErrorAlert && <div className="alert alert-danger">Check you email/password and try again</div>}
             <div className="login-logo">
-                <a href="../../index2.html"><b>Admin</b>LTE</a>
+                <a><b>Login</b> Here</a>
             </div>
             <div className="card">
                 <div className="card-body login-card-body">

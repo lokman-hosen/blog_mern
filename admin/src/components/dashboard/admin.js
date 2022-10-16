@@ -1,5 +1,5 @@
 function AdminDashboard(){
-    console.log('component');
+    //console.log('component');
     return(
         <section className="content">
             <div className="container-fluid">

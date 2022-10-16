@@ -20,6 +20,7 @@ function PostCategoryList(){
     const [showToaster, setShowToaster] = useState(false);
     const [messageType, setMessageType] = useState("");
     const [message, setMessage] = useState("");
+    const [validationErrors, setValidationErrors] = useState([]);
 
     //create modal
     const [formData, setFormData] = useState({
@@ -45,7 +46,8 @@ function PostCategoryList(){
         }).catch((err) => {
             setMessageType("error")
             setMessage("Something went wrong")
-            console.log(err)
+            console.log(err.response.data.errors.title.message)
+            setValidationErrors(err.response.data.errors)
             setShowToaster(false)
 
         })
@@ -54,6 +56,7 @@ function PostCategoryList(){
     const createModal = () =>{
         let modalState = modalVisibility == "none" ? "block" : "none";
         setModalVisibility(modalState);
+        setValidationErrors({})
     }
 
     useEffect( ()=>{
@@ -100,11 +103,18 @@ function PostCategoryList(){
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header">
-                                    <h3 className="card-title">Post Category List</h3>
-                                    <div className="input-group input-group-sm pt-1 mr-2">
-                                        <button type="button" className="btn btn-sm btn-info" onClick={createModal}>
-                                            <i className="fa fa-plus"></i> Add New
-                                        </button>
+                                    <div className="row">
+                                        <div className="col">
+                                            <h3 className="card-title">Post Category List</h3>
+                                        </div>
+                                        <div className="col">
+                                            <div className="text-right">
+                                                <button type="button" className="btn btn-sm btn-info" onClick={createModal}>
+                                                    <i className="fa fa-plus"></i> Add New
+                                                </button>
+                                            </div>
+                                        </div>
+
                                     </div>
                                 </div>
                                 <div className="card-body">
@@ -165,12 +175,14 @@ function PostCategoryList(){
                                 </div>
                                 <div className="modal-body">
                                     <div className="input-group mb-3">
-                                        <input type="text" name="title" className="form-control"
+                                        <input type="text" name="title" className={`form-control ${validationErrors.title && 'is-invalid'}`}
                                                onChange={(e) => setFormData({...formData, title: e.target.value})}
                                                value={formData.title}
                                                placeholder="Post Category Title">
 
                                         </input>
+                                        { validationErrors.title && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.title.message.substring(4)}</span>}
+
                                     </div>
                                 </div>
                                 <div className="modal-footer justify-content-between">
