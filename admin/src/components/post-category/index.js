@@ -33,7 +33,7 @@ function PostCategoryList(){
         e.preventDefault();
 
         if (!editMode){
-            axios.post('http://localhost:8800/api/categories', {
+            axios.post(API_BASE_URL+'api/categories', {
                 title: formData.title,
                 status: 1,
             }).then((response) => {
@@ -55,11 +55,12 @@ function PostCategoryList(){
 
             })
         }else {
-            axios.put('http://localhost:8800/api/categories/'+formData.id, {
+            axios.put(API_BASE_URL+'api/categories/'+formData.id, {
                 title: formData.title,
                 status: formData.status,
             }).then((response) => {
                 setShowToaster(true)
+                setEditMode(false)
                 if (response.data.status) {
                     // clear form data
                     formData.title = '';
@@ -89,7 +90,7 @@ function PostCategoryList(){
 
     const getItemById = (id) => {
         setEditMode(true);
-        axios.get('http://localhost:8800/api/categories/'+id)
+        axios.get(API_BASE_URL+'api/categories/'+id)
             .then(function (response) {
                 // handle success
                 setFormData({
