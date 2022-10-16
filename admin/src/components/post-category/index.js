@@ -21,36 +21,63 @@ function PostCategoryList(){
     const [messageType, setMessageType] = useState("");
     const [message, setMessage] = useState("");
     const [validationErrors, setValidationErrors] = useState([]);
+    const [editMode, setEditMode] = useState(false);
 
     //create modal
     const [formData, setFormData] = useState({
+        id: "",
         title: "",
         status: "",
     })
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        axios.post('http://localhost:8800/api/categories', {
-            title: formData.title,
-            status: formData.password,
-        }).then((response) => {
-            setShowToaster(true)
-            if (response.data.status) {
-                // clear form data
-                formData.title = '';
-                setModalVisibility("none")
-                setMessageType("success")
-                setMessage("Category created Successfully")
-                getCategoryList();
-            }
-        }).catch((err) => {
-            setMessageType("error")
-            setMessage("Something went wrong")
-            console.log(err.response.data.errors.title.message)
-            setValidationErrors(err.response.data.errors)
-            setShowToaster(false)
+        if (!editMode){
+            axios.post('http://localhost:8800/api/categories', {
+                title: formData.title,
+                status: 1,
+            }).then((response) => {
+                setShowToaster(true)
+                if (response.data.status) {
+                    // clear form data
+                    formData.title = '';
+                    setModalVisibility("none")
+                    setMessageType("success")
+                    setMessage("Category created Successfully")
+                    getCategoryList();
+                }
+            }).catch((err) => {
+                setMessageType("error")
+                setMessage("Something went wrong")
+                console.log(err.response.data.errors.title.message)
+                setValidationErrors(err.response.data.errors)
+                setShowToaster(false)
 
-        })
+            })
+        }else {
+            axios.put('http://localhost:8800/api/categories/'+formData.id, {
+                title: formData.title,
+                status: formData.status,
+            }).then((response) => {
+                setShowToaster(true)
+                if (response.data.status) {
+                    // clear form data
+                    formData.title = '';
+                    formData.status = '';
+                    setModalVisibility("none")
+                    setMessageType("success")
+                    setMessage("Category updated Successfully")
+                    getCategoryList();
+                }
+            }).catch((err) => {
+                setMessageType("error")
+                setMessage("Something went wrong")
+                console.log(err.response.data.errors.title.message)
+                setValidationErrors(err.response.data.errors)
+                setShowToaster(false)
+
+            })
+        }
 
     }
     const createModal = () =>{
@@ -58,6 +85,30 @@ function PostCategoryList(){
         setModalVisibility(modalState);
         setValidationErrors({})
     }
+
+
+    const getItemById = (id) => {
+        setEditMode(true);
+        axios.get('http://localhost:8800/api/categories/'+id)
+            .then(function (response) {
+                // handle success
+                setFormData({
+                    'title' : response.data.data.title,
+                    'status' : response.data.data.status,
+                    'id' : response.data.data._id,
+                })
+                setModalVisibility("block");
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+
+    }
+
 
     useEffect( ()=>{
         if (isLoggedIn == 'false'){
@@ -93,6 +144,7 @@ function PostCategoryList(){
                 // always executed
             });
     }
+
 
 
     return(
@@ -142,7 +194,7 @@ function PostCategoryList(){
                                                         }
                                                     </td>
                                                     <td className="text-center">
-                                                        <a  className="btn btn-sm btn-warning ml-1"> <i className="fa fa-edit"></i></a>
+                                                        <a  className="btn btn-sm btn-warning ml-1" onClick={()=> getItemById(category._id)}> <i className="fa fa-edit"></i></a>
                                                         <a  className="btn btn-sm btn-danger ml-1"> <i className="fa fa-trash"></i></a>
                                                     </td>
                                                 </tr>
@@ -174,8 +226,9 @@ function PostCategoryList(){
                                     </button>
                                 </div>
                                 <div className="modal-body">
-                                    <div className="input-group mb-3">
-                                        <input type="text" name="title" className={`form-control ${validationErrors.title && 'is-invalid'}`}
+                                    <div className="form-group mb-3">
+                                        <label>Title</label>
+                                        <input type="text" name="title" className={`form-control rounded-0 ${validationErrors.title && 'is-invalid'}`}
                                                onChange={(e) => setFormData({...formData, title: e.target.value})}
                                                value={formData.title}
                                                placeholder="Post Category Title">
@@ -183,6 +236,18 @@ function PostCategoryList(){
                                         </input>
                                         { validationErrors.title && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.title.message.substring(4)}</span>}
 
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="exampleSelectRounded0">Status</label>
+                                        <select className="custom-select rounded-0" id="exampleSelectRounded0"
+                                                onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                                value={formData.status}
+
+                                        >
+                                            <option value="1">Active</option>
+                                            <option value="0">Inactive</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className="modal-footer justify-content-between">
