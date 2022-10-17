@@ -108,7 +108,7 @@ function PostCategoryList(){
         setShowToaster(false)
     }
 
-    // item detail
+    // item delete
     const getItemById = (id) => {
         setEditMode(true);
         setShowToaster(false)
@@ -121,6 +121,26 @@ function PostCategoryList(){
                     'id' : response.data.data._id,
                 })
                 setModalVisibility("block");
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
+
+    }
+
+    // item delete
+    const deleteItemById = (id) => {
+        axios.delete(API_BASE_URL+'api/categories/'+id)
+            .then(function (response) {
+                // handle success
+                setMessageType("success")
+                setMessage("Category Deleted Successfully")
+                getCategoryList();
+
             })
             .catch(function (error) {
                 // handle error
@@ -209,8 +229,14 @@ function PostCategoryList(){
                                                         }
                                                     </td>
                                                     <td className="text-center">
-                                                        <a  className="btn btn-sm btn-warning ml-1" onClick={()=> getItemById(category._id)}> <i className="fa fa-edit"></i></a>
-                                                        <a  className="btn btn-sm btn-danger ml-1"> <i className="fa fa-trash"></i></a>
+                                                        <a  className="btn btn-sm btn-warning ml-1"
+                                                            onClick={()=> getItemById(category._id)}>
+                                                            <i className="fa fa-edit"></i>
+                                                        </a>
+                                                        <a  className="btn btn-sm btn-danger ml-1"
+                                                            onClick={()=> deleteItemById(category._id)}>
+                                                        <i className="fa fa-trash"></i>
+                                                        </a>
                                                     </td>
                                                 </tr>
                                             ) : <tr><td colSpan="7" className="text-center">
