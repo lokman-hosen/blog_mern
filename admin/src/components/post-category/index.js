@@ -6,6 +6,11 @@ import {API_BASE_URL} from "../../config";
 import Pagination from "../pagination";
 import {login} from "../../redux/userSlice";
 import ToastMessage from "../ToastMessage";
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
+
+
+
 
 function PostCategoryList(){
     // auth
@@ -134,21 +139,42 @@ function PostCategoryList(){
 
     // item delete
     const deleteItemById = (id) => {
-        axios.delete(API_BASE_URL+'api/categories/'+id)
-            .then(function (response) {
-                // handle success
-                setMessageType("success")
-                setMessage("Category Deleted Successfully")
-                getCategoryList();
+        const MySwal = withReactContent(Swal)
+        MySwal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                axios.delete(API_BASE_URL+'api/categories/'+id)
+                    .then(function (response) {
+                        // handle success
+                        MySwal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
+                        getCategoryList();
 
-            })
-            .catch(function (error) {
-                // handle error
-                console.log(error);
-            })
-            .finally(function () {
-                // always executed
-            });
+                    })
+                    .catch(function (error) {
+                        // handle error
+                        console.log(error);
+                        MySwal.fire({
+                            title: 'Opps!',
+                            text: "Fail to Delete!",
+                            icon: 'warning',
+                        })
+                    })
+                    .finally(function () {
+                        // always executed
+                    });
+            }
+        })
 
     }
 
