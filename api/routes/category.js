@@ -6,17 +6,18 @@ import {
  deleteCategory,
  updateCategory
 } from "../controllers/categoryController.js";
+import {checkLogin} from "../middlewares/checkLogin.js";
 
 const router = express.Router();
 //create
- router.post("/", createCategory)
+ router.post("/", checkLogin, createCategory)
 //update
-router.put("/:id", updateCategory);
+router.put("/:id", checkLogin, updateCategory);
  //delete
-router.delete("/:id", deleteCategory);
+router.delete("/:id", checkLogin, deleteCategory);
 //detail
-router.get("/:id", categoryDetail);
+router.get("/:id", checkLogin, categoryDetail);
 //get all
-router.get("/", categoryList);
+router.get("/", checkLogin, categoryList);
 
 export default router

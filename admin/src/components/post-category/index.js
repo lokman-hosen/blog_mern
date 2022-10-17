@@ -57,6 +57,11 @@ function PostCategoryList(){
             axios.post(API_BASE_URL+'api/categories', {
                 title: formData.title,
                 status: 1,
+            },{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
+                }
             }).then((response) => {
                 setShowToaster(true)
                 if (response.data.status) {
@@ -80,6 +85,11 @@ function PostCategoryList(){
             axios.put(API_BASE_URL+'api/categories/'+formData.id, {
                 title: formData.title,
                 status: formData.status,
+            }, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+token
+                }
             }).then((response) => {
                 setShowToaster(true)
                 setEditMode(false)
@@ -113,12 +123,16 @@ function PostCategoryList(){
         setShowToaster(false)
     }
 
-    // item delete
+    // get single item
     const getItemById = (id) => {
         setEditMode(true);
         setShowToaster(false)
-        axios.get(API_BASE_URL+'api/categories/'+id)
-            .then(function (response) {
+        axios.get(API_BASE_URL+'api/categories/'+id, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+token
+            }
+        }).then(function (response) {
                 // handle success
                 setFormData({
                     'title' : response.data.data.title,
@@ -150,8 +164,12 @@ function PostCategoryList(){
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                axios.delete(API_BASE_URL+'api/categories/'+id)
-                    .then(function (response) {
+                axios.delete(API_BASE_URL+'api/categories/'+id, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': 'Bearer '+token
+                    }
+                }).then(function (response) {
                         // handle success
                         MySwal.fire(
                             'Deleted!',
