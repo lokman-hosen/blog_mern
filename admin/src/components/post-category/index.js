@@ -8,30 +8,46 @@ import {login} from "../../redux/userSlice";
 import ToastMessage from "../ToastMessage";
 
 function PostCategoryList(){
+    // auth
     const token = useSelector((state) => state.user.token)
     const isLoggedIn = useSelector((state) => state.user.login)
     const navigate = useNavigate();
-
+    // category
     const [categories, setCategories] = useState([]);
     const [loader, setLoader] = useState(true);
+    //pagination
     const [currentPage, setCurrentPage] = useState(1);
     const [totalRecord, setTotalRecord] = useState(0);
+    // create and edit
     const [modalVisibility, setModalVisibility] = useState("none");
+    const [editMode, setEditMode] = useState(false);
+    const [validationErrors, setValidationErrors] = useState([]);
+    // toaster
     const [showToaster, setShowToaster] = useState(false);
     const [messageType, setMessageType] = useState("");
     const [message, setMessage] = useState("");
-    const [validationErrors, setValidationErrors] = useState([]);
-    const [editMode, setEditMode] = useState(false);
 
-    //create modal
     const [formData, setFormData] = useState({
         id: "",
         title: "",
         status: "",
     })
+
+
+    useEffect( ()=>{
+        if (isLoggedIn == 'false'){
+            navigate("/login")
+        }
+        setLoader(true)
+        getCategoryList()
+
+    } , [currentPage])
+
+
+    // modal form submit
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        // create item
         if (!editMode){
             axios.post(API_BASE_URL+'api/categories', {
                 title: formData.title,
@@ -55,6 +71,7 @@ function PostCategoryList(){
 
             })
         }else {
+            // update item
             axios.put(API_BASE_URL+'api/categories/'+formData.id, {
                 title: formData.title,
                 status: formData.status,
@@ -76,12 +93,13 @@ function PostCategoryList(){
                 console.log(err.response.data.errors.title.message)
                 setValidationErrors(err.response.data.errors)
                 setShowToaster(false)
-
             })
         }
 
     }
-    const createModal = () =>{
+
+    // open modal
+    const openModal = () =>{
         formData.title = '';
         let modalState = modalVisibility == "none" ? "block" : "none";
         setModalVisibility(modalState);
@@ -90,7 +108,7 @@ function PostCategoryList(){
         setShowToaster(false)
     }
 
-
+    // item detail
     const getItemById = (id) => {
         setEditMode(true);
         setShowToaster(false)
@@ -114,21 +132,13 @@ function PostCategoryList(){
 
     }
 
-
-    useEffect( ()=>{
-        if (isLoggedIn == 'false'){
-            navigate("/login")
-        }
-        setLoader(true)
-        getCategoryList()
-
-    } , [currentPage])
-
+    // load data according to page click
     const paginate = (pageNumber) =>{
         setShowToaster(false);
         setCurrentPage(pageNumber)
     }
 
+    // get category list
     function getCategoryList(){
         axios.get(API_BASE_URL+'api/categories?page='+currentPage, {
             headers: {
@@ -166,7 +176,7 @@ function PostCategoryList(){
                                         </div>
                                         <div className="col">
                                             <div className="text-right">
-                                                <button type="button" className="btn btn-sm btn-info" onClick={createModal}>
+                                                <button type="button" className="btn btn-sm btn-info" onClick={openModal}>
                                                     <i className="fa fa-plus"></i> Add New
                                                 </button>
                                             </div>
@@ -226,7 +236,7 @@ function PostCategoryList(){
                             <form onSubmit={handleSubmit}>
                                 <div className="modal-header">
                                     <h4 className="modal-title">{editMode ? 'Edit' : 'Add'} Category</h4>
-                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
+                                    <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={openModal}>
                                         <span aria-hidden="true">×</span>
                                     </button>
                                 </div>
@@ -255,7 +265,7 @@ function PostCategoryList(){
                                     }
                                 </div>
                                 <div className="modal-footer justify-content-between">
-                                    <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
+                                    <button type="button" className="btn btn-default" data-dismiss="modal" onClick={openModal}>Close</button>
                                     <button type="submit" className="btn btn-primary">{editMode ? 'Update' : 'Save'}</button>
                                 </div>
                             </form>
