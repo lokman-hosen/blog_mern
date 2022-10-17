@@ -82,14 +82,18 @@ function PostCategoryList(){
 
     }
     const createModal = () =>{
+        formData.title = '';
         let modalState = modalVisibility == "none" ? "block" : "none";
         setModalVisibility(modalState);
-        setValidationErrors({})
+        setValidationErrors({});
+        setEditMode(false);
+        setShowToaster(false)
     }
 
 
     const getItemById = (id) => {
         setEditMode(true);
+        setShowToaster(false)
         axios.get(API_BASE_URL+'api/categories/'+id)
             .then(function (response) {
                 // handle success
@@ -121,6 +125,7 @@ function PostCategoryList(){
     } , [currentPage])
 
     const paginate = (pageNumber) =>{
+        setShowToaster(false);
         setCurrentPage(pageNumber)
     }
 
@@ -145,7 +150,6 @@ function PostCategoryList(){
                 // always executed
             });
     }
-
 
 
     return(
@@ -215,13 +219,13 @@ function PostCategoryList(){
                     </div>
                 </div>
 
-                {/*create Modal*/}
+                {/*create/edit Modal*/}
                 <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
                     <div className="modal-dialog modal-lg">
                         <div className="modal-content">
                             <form onSubmit={handleSubmit}>
                                 <div className="modal-header">
-                                    <h4 className="modal-title">Large Modal</h4>
+                                    <h4 className="modal-title">{editMode ? 'Edit' : 'Add'} Category</h4>
                                     <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={createModal}>
                                         <span aria-hidden="true">×</span>
                                     </button>
@@ -233,27 +237,26 @@ function PostCategoryList(){
                                                onChange={(e) => setFormData({...formData, title: e.target.value})}
                                                value={formData.title}
                                                placeholder="Post Category Title">
-
                                         </input>
                                         { validationErrors.title && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.title.message.substring(4)}</span>}
 
                                     </div>
 
-                                    <div className="form-group">
-                                        <label htmlFor="exampleSelectRounded0">Status</label>
-                                        <select className="custom-select rounded-0" id="exampleSelectRounded0"
-                                                onChange={(e) => setFormData({...formData, status: e.target.value})}
-                                                value={formData.status}
-
-                                        >
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
-                                        </select>
-                                    </div>
+                                    { editMode &&
+                                        <div className="form-group">
+                                            <label htmlFor="exampleSelectRounded0">Status</label>
+                                            <select className="custom-select rounded-0" id="exampleSelectRounded0"
+                                                    onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                                    value={formData.status} >
+                                                <option value="1">Active</option>
+                                                <option value="0">Inactive</option>
+                                            </select>
+                                        </div>
+                                    }
                                 </div>
                                 <div className="modal-footer justify-content-between">
                                     <button type="button" className="btn btn-default" data-dismiss="modal" onClick={createModal}>Close</button>
-                                    <button type="submit" className="btn btn-primary">Save changes</button>
+                                    <button type="submit" className="btn btn-primary">{editMode ? 'Update' : 'Save'}</button>
                                 </div>
                             </form>
                         </div>

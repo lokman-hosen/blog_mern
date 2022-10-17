@@ -6,16 +6,10 @@ function ToastMessage({message}){
     console.log('toast')
 
     //const notify = () => toast("Wow so easy!");
-    toast.success('Produto removido com sucesso', {
+    toast.success(message, {
         toastId: 'success',
     })
-    return(
-        <div>
-
-            <ToastContainer />
-
-        </div>
-    )
+    return <ToastContainer />
 }
 
 export default ToastMessage

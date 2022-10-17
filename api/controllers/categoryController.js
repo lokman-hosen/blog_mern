@@ -19,7 +19,7 @@ export const updateCategory = async (req, res)=>{
         const updateCategory = await Category.findByIdAndUpdate(
             req.params.id,
             {$set: req.body},
-            {new:true}
+            {new:true, runValidators: true}
         );
         res.status(200).json({
             'status' : true,

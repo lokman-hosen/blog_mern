@@ -19,7 +19,7 @@ export const updateUser = async (req, res)=>{
         const updateUser = await User.findByIdAndUpdate(
             req.params.id,
             {$set: req.body},
-            {new:true}
+             {new:true, runValidators: true}
         );
         res.status(200).json({
             'status': true,
