@@ -245,7 +245,6 @@ function PostCategoryList(){
                                                 </button>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
                                 <div className="card-body">
