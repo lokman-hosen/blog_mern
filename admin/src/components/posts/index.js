@@ -33,7 +33,7 @@ function PostList(){
         title: "",
         description: "",
         image: "default.png",
-        author: "",
+        author: "634e7c93b654f301477aba01",
         categories: [],
         status: "",
     })
@@ -53,9 +53,12 @@ function PostList(){
         e.preventDefault();
         // create item
         if (!editMode){
-            axios.post(API_BASE_URL+'api/categories', {
+            axios.post(API_BASE_URL+'api/posts', {
                 title: formData.title,
-                status: 1,
+                description: formData.description,
+                image: formData.image,
+                author: formData.author,
+                categories: formData.categories,
             },{
                 headers: {
                     'Content-Type': 'application/json',
@@ -68,13 +71,12 @@ function PostList(){
                     formData.title = '';
                     setModalVisibility("none")
                     setMessageType("success")
-                    setMessage("Category created Successfully")
+                    setMessage("Post created Successfully")
                     getItemList();
                 }
             }).catch((err) => {
                 setMessageType("error")
                 setMessage("Something went wrong")
-                console.log(err.response.data.errors.title.message)
                 setValidationErrors(err.response.data.errors)
                 setShowToaster(false)
 
@@ -113,7 +115,7 @@ function PostList(){
     }
 
     function getItemList(){
-        axios.get('http://localhost:8800/api/posts?page='+currentPage, {
+        axios.get(API_BASE_URL+'api/posts?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
@@ -224,6 +226,18 @@ function PostList(){
         setCurrentPage(pageNumber)
         //setTotalPage(pageNumbers);
     }
+
+    // store categories
+    const handleCategoryChange = (e) =>{
+        setFormData({
+            'categories' : [...e.target.selectedOptions].map(o => o.value)
+        })
+    }
+    const handleFileSelect = (e) =>{
+        setFormData({
+            'image' : e.target.files[0]
+        })
+    }
     return(
         <section className="content">
             <div className="container-fluid">
@@ -260,7 +274,7 @@ function PostList(){
                                     <tbody  style={{minHeight: '200px'}}>
                                     {!loader ?
                                         posts.map((post,index) =>
-                                                <tr>
+                                                <tr key={post._id}>
                                                     <td>{index+1}</td>
                                                     <td>{post.title}</td>
                                                     <td>{post.description}</td>
@@ -319,7 +333,9 @@ function PostList(){
 
                                 <div className="form-group mb-3">
                                     <label>Categories<span className="text-danger">*</span></label>
-                                    <select className="form-select form-control" multiple aria-label="multiple select example">
+                                    <select className="form-select form-control" name="categories[]" multiple={true} aria-label="multiple select example"
+                                            onChange={handleCategoryChange}
+                                    >
                                         <option selected>Open this select menu</option>
                                         <option value="1">One</option>
                                         <option value="2">Two</option>
@@ -339,7 +355,9 @@ function PostList(){
                                 </div>
                                 <div className="form-group mb-3">
                                     <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
-                                    <input className="form-control" type="file" id="formFile"></input>
+                                    <input className="form-control" type="file" id="formFile"
+                                           onChange={handleFileSelect}
+                                    ></input>
                                     { validationErrors.description && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.description.message.substring(4)}</span>}
 
                                 </div>

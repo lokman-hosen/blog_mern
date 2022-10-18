@@ -7,6 +7,7 @@ import  cors from 'cors'
 const router = express.Router();
 
 // register user
+router.options('/register', cors())
 router.post("/register", registration)
 //login
 router.options('/login', cors())
