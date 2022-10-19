@@ -1,13 +1,17 @@
 import express from "express";
 import {postDetail, createPost, deletePost, postList, updatePost} from "../controllers/postController.js";
 import {checkLogin} from "../middlewares/checkLogin.js";
-import multer from 'multer'
-const upload = multer({ dest: 'uploads/' })
+import multer from "multer";
+import {fileUpload} from "../middlewares/fileUpload.js";
+//import multer from 'multer'
+//const upload = multer({ dest: 'uploads/' })
 
 const router = express.Router();
 
+
+
 //create
- router.post("/", checkLogin, upload.single('image'), createPost)
+ router.post("/", createPost)
 //update
 router.put("/:id", checkLogin, updatePost);
  //delete

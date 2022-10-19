@@ -1,8 +1,66 @@
 import Category from "../model/Category.js";
 import Post from "../model/Post.js";
+import multer from 'multer'
+//const upload = multer({ dest: 'uploads/' })
 
 export const createPost = async (req, res)=>{
-    const newPost = new Post(req.body)
+   // console.log(req.body)
+    let fileName1 = '';
+
+    const storage = multer.diskStorage({
+        // destination: function (req, file, cb) {
+        //     cb(null, '/tmp/my-uploads')
+        // },
+        destination: "uploads",
+        filename: function (req, file, cb) {
+            const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+            const ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
+            const fileName = 'post' + '-'+uniqueSuffix+ext;
+            fileName1 = fileName
+            cb(null, fileName)
+        }
+    });
+
+    const upload = multer({
+        storage: storage
+    }).single('image')
+
+    upload(req, res, (err) =>{
+        console.log(req.file)
+        if (err){
+
+        }else {
+            const newPost = new Post({
+                'title': req.body.title,
+                'description': req.body.description,
+                'image': fileName1,
+                'author': req.body.author,
+                'categories': ["632eaee077da4c01785353da", "6334302d785536302206e54a", "6333d91ecd08621655cc9bc8"],
+                'status': req.body.status,
+            })
+
+            //console.log(newPost);
+            try {
+                const savedPost = newPost.save()
+                res.status(200).json({
+                    'status': true,
+                    'data':savedPost
+                })
+            }catch (error){
+                res.status(500).json(error)
+            }
+        }
+
+    })
+    // const newPost = new Post({
+    //     'title': req.body.title,
+    //     'description': req.body.description,
+    //     'image': fileName1,
+    //     'categories': req.body.categories,
+    //     'status': req.body.status,
+    // })
+    //
+    // //console.log(newPost);
     // try {
     //     const savedPost = await newPost.save()
     //     res.status(200).json({

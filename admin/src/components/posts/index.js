@@ -344,7 +344,7 @@ function PostList(){
                                         <option value="2">Two</option>
                                         <option value="3">Three</option>
                                     </select>
-                                    { validationErrors.title && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.title.message.substring(4)}</span>}
+                                    { validationErrors.categories && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.categories.message.substring(4)}</span>}
 
                                 </div>
                                 <div className="form-group mb-3">
@@ -358,10 +358,10 @@ function PostList(){
                                 </div>
                                 <div className="form-group mb-3">
                                     <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
-                                    <input className="form-control" type="file" id="formFile"
+                                    <input className="form-control" name="image" type="file" id="formFile"
                                            onChange={handleFileSelect}
                                     ></input>
-                                    { validationErrors.description && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.description.message.substring(4)}</span>}
+                                    { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
 
                                 </div>
 
