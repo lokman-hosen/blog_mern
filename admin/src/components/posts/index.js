@@ -61,7 +61,7 @@ function PostList(){
                 categories: formData.categories,
             },{
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': 'multipart/form-data',
                     'Authorization': 'Bearer '+token
                 }
             }).then((response) => {
@@ -229,14 +229,17 @@ function PostList(){
 
     // store categories
     const handleCategoryChange = (e) =>{
-        setFormData({
-            'categories' : [...e.target.selectedOptions].map(o => o.value)
-        })
+        // setFormData({
+        //     'categories' : [...e.target.selectedOptions].map(o => o.value)
+        // })
+        setFormData({...formData, categories: [...e.target.selectedOptions].map(o => o.value)})
     }
     const handleFileSelect = (e) =>{
-        setFormData({
-            'image' : e.target.files[0]
-        })
+        // setFormData({
+        //     'image' : e.target.files[0]
+        // })
+        console.log( e.target.files[0])
+        setFormData({...formData, image: e.target.files[0]})
     }
     return(
         <section className="content">
