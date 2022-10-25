@@ -26,14 +26,14 @@ export const createPost = async (req, res)=>{
     }).single('image')
 
     upload(req, res, (err) =>{
-        console.log(req.file)
+        //console.log(req.file)
         if (err){
 
         }else {
             const newPost = new Post({
                 'title': req.body.title,
                 'description': req.body.description,
-                'image': fileName1,
+                'image': "uploads/"+fileName1,
                 'author': req.body.author,
                 'categories': ["632eaee077da4c01785353da", "6334302d785536302206e54a", "6333d91ecd08621655cc9bc8"],
                 'status': req.body.status,
