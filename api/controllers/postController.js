@@ -52,11 +52,17 @@ export const createPost = async (req, res)=>{
             })
 
             try {
-                const savedPost = newPost.save()
-                res.status(200).json({
-                    'status': true,
-                    'data':savedPost
+                const savedPost = newPost.save(function (error){
+                    if (error){
+                        res.status(500).json(error)
+                    }else {
+                        res.status(200).json({
+                            'status': true,
+                            'data':savedPost
+                        })
+                    }
                 })
+
             }catch (error){
                 res.status(500).json(error)
             }
