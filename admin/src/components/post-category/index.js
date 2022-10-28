@@ -253,12 +253,12 @@ function PostCategoryList(){
                                         <tr>
                                             <th>#</th>
                                             <th>Title</th>
-                                            <th>Created AT</th>
+                                            <th>Created At</th>
                                             <th>Status</th>
-                                            <th className="text-center">Action</th>
+                                            <th className="text-center table-action">Action</th>
                                         </tr>
                                         </thead>
-                                        <tbody  style={{minHeight: '200px'}}>
+                                        <tbody style={{minHeight: '200px'}}>
                                         {!loader ?
                                             categories.map((category,index) =>
                                                 <tr key={category._id}>

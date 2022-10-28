@@ -299,14 +299,14 @@ function PostList(){
                                         <th>Author</th>
                                         <th>Created AT</th>
                                         <th>Status</th>
-                                        <th className="text-center">Action</th>
+                                        <th className="text-center table-action">Action</th>
                                     </tr>
                                     </thead>
-                                    <tbody  style={{minHeight: '200px'}}>
+                                    <tbody style={{minHeight: '200px'}}>
                                     {!loader ?
                                         posts.map((post,index) =>
                                             <tr key={post._id}>
-                                                <td>{index+1}</td>
+                                                <td>{((currentPage-1)*10)+index+1}</td>
                                                 <td><img src={API_BASE_URL+post.image} style={{width: "50px"}} /></td>
                                                 <td>{post.title}</td>
                                                 <td>{post.description}</td>
@@ -346,7 +346,7 @@ function PostList(){
                     <div className="modal-content">
                         <form onSubmit={handleSubmit}>
                             <div className="modal-header">
-                                <h4 className="modal-title">{editMode ? 'Edit' : 'Add'} Category</h4>
+                                <h4 className="modal-title">{editMode ? 'Edit' : 'Add'} Post</h4>
                                 <button type="button" className="close" data-dismiss="modal" aria-label="Close" onClick={openModal}>
                                     <span aria-hidden="true">×</span>
                                 </button>
