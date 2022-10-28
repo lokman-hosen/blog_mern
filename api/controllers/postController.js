@@ -26,8 +26,20 @@ export const createPost = async (req, res)=>{
     }).single('image')
 
     upload(req, res, (err) =>{
-        //console.log(req.file)
+        // process
+        const requestBody = req.body;
+        const categoryIds = [];
+        const asArray = Object.entries(requestBody);
+        const filtered = asArray.filter(([key, value]) =>{
+            if (key.includes("categories")){
+                categoryIds.push(value)
+            }
+        })
         if (err){
+            res.status(500).json({
+                        'status': false,
+                        'data':"Something Went wrong"
+                    })
 
         }else {
             const newPost = new Post({
@@ -35,11 +47,10 @@ export const createPost = async (req, res)=>{
                 'description': req.body.description,
                 'image': "uploads/"+fileName1,
                 'author': req.body.author,
-                'categories': ["632eaee077da4c01785353da", "6334302d785536302206e54a", "6333d91ecd08621655cc9bc8"],
+                'categories': categoryIds,
                 'status': req.body.status,
             })
 
-            //console.log(newPost);
             try {
                 const savedPost = newPost.save()
                 res.status(200).json({

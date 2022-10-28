@@ -22,6 +22,7 @@ function PostList(){
     const [modalVisibility, setModalVisibility] = useState("none");
     const [editMode, setEditMode] = useState(false);
     const [validationErrors, setValidationErrors] = useState([]);
+    const [categoryList, setCategoryList] = useState([]);
 
     // toaster
     const [showToaster, setShowToaster] = useState(false);
@@ -53,6 +54,7 @@ function PostList(){
         e.preventDefault();
         // create item
         if (!editMode){
+            const data = {}
             axios.post(API_BASE_URL+'api/posts', {
                 title: formData.title,
                 description: formData.description,
@@ -139,8 +141,33 @@ function PostList(){
             });
     }
 
+    function getCategoryList(){
+        axios.get(API_BASE_URL+'api/categories?page=1', {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer '+token
+            },
+        })
+            .then(function (response) {
+                setCategoryList(response.data.data)
+                setLoader(false)
+            })
+            .catch(function (error) {
+                // handle error
+                //console.log(error);
+                if (error.response.data.message == 'Authentication Fail'){
+                    localStorage.setItem('login', false)
+                    // navigate("/login")
+                }
+            })
+            .then(function () {
+                // always executed
+            });
+    }
+
     // open modal
     const openModal = () =>{
+        getCategoryList();
         formData.title = '';
         let modalState = modalVisibility == "none" ? "block" : "none";
         setModalVisibility(modalState);
@@ -277,27 +304,27 @@ function PostList(){
                                     <tbody  style={{minHeight: '200px'}}>
                                     {!loader ?
                                         posts.map((post,index) =>
-                                                <tr key={post._id}>
-                                                    <td>{index+1}</td>
-                                                    <td>{post.title}</td>
-                                                    <td>{post.description}</td>
-                                                    <td>{post.author.name}</td>
-                                                    <td>{post.createdAt}</td>
-                                                    <td>
-                                                        {post.status == 1 ?
-                                                            <span className="badge bg-success">Active</span>
-                                                            :<span className="badge bg-danger">Inactive</span>
-                                                        }
-                                                    </td>
-                                                    <td className="text-center">
-                                                        <a  className="btn btn-sm btn-warning ml-1"> <i className="fa fa-edit"></i></a>
-                                                        <a  className="btn btn-sm btn-info ml-1"> <i className="fa fa-eye"></i></a>
-                                                        <a  className="btn btn-sm btn-danger ml-1"> <i className="fa fa-trash"></i></a>
-                                                    </td>
-                                                </tr>
-                                            ) : <tr><td colSpan="7" className="text-center">
-                                                <i className="fas fa-spinner fa-spin fa-3x"></i>
-                                            </td></tr>
+                                            <tr key={post._id}>
+                                                <td>{index+1}</td>
+                                                <td>{post.title}</td>
+                                                <td>{post.description}</td>
+                                                <td>{post.author.name}</td>
+                                                <td>{post.createdAt}</td>
+                                                <td>
+                                                    {post.status == 1 ?
+                                                        <span className="badge bg-success">Active</span>
+                                                        :<span className="badge bg-danger">Inactive</span>
+                                                    }
+                                                </td>
+                                                <td className="text-center">
+                                                    <a  className="btn btn-sm btn-warning ml-1"> <i className="fa fa-edit"></i></a>
+                                                    <a  className="btn btn-sm btn-info ml-1"> <i className="fa fa-eye"></i></a>
+                                                    <a  className="btn btn-sm btn-danger ml-1"> <i className="fa fa-trash"></i></a>
+                                                </td>
+                                            </tr>
+                                        ) : <tr><td colSpan="7" className="text-center">
+                                            <i className="fas fa-spinner fa-spin fa-3x"></i>
+                                        </td></tr>
                                     }
 
                                     </tbody>
@@ -311,7 +338,7 @@ function PostList(){
                 </div>
             </div>
 
-            {/*create/edit Modal*/}
+            {/*create/edit modal*/}
             <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
                 <div className="modal-dialog modal-xl">
                     <div className="modal-content">
@@ -339,19 +366,20 @@ function PostList(){
                                     <select className="form-select form-control" name="categories[]" multiple={true} aria-label="multiple select example"
                                             onChange={handleCategoryChange}
                                     >
-                                        <option selected>Open this select menu</option>
-                                        <option value="1">One</option>
-                                        <option value="2">Two</option>
-                                        <option value="3">Three</option>
+                                        { categoryList.length > 0 &&
+                                            categoryList.map((category) =>
+                                                <option value={category._id} key={category._id}>{category.title}</option>
+                                            )
+                                        }
                                     </select>
                                     { validationErrors.categories && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.categories.message.substring(4)}</span>}
 
                                 </div>
                                 <div className="form-group mb-3">
                                     <label>Description<span className="text-danger">*</span></label>
-                                   <textarea name="description" className={`form-control rounded-0 ${validationErrors.description && 'is-invalid'}`}
-                                             onChange={(e) => setFormData({...formData, description: e.target.value})}
-                                             placeholder="Post Description">
+                                    <textarea name="description" className={`form-control rounded-0 ${validationErrors.description && 'is-invalid'}`}
+                                              onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                              placeholder="Post Description">
                                    </textarea>
                                     { validationErrors.description && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.description.message.substring(4)}</span>}
 
