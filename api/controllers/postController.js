@@ -5,7 +5,7 @@ import multer from 'multer'
 
 export const createPost = async (req, res)=>{
    // console.log(req.body)
-    let fileName1 = '';
+    let fileName1 = null;
 
     const storage = multer.diskStorage({
         // destination: function (req, file, cb) {

@@ -18,14 +18,16 @@ const postSchema = new Schema(
         },
         author: {
             type: Schema.Types.ObjectId,
-            ref: 'User'
+            ref: 'User',
+            required: true
         },
 
         //post belongs to multiple category
         categories: [
             {
                 type: Schema.Types.ObjectId,
-                ref: 'Category'
+                ref: 'Category',
+                required: true
             }
         ],
         status: {

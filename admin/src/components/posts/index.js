@@ -33,7 +33,7 @@ function PostList(){
         id: "",
         title: "",
         description: "",
-        image: "default.png",
+        image: "",
         author: "634e7c93b654f301477aba01",
         categories: [],
         status: "",
@@ -342,7 +342,7 @@ function PostList(){
 
             {/*create/edit modal*/}
             <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
-                <div className="modal-dialog modal-xl">
+                <div className="modal-dialog modal-lg">
                     <div className="modal-content">
                         <form onSubmit={handleSubmit}>
                             <div className="modal-header">
