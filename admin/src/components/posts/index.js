@@ -293,6 +293,7 @@ function PostList(){
                                     <thead>
                                     <tr>
                                         <th>#</th>
+                                        <th>Image</th>
                                         <th>Title</th>
                                         <th>Description</th>
                                         <th>Author</th>
@@ -306,6 +307,7 @@ function PostList(){
                                         posts.map((post,index) =>
                                             <tr key={post._id}>
                                                 <td>{index+1}</td>
+                                                <td><img src={API_BASE_URL+post.image} style={{width: "50px"}} /></td>
                                                 <td>{post.title}</td>
                                                 <td>{post.description}</td>
                                                 <td>{post.author.name}</td>
@@ -317,9 +319,9 @@ function PostList(){
                                                     }
                                                 </td>
                                                 <td className="text-center">
-                                                    <a  className="btn btn-sm btn-warning ml-1"> <i className="fa fa-edit"></i></a>
-                                                    <a  className="btn btn-sm btn-info ml-1"> <i className="fa fa-eye"></i></a>
-                                                    <a  className="btn btn-sm btn-danger ml-1"> <i className="fa fa-trash"></i></a>
+                                                    <a  className="btn btn-xs btn-warning ml-1"> <i className="fa fa-edit"></i></a>
+                                                    <a  className="btn btn-xs btn-info ml-1"> <i className="fa fa-eye"></i></a>
+                                                    <a  className="btn btn-xs btn-danger ml-1"> <i className="fa fa-trash"></i></a>
                                                 </td>
                                             </tr>
                                         ) : <tr><td colSpan="7" className="text-center">

@@ -26,7 +26,7 @@ export const createPost = async (req, res)=>{
     }).single('image')
 
     upload(req, res, (err) =>{
-        // process
+        // process category id array
         const requestBody = req.body;
         const categoryIds = [];
         const asArray = Object.entries(requestBody);
