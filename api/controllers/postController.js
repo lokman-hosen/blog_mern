@@ -154,7 +154,7 @@ export const postDetail = async (req, res)=>{
 export const postList = async (req, res)=>{
     const skipRecord = req.query.page*10;
     try {
-        const posts = await Post.find().populate([
+        const posts = await Post.find().sort('-createdAt').populate([
             // take limited column from relation
             {path:"author", select:"name email"},
             {path:"categories", select:"title"}

@@ -4,8 +4,12 @@ import authRoute from './routes/auth.js'
 import categoryRoute from './routes/category.js'
 import userRoute from './routes/users.js'
 import postRoute from './routes/post.js'
+//path for file
+import path from 'path';
+const __dirname = path.resolve();
 
 const app = express()
+
 
 import dotenv from "dotenv"
 import cors from "cors";
@@ -28,6 +32,13 @@ app.get("/", (req, res) =>{
 })
 
 //middleware
+
+//app.use(express.static('api'))
+app.use('/uploads', express.static(path.join(__dirname, '/uploads')));
+
+
+
+
 app.use(express.json())
 app.use(cors())
 app.use("/api/auth", authRoute);
