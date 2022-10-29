@@ -1,3 +1,11 @@
 .table-action{
     width: 105px;
 }
+.multiselect option{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #dddddda1;
+}
+.multiselect option:hover{
+   background: #dddddda1;
+}

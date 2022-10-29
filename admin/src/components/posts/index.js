@@ -6,6 +6,7 @@ import Pagination from "../pagination";
 import {API_BASE_URL} from "../../config";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
+import ToastMessage from "../ToastMessage";
 
 function PostList(){
     const token = useSelector((state) => state.user.token)
@@ -70,7 +71,10 @@ function PostList(){
                 setShowToaster(true)
                 if (response.data.status) {
                     // clear form data
-                    formData.title = '';
+                    formData.title = ''
+                    formData.description = ''
+                    formData.image = ''
+                    formData.categories = []
                     setModalVisibility("none")
                     setMessageType("success")
                     setMessage("Post created Successfully")
@@ -168,7 +172,10 @@ function PostList(){
     // open modal
     const openModal = () =>{
         getCategoryList();
-        formData.title = '';
+        formData.title = ''
+        formData.description = ''
+        formData.image = ''
+        formData.categories = []
         let modalState = modalVisibility == "none" ? "block" : "none";
         setModalVisibility(modalState);
         setValidationErrors({});
@@ -265,6 +272,7 @@ function PostList(){
         <section className="content">
             <div className="container-fluid">
                 <div className="row">
+                    { showToaster &&  <ToastMessage messageType={messageType} message={message}/> }
                     <div className="col-12">
                         <div className="card">
                             <div className="card-header">
@@ -358,7 +366,7 @@ function PostList(){
 
                                 <div className="form-group mb-3">
                                     <label>Categories<span className="text-danger">*</span></label>
-                                    <select className="form-select form-control" name="categories[]" multiple={true} aria-label="multiple select example"
+                                    <select className="form-select form-control multiselect" value={formData.categories} name="categories[]" multiple={true} aria-label="multiple select example"
                                             onChange={handleCategoryChange}
                                     >
                                         { categoryList.length > 0 &&
@@ -373,6 +381,7 @@ function PostList(){
                                 <div className="form-group mb-3">
                                     <label>Description<span className="text-danger">*</span></label>
                                     <textarea name="description" className={`form-control rounded-0 ${validationErrors.description && 'is-invalid'}`}
+                                              value={formData.description}
                                               onChange={(e) => setFormData({...formData, description: e.target.value})}
                                               placeholder="Post Description">
                                    </textarea>
@@ -382,6 +391,7 @@ function PostList(){
                                 <div className="form-group mb-3">
                                     <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
                                     <input className={`form-control rounded-0 ${validationErrors.image && 'is-invalid'}`} name="image" type="file" id="formFile"
+                                           value={formData.image}
                                            onChange={handleFileSelect}
                                     ></input>
                                     { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
