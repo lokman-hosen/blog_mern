@@ -5,7 +5,7 @@ import multer from 'multer'
 
 export const createPost = async (req, res)=>{
    // console.log(req.body)
-    let fileName1 = null;
+    let fileNameFinal = null;
 
     const storage = multer.diskStorage({
         // destination: function (req, file, cb) {
@@ -16,7 +16,7 @@ export const createPost = async (req, res)=>{
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
             const ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
             const fileName = 'post' + '-'+uniqueSuffix+ext;
-            fileName1 = fileName
+            fileNameFinal = "uploads/"+fileName
             cb(null, fileName)
         }
     });
@@ -45,27 +45,22 @@ export const createPost = async (req, res)=>{
             const newPost = new Post({
                 'title': req.body.title,
                 'description': req.body.description,
-                'image': "uploads/"+fileName1,
+                'image': fileNameFinal,
                 'author': req.body.author,
                 'categories': categoryIds,
                 'status': req.body.status,
             })
 
-            try {
-                const savedPost = newPost.save(function (error){
-                    if (error){
-                        res.status(500).json(error)
-                    }else {
-                        res.status(200).json({
-                            'status': true,
-                            'data':savedPost
-                        })
-                    }
-                })
-
-            }catch (error){
-                res.status(500).json(error)
-            }
+            const savedPost = newPost.save(function (error){
+                if (error){
+                    res.status(500).json(error)
+                }else {
+                    res.status(200).json({
+                        'status': true,
+                        'data':savedPost
+                    })
+                }
+            })
         }
 
     })

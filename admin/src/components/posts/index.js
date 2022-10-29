@@ -256,16 +256,9 @@ function PostList(){
 
     // store categories
     const handleCategoryChange = (e) =>{
-        // setFormData({
-        //     'categories' : [...e.target.selectedOptions].map(o => o.value)
-        // })
         setFormData({...formData, categories: [...e.target.selectedOptions].map(o => o.value)})
     }
     const handleFileSelect = (e) =>{
-        // setFormData({
-        //     'image' : e.target.files[0]
-        // })
-        console.log( e.target.files[0])
         setFormData({...formData, image: e.target.files[0]})
     }
     return(
@@ -370,7 +363,7 @@ function PostList(){
                                     >
                                         { categoryList.length > 0 &&
                                             categoryList.map((category) =>
-                                                <option value={category._id} key={category._id}>{category.title}</option>
+                                                <option value={category._id} key={category._id} style={{paddingTop:"4px"}}>{category.title}</option>
                                             )
                                         }
                                     </select>
@@ -388,7 +381,7 @@ function PostList(){
                                 </div>
                                 <div className="form-group mb-3">
                                     <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
-                                    <input className="form-control" name="image" type="file" id="formFile"
+                                    <input className={`form-control rounded-0 ${validationErrors.image && 'is-invalid'}`} name="image" type="file" id="formFile"
                                            onChange={handleFileSelect}
                                     ></input>
                                     { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
