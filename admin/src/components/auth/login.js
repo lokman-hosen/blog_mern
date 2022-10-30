@@ -3,6 +3,7 @@ import axios from "axios";
 import {useDispatch} from "react-redux";
 import {login} from "../../redux/userSlice";
 import { useNavigate } from "react-router-dom";
+import {API_BASE_URL} from "../../config";
 
 function Login(){
     const [loader, setLoader] = useState(true);
@@ -19,7 +20,7 @@ function Login(){
         // hide error alert
         setShowErrorAlert(false)
 
-        axios.post('http://localhost:8800/api/auth/login', {
+        axios.post(API_BASE_URL+'api/auth/login', {
             email: formData.email,
             password: formData.password,
         })

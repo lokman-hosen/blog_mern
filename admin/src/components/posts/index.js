@@ -106,13 +106,12 @@ function PostList(){
                     formData.status = '';
                     setModalVisibility("none")
                     setMessageType("success")
-                    setMessage("Category updated Successfully")
+                    setMessage("Post updated Successfully")
                     getItemList();
                 }
             }).catch((err) => {
                 setMessageType("error")
                 setMessage("Something went wrong")
-                console.log(err.response.data.errors.title.message)
                 setValidationErrors(err.response.data.errors)
                 setShowToaster(false)
             })
@@ -192,10 +191,17 @@ function PostList(){
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
             }
-        }).then(function (response) {
+        }).then( function (response) {
             // handle success
+             getCategoryList();
+             //const array = response.data.data.description;
+            const categoryIds = response.data.data.categories.map(x => {
+                return x._id;
+            });
             setFormData({
                 'title' : response.data.data.title,
+                'description' : response.data.data.description,
+                'categories' : categoryIds,
                 'status' : response.data.data.status,
                 'id' : response.data.data._id,
             })
@@ -308,7 +314,7 @@ function PostList(){
                                         posts.map((post,index) =>
                                             <tr key={post._id}>
                                                 <td>{((currentPage-1)*10)+index+1}</td>
-                                                <td><img src={API_BASE_URL+post.image} style={{width: "50px"}} /></td>
+                                                <td><img src={API_BASE_URL+post.image} style={{width: "50px", height: "50px"}} /></td>
                                                 <td>{post.title}</td>
                                                 <td>{post.description}</td>
                                                 <td>{post.author.name}</td>
@@ -320,7 +326,9 @@ function PostList(){
                                                     }
                                                 </td>
                                                 <td className="text-center">
-                                                    <a  className="btn btn-xs btn-warning ml-1"> <i className="fa fa-edit"></i></a>
+                                                    <a  className="btn btn-xs btn-warning ml-1" onClick={()=> getItemById(post._id)}>
+                                                        <i className="fa fa-edit"></i>
+                                                    </a>
                                                     <a  className="btn btn-xs btn-info ml-1"> <i className="fa fa-eye"></i></a>
                                                     <a  className="btn btn-xs btn-danger ml-1"> <i className="fa fa-trash"></i></a>
                                                 </td>
@@ -343,7 +351,7 @@ function PostList(){
 
             {/*create/edit modal*/}
             <div className="modal" id="createModal" style={{display: modalVisibility}} aria-hidden="true">
-                <div className="modal-dialog modal-lg">
+                <div className="modal-dialog modal-xl">
                     <div className="modal-content">
                         <form onSubmit={handleSubmit}>
                             <div className="modal-header">
@@ -353,62 +361,77 @@ function PostList(){
                                 </button>
                             </div>
                             <div className="modal-body">
-                                <div className="form-group mb-3">
-                                    <label>Title<span className="text-danger">*</span></label>
-                                    <input type="text" name="title" className={`form-control rounded-0 ${validationErrors.title && 'is-invalid'}`}
-                                           onChange={(e) => setFormData({...formData, title: e.target.value})}
-                                           value={formData.title}
-                                           placeholder="Post Title">
-                                    </input>
-                                    { validationErrors.title && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.title.message.substring(4)}</span>}
-
-                                </div>
-
-                                <div className="form-group mb-3">
-                                    <label>Categories<span className="text-danger">*</span></label>
-                                    <select className="form-select form-control multiselect" value={formData.categories} name="categories[]" multiple={true} aria-label="multiple select example"
-                                            onChange={handleCategoryChange}
-                                    >
-                                        { categoryList.length > 0 &&
-                                            categoryList.map((category) =>
-                                                <option value={category._id} key={category._id} style={{paddingTop:"4px"}}>{category.title}</option>
-                                            )
-                                        }
-                                    </select>
-                                    { validationErrors.categories && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.categories.message.substring(4)}</span>}
-
-                                </div>
-                                <div className="form-group mb-3">
-                                    <label>Description<span className="text-danger">*</span></label>
-                                    <textarea name="description" className={`form-control rounded-0 ${validationErrors.description && 'is-invalid'}`}
-                                              value={formData.description}
-                                              onChange={(e) => setFormData({...formData, description: e.target.value})}
-                                              placeholder="Post Description">
-                                   </textarea>
-                                    { validationErrors.description && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.description.message.substring(4)}</span>}
-
-                                </div>
-                                <div className="form-group mb-3">
-                                    <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
-                                    <input className={`form-control rounded-0 ${validationErrors.image && 'is-invalid'}`} name="image" type="file" id="formFile"
-                                           value={formData.image}
-                                           onChange={handleFileSelect}
-                                    ></input>
-                                    { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
-
-                                </div>
-
-                                { editMode &&
-                                    <div className="form-group">
-                                        <label htmlFor="exampleSelectRounded0">Status<span className="text-danger">*</span></label>
-                                        <select className="custom-select rounded-0" id="exampleSelectRounded0"
-                                                onChange={(e) => setFormData({...formData, status: e.target.value})}
-                                                value={formData.status} >
-                                            <option value="1">Active</option>
-                                            <option value="0">Inactive</option>
-                                        </select>
+                                <div className="row">
+                                    <div className="col-md-12">
+                                        <div className="form-group mb-3">
+                                            <label>Title<span className="text-danger">*</span></label>
+                                            <input type="text" name="title" className={`form-control rounded-0 ${validationErrors.title && 'is-invalid'}`}
+                                                   onChange={(e) => setFormData({...formData, title: e.target.value})}
+                                                   value={formData.title}
+                                                   placeholder="Post Title">
+                                            </input>
+                                            { validationErrors.title && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.title.message.substring(4)}</span>}
+                                        </div>
                                     </div>
-                                }
+
+                                    <div className="col-md-12">
+                                        <div className="form-group mb-3">
+                                            <label>Categories<span className="text-danger">*</span></label>
+                                            <select className="form-select form-control multiselect" value={formData.categories} name="categories[]" multiple={true} aria-label="multiple select example"
+                                                    onChange={handleCategoryChange}
+                                            >
+                                                { categoryList.length > 0 &&
+                                                    categoryList.map((category) =>
+                                                        <option value={category._id} key={category._id} style={{paddingTop:"4px"}}>{category.title}</option>
+                                                    )
+                                                }
+                                            </select>
+                                            { validationErrors.categories && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.categories.message.substring(4)}</span>}
+
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-12">
+                                        <div className="form-group mb-3">
+                                            <label>Description<span className="text-danger">*</span></label>
+                                            <textarea name="description" className={`form-control rounded-0 ${validationErrors.description && 'is-invalid'}`}
+                                                      value={formData.description}
+                                                      onChange={(e) => setFormData({...formData, description: e.target.value})}
+                                                      placeholder="Post Description">
+                                             </textarea>
+                                            { validationErrors.description && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.description.message.substring(4)}</span>}
+
+                                        </div>
+                                    </div>
+
+                                    <div className="col-md-6">
+                                        <div className="form-group mb-3">
+                                            <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
+                                            <input className={`form-control rounded-0 ${validationErrors.image && 'is-invalid'}`} name="image" type="file" id="formFile"
+                                                   value={formData.image}
+                                                   onChange={handleFileSelect}
+                                            ></input>
+                                            { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
+
+                                        </div>
+                                    </div>
+
+
+                                    { editMode &&
+                                        <div className="col-md-6">
+                                            <div className="form-group">
+                                                <label htmlFor="exampleSelectRounded0">Status<span className="text-danger">*</span></label>
+                                                <select className="custom-select rounded-0" id="exampleSelectRounded0"
+                                                        onChange={(e) => setFormData({...formData, status: e.target.value})}
+                                                        value={formData.status} >
+                                                    <option value="1">Active</option>
+                                                    <option value="0">Inactive</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>
                             </div>
                             <div className="modal-footer justify-content-between">
                                 <button type="button" className="btn btn-default" data-dismiss="modal" onClick={openModal}>Close</button>
