@@ -284,9 +284,7 @@ function PostList(){
     }
 
     const handleFileSelect = (e) =>{
-        console.log(e.target.files[0])
-        setFormData({...formData, file_upload: true})
-        setFormData({...formData, image: e.target.files[0]})
+        setFormData({...formData, image: e.target.files[0], file_upload: true})
     }
     return(
         <section className="content">
