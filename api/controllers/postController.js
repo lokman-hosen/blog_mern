@@ -88,6 +88,7 @@ export const updatePost = async (req, res)=>{
         console.log(req.body.file_upload)
         console.log(req.body.file_upload == "undefined")
         if (typeof(req.body.file_upload) != "undefined" && !req.body.file_upload){
+            console.log('Post update')
            try {
                const updatePost = await Post.findByIdAndUpdate(
                    req.params.id,
@@ -108,6 +109,7 @@ export const updatePost = async (req, res)=>{
            const storage = multer.diskStorage({
                destination: "uploads",
                filename: function (req, file, cb) {
+                   console.log(file)
                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
                    const ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
                    const fileName = 'post' + '-'+uniqueSuffix+ext;
@@ -141,18 +143,19 @@ export const updatePost = async (req, res)=>{
                        'categories': categoryIds,
                        'status': req.body.status,
                    }
+                   console.log(body)
                    const updatePost =  Post.findByIdAndUpdate(
                        req.params.id,
                        {$set: body},
                        {new:true, runValidators: true},
-                       function (err, model){
-                           if (!err){
+                       function (updateErr, model){
+                           if (!updateErr){
                                res.status(200).json({
                                    'status': true,
                                    'data':updatePost
                                })
                            }else {
-                               res.status(500).json(err)
+                               res.status(500).json(updateErr)
                            }
 
                        }

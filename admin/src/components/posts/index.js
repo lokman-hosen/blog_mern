@@ -94,7 +94,7 @@ function PostList(){
                 title: formData.title,
                 description: formData.description,
                 image: formData.image,
-                author: formData.author,
+                author: "634e7c93b654f301477aba01",
                 categories: formData.categories,
                 status: formData.status,
                 file_upload: formData.file_upload,
@@ -211,6 +211,7 @@ function PostList(){
                 'title' : response.data.data.title,
                 'description' : response.data.data.description,
                 'categories' : categoryIds,
+                'image' : "",
                 'status' : response.data.data.status,
                 'id' : response.data.data._id,
                 'file_upload' : false,
@@ -281,9 +282,11 @@ function PostList(){
     const handleCategoryChange = (e) =>{
         setFormData({...formData, categories: [...e.target.selectedOptions].map(o => o.value)})
     }
+
     const handleFileSelect = (e) =>{
-        setFormData({...formData, image: e.target.files[0]})
+        console.log(e.target.files[0])
         setFormData({...formData, file_upload: true})
+        setFormData({...formData, image: e.target.files[0]})
     }
     return(
         <section className="content">
@@ -419,7 +422,6 @@ function PostList(){
                                         <div className="form-group mb-3">
                                             <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
                                             <input className={`form-control rounded-0 ${validationErrors.image && 'is-invalid'}`} name="image" type="file" id="formFile"
-                                                   value={formData.image}
                                                    onChange={handleFileSelect}
                                             ></input>
                                             { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
