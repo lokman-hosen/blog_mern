@@ -8,9 +8,6 @@ export const createPost = async (req, res)=>{
     let fileNameFinal = null;
 
     const storage = multer.diskStorage({
-        // destination: function (req, file, cb) {
-        //     cb(null, '/tmp/my-uploads')
-        // },
         destination: "uploads",
         filename: function (req, file, cb) {
             const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
@@ -36,11 +33,7 @@ export const createPost = async (req, res)=>{
             }
         })
         if (err){
-            res.status(500).json({
-                        'status': false,
-                        'data':"Something Went wrong"
-                    })
-
+            res.status(500).json({'status': false, 'data':"Something Went wrong"})
         }else {
             const newPost = new Post({
                 'title': req.body.title,
@@ -91,19 +84,83 @@ export const updatePost = async (req, res)=>{
 
     // admin post owner can edit post
     if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
-        try {
-            const updatePost = await Post.findByIdAndUpdate(
-                req.params.id,
-                {$set: req.body},
-                {new:true, runValidators: true}
-            );
-            res.status(200).json({
-                'status': true,
-                'data':updatePost
-            })
-        }catch (error){
-            res.status(500).json(error)
-        }
+        // update post without file
+        console.log(req.body.file_upload)
+        console.log(req.body.file_upload == "undefined")
+        if (typeof(req.body.file_upload) != "undefined" && !req.body.file_upload){
+           try {
+               const updatePost = await Post.findByIdAndUpdate(
+                   req.params.id,
+                   {$set: req.body},
+                   {new:true, runValidators: true}
+               );
+               res.status(200).json({
+                   'status': true,
+                   'data':updatePost
+               })
+           }catch (error){
+               res.status(500).json(error)
+           }
+       }else {
+           console.log('File upload')
+           let fileNameFinal = null;
+
+           const storage = multer.diskStorage({
+               destination: "uploads",
+               filename: function (req, file, cb) {
+                   const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
+                   const ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
+                   const fileName = 'post' + '-'+uniqueSuffix+ext;
+                   fileNameFinal = "uploads/"+fileName
+                   cb(null, fileName)
+               }
+           });
+
+           const upload = multer({
+               storage: storage
+           }).single('image')
+
+           upload(req, res, (err) =>{
+               // process category id array
+               const requestBody = req.body;
+               const categoryIds = [];
+               const asArray = Object.entries(requestBody);
+               const filtered = asArray.filter(([key, value]) =>{
+                   if (key.includes("categories")){
+                       categoryIds.push(value)
+                   }
+               })
+               if (err){
+                   res.status(500).json({'status': false, 'data':"Something Went wrong"})
+               }else {
+                   const body = {
+                       'title': req.body.title,
+                       'description': req.body.description,
+                       'image': fileNameFinal,
+                       'author': req.body.author,
+                       'categories': categoryIds,
+                       'status': req.body.status,
+                   }
+                   const updatePost =  Post.findByIdAndUpdate(
+                       req.params.id,
+                       {$set: body},
+                       {new:true, runValidators: true},
+                       function (err, model){
+                           if (!err){
+                               res.status(200).json({
+                                   'status': true,
+                                   'data':updatePost
+                               })
+                           }else {
+                               res.status(500).json(err)
+                           }
+
+                       }
+                   );
+               }
+
+           })
+       }
     }else {
         res.status(404).json({
             'status': false,

@@ -38,6 +38,7 @@ function PostList(){
         author: "634e7c93b654f301477aba01",
         categories: [],
         status: "",
+        fileUpload: true,
     })
 
 
@@ -91,10 +92,15 @@ function PostList(){
             // update item
             axios.put(API_BASE_URL+'api/posts/'+formData.id, {
                 title: formData.title,
+                description: formData.description,
+                image: formData.image,
+                author: formData.author,
+                categories: formData.categories,
                 status: formData.status,
+                file_upload: formData.file_upload,
             }, {
                 headers: {
-                    'Content-Type': 'application/json',
+                    'Content-Type': formData.file_upload ? 'multipart/form-data' : 'application/json',
                     'Authorization': 'Bearer '+token
                 }
             }).then((response) => {
@@ -102,8 +108,11 @@ function PostList(){
                 setEditMode(false)
                 if (response.data.status) {
                     // clear form data
-                    formData.title = '';
-                    formData.status = '';
+                    formData.title = ''
+                    formData.description = ''
+                    formData.image = ''
+                    formData.categories = []
+                    formData.file_upload = false
                     setModalVisibility("none")
                     setMessageType("success")
                     setMessage("Post updated Successfully")
@@ -204,6 +213,7 @@ function PostList(){
                 'categories' : categoryIds,
                 'status' : response.data.data.status,
                 'id' : response.data.data._id,
+                'file_upload' : false,
             })
             setModalVisibility("block");
         })
@@ -273,6 +283,7 @@ function PostList(){
     }
     const handleFileSelect = (e) =>{
         setFormData({...formData, image: e.target.files[0]})
+        setFormData({...formData, file_upload: true})
     }
     return(
         <section className="content">
