@@ -20,6 +20,7 @@ function PostList(){
     const [currentPage, setCurrentPage] = useState(1);
     const [totalRecord, setTotalRecord] = useState(0);
     // create and edit
+    const imageInputRef = React.useRef();
     const [modalVisibility, setModalVisibility] = useState("none");
     const [editMode, setEditMode] = useState(false);
     const [validationErrors, setValidationErrors] = useState([]);
@@ -71,6 +72,7 @@ function PostList(){
             }).then((response) => {
                 setShowToaster(true)
                 if (response.data.status) {
+                    imageInputRef.current.value = "";
                     // clear form data
                     formData.title = ''
                     formData.description = ''
@@ -108,6 +110,7 @@ function PostList(){
                 setEditMode(false)
                 if (response.data.status) {
                     // clear form data
+                    imageInputRef.current.value = "";
                     formData.title = ''
                     formData.description = ''
                     formData.image = ''
@@ -421,6 +424,8 @@ function PostList(){
                                             <label htmlFor="formFile" className="form-label">Image<span className="text-danger">*</span></label>
                                             <input className={`form-control rounded-0 ${validationErrors.image && 'is-invalid'}`} name="image" type="file" id="formFile"
                                                    onChange={handleFileSelect}
+                                                   ref={imageInputRef}
+                                                   // onChange={(e) => setFormData({...formData, image: e.target.files[0]})}
                                             ></input>
                                             { validationErrors.image && <span id="exampleInputEmail1-error" className="error invalid-feedback">{validationErrors.image.message.substring(4)}</span>}
 
