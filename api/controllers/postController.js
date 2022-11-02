@@ -1,6 +1,8 @@
 import Category from "../model/Category.js";
 import Post from "../model/Post.js";
 import multer from 'multer'
+import { unlinkSync } from 'node:fs';
+
 //const upload = multer({ dest: 'uploads/' })
 
 export const createPost = async (req, res)=>{
@@ -85,9 +87,6 @@ export const updatePost = async (req, res)=>{
     // admin post owner can edit post
     if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
         // update post without file
-        console.log('BoDy'+req.body.file_upload)
-        console.log('hello'+(req.body.file_upload === false))
-        //console.log(req.body.file_upload == "undefined")
         if (req.body.file_upload === false){
             console.log('Only post update')
            try {
@@ -149,11 +148,18 @@ export const updatePost = async (req, res)=>{
                        req.params.id,
                        {$set: body},
                        {new:true, runValidators: true},
-                       function (updateErr, post){
+                       function (updateErr, updatedPost){
                            if (!updateErr){
+                               // delete old file
+                               try {
+                                   unlinkSync(post.image);
+                                   console.log('successfully deleted /tmp/hello');
+                               } catch (err) {
+                                   console.log("Delete error")
+                               }
                                res.status(200).json({
                                    'status': true,
-                                   'data': post
+                                   'data': updatedPost
                                })
                            }else {
                                console.log("updateErr")
