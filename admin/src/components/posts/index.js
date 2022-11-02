@@ -7,6 +7,7 @@ import {API_BASE_URL} from "../../config";
 import withReactContent from "sweetalert2-react-content";
 import Swal from "sweetalert2";
 import ToastMessage from "../ToastMessage";
+import Loader from "../Loader";
 
 function PostList(){
     const token = useSelector((state) => state.user.token)
@@ -182,7 +183,8 @@ function PostList(){
 
     // open modal
     const openModal = () =>{
-        getCategoryList();
+        setLoader(true)
+         getCategoryList();
         formData.title = ''
         formData.description = ''
         formData.image = ''
@@ -192,10 +194,12 @@ function PostList(){
         setValidationErrors({});
         setEditMode(false);
         setShowToaster(false)
+        setLoader(false)
     }
 
     // get single item
     const getItemById = (id) => {
+        setLoader(true)
         setEditMode(true);
         setShowToaster(false)
         axios.get(API_BASE_URL+'api/posts/'+id, {
@@ -219,6 +223,7 @@ function PostList(){
                 'id' : response.data.data._id,
                 'file_upload' : false,
             })
+            setLoader(false)
             setModalVisibility("block");
         })
             .catch(function (error) {
@@ -293,7 +298,10 @@ function PostList(){
         <section className="content">
             <div className="container-fluid">
                 <div className="row">
-                    { showToaster &&  <ToastMessage messageType={messageType} message={message}/> }
+                    <div className={`col-12 ${loader && 'overlay'}`}>
+                        { loader && <Loader/>}
+                        { showToaster &&  <ToastMessage messageType={messageType} message={message}/> }
+                    </div>
                     <div className="col-12">
                         <div className="card">
                             <div className="card-header">
@@ -325,7 +333,7 @@ function PostList(){
                                     </tr>
                                     </thead>
                                     <tbody style={{minHeight: '200px'}}>
-                                    {!loader ?
+                                    {posts.length > 0 ?
                                         posts.map((post,index) =>
                                             <tr key={post._id}>
                                                 <td>{((currentPage-1)*10)+index+1}</td>
@@ -349,7 +357,6 @@ function PostList(){
                                                 </td>
                                             </tr>
                                         ) : <tr><td colSpan="7" className="text-center">
-                                            <i className="fas fa-spinner fa-spin fa-3x"></i>
                                         </td></tr>
                                     }
 
