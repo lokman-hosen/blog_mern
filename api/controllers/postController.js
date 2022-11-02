@@ -85,11 +85,14 @@ export const updatePost = async (req, res)=>{
     // admin post owner can edit post
     if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
         // update post without file
-        console.log(req.body.file_upload)
-        console.log(req.body.file_upload == "undefined")
-        if (typeof(req.body.file_upload) != "undefined" && !req.body.file_upload){
-            console.log('Post update')
+        console.log('BoDy'+req.body.file_upload)
+        console.log('hello'+(req.body.file_upload === false))
+        //console.log(req.body.file_upload == "undefined")
+        if (req.body.file_upload === false){
+            console.log('Only post update')
            try {
+                // keep old image name
+               req.body.image = post.image
                const updatePost = await Post.findByIdAndUpdate(
                    req.params.id,
                    {$set: req.body},
@@ -103,13 +106,12 @@ export const updatePost = async (req, res)=>{
                res.status(500).json(error)
            }
        }else {
-           console.log('File upload')
+           console.log('File upload with post')
            let fileNameFinal = null;
 
            const storage = multer.diskStorage({
                destination: "uploads",
                filename: function (req, file, cb) {
-                   console.log(file)
                    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
                    const ext = file.originalname.substring(file.originalname.lastIndexOf('.'), file.originalname.length);
                    const fileName = 'post' + '-'+uniqueSuffix+ext;
@@ -143,18 +145,18 @@ export const updatePost = async (req, res)=>{
                        'categories': categoryIds,
                        'status': req.body.status,
                    }
-                   console.log(body)
                    const updatePost =  Post.findByIdAndUpdate(
                        req.params.id,
                        {$set: body},
                        {new:true, runValidators: true},
-                       function (updateErr, model){
+                       function (updateErr, post){
                            if (!updateErr){
                                res.status(200).json({
                                    'status': true,
-                                   'data':updatePost
+                                   'data': post
                                })
                            }else {
+                               console.log("updateErr")
                                res.status(500).json(updateErr)
                            }
 

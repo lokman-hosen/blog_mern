@@ -275,7 +275,6 @@ function PostList(){
 
     const paginate = (pageNumber) =>{
         setCurrentPage(pageNumber)
-        //setTotalPage(pageNumbers);
     }
 
     // store categories
@@ -283,6 +282,7 @@ function PostList(){
         setFormData({...formData, categories: [...e.target.selectedOptions].map(o => o.value)})
     }
 
+    // store file
     const handleFileSelect = (e) =>{
         setFormData({...formData, image: e.target.files[0], file_upload: true})
     }
