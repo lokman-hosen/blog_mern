@@ -8,6 +8,7 @@ import {login} from "../../redux/userSlice";
 import ToastMessage from "../ToastMessage";
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
+import Loader from "../Loader";
 
 
 
@@ -115,16 +116,19 @@ function PostCategoryList(){
 
     // open modal
     const openModal = () =>{
+        //setLoader(true)
         formData.title = '';
         let modalState = modalVisibility == "none" ? "block" : "none";
         setModalVisibility(modalState);
         setValidationErrors({});
         setEditMode(false);
         setShowToaster(false)
+        //setLoader(false)
     }
 
     // get single item
     const getItemById = (id) => {
+        setLoader(true)
         setEditMode(true);
         setShowToaster(false)
         axios.get(API_BASE_URL+'api/categories/'+id, {
@@ -139,6 +143,7 @@ function PostCategoryList(){
                     'status' : response.data.data.status,
                     'id' : response.data.data._id,
                 })
+                setLoader(false)
                 setModalVisibility("block");
             })
             .catch(function (error) {
@@ -230,7 +235,10 @@ function PostCategoryList(){
             <section className="content">
                 <div className="container-fluid">
                     <div className="row">
-                        { showToaster &&  <ToastMessage messageType={messageType} message={message}/> }
+                        <div className={`col-12 ${loader && 'overlay'}`}>
+                            { loader && <Loader/>}
+                            { showToaster &&  <ToastMessage messageType={messageType} message={message}/> }
+                        </div>
                         <div className="col-12">
                             <div className="card">
                                 <div className="card-header">
@@ -259,7 +267,7 @@ function PostCategoryList(){
                                         </tr>
                                         </thead>
                                         <tbody style={{minHeight: '200px'}}>
-                                        {!loader ?
+                                        {categories.length > 0 ?
                                             categories.map((category,index) =>
                                                 <tr key={category._id}>
                                                     <td>{((currentPage-1)*10)+index+1}</td>
@@ -283,7 +291,6 @@ function PostCategoryList(){
                                                     </td>
                                                 </tr>
                                             ) : <tr><td colSpan="7" className="text-center">
-                                                <i className="fas fa-spinner fa-spin fa-3x"></i>
                                             </td></tr>
                                         }
 
