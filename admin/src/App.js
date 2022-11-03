@@ -9,6 +9,7 @@ import UserList from "./components/users";
 import PostList from "./components/posts";
 import PostCategoryList from "./components/post-category";
 import Login from "./components/auth/login";
+import PostDetail from "./components/posts/view";
 
 function App() {
     const location = useLocation();
@@ -46,6 +47,7 @@ function App() {
                         <Route path="/users" exact element={<UserList />} />
                         <Route path="/posts" exact element={<PostList />} />
                         <Route path="/categories" exact element={<PostCategoryList />} />
+                        <Route path="/posts/:id" exact element={<PostDetail />} />
                     </Routes>
                 </div>
                 <Footer/>

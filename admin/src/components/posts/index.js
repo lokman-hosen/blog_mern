@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
 import {useSelector} from "react-redux";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Pagination from "../pagination";
 import {API_BASE_URL} from "../../config";
 import withReactContent from "sweetalert2-react-content";
@@ -339,7 +339,7 @@ function PostList(){
                                                 <td>{((currentPage-1)*10)+index+1}</td>
                                                 <td><img src={API_BASE_URL+post.image} style={{width: "50px", height: "50px"}} /></td>
                                                 <td>{post.title}</td>
-                                                <td>{post.description}</td>
+                                                <td>{post.description.substring(0, 150)}</td>
                                                 <td>{post.author.name}</td>
                                                 <td>{post.createdAt}</td>
                                                 <td>
@@ -352,7 +352,9 @@ function PostList(){
                                                     <a  className="btn btn-xs btn-warning ml-1" onClick={()=> getItemById(post._id)}>
                                                         <i className="fa fa-edit"></i>
                                                     </a>
-                                                    <a  className="btn btn-xs btn-info ml-1"> <i className="fa fa-eye"></i></a>
+                                                    <Link target="_blank" className="btn btn-xs btn-info ml-1" to={`/posts/${post._id}`}>
+                                                        <i className="fa fa-eye"></i>
+                                                    </Link>
                                                     <a  className="btn btn-xs btn-danger ml-1"> <i className="fa fa-trash"></i></a>
                                                 </td>
                                             </tr>
