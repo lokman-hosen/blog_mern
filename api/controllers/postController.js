@@ -189,6 +189,12 @@ export const deletePost = async (req, res)=>{
     if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
         try {
             await Post.findByIdAndDelete(req.params.id);
+            try {
+                unlinkSync(post.image);
+                console.log('successfully deleted');
+            } catch (err) {
+                console.log("Delete error")
+            }
             res.status(200).json({
                 'status': true,
                 'data': 'Post Deleted'

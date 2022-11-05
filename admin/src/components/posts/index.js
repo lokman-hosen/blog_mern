@@ -355,7 +355,11 @@ function PostList(){
                                                     <Link target="_blank" className="btn btn-xs btn-info ml-1" to={`/posts/${post._id}`}>
                                                         <i className="fa fa-eye"></i>
                                                     </Link>
-                                                    <a  className="btn btn-xs btn-danger ml-1"> <i className="fa fa-trash"></i></a>
+                                                    <a  className="btn btn-xs btn-danger ml-1"
+                                                        onClick={()=> deleteItemById(post._id)}>
+
+                                                        <i className="fa fa-trash"></i>
+                                                    </a>
                                                 </td>
                                             </tr>
                                         ) : <tr><td colSpan="7" className="text-center">
