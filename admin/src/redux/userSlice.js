@@ -6,6 +6,7 @@ const userSlice = createSlice({
         email: localStorage.getItem('email'),
         login: localStorage.getItem('login') ? localStorage.getItem('login') : false,
         token: localStorage.getItem('token'),
+        userList: []
     },
     reducers: {
         login: (state, action) => {
@@ -16,9 +17,14 @@ const userSlice = createSlice({
         },
         logout: state => {
             state.value -= 1
+        },
+
+        userList: (state, action) => {
+            state.userList = action.payload.userList
         }
+
     }
 })
 
-export const {login, logout} = userSlice.actions;
+export const {login, logout, userList} = userSlice.actions;
 export default userSlice.reducer;

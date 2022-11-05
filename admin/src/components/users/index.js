@@ -1,14 +1,17 @@
 import React, {useEffect, useState} from 'react';
 import axios from "axios";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import { useNavigate } from "react-router-dom";
-import {login} from "../../redux/userSlice";
+import {login, userList} from "../../redux/userSlice";
 import Pagination from "../pagination";
+import {API_BASE_URL} from "../../config";
 
 function UserList(){
     const token = useSelector((state) => state.user.token)
     const isLoggedIn = useSelector((state) => state.user.login)
+    const userList1 = useSelector((state) => state.user.userList)
     const navigate = useNavigate();
+    const dispatch =  useDispatch();
 
     const [users, setUsers] = useState([]);
     const [loader, setLoader] = useState(true);
@@ -19,11 +22,13 @@ function UserList(){
 
 
     useEffect( ()=>{
+        console.log(token)
+        console.log(userList1)
         if (isLoggedIn == 'false'){
             navigate("/login")
         }
         setLoader(true)
-        axios.get('http://localhost:8800/api/users?page='+currentPage, {
+        axios.get(API_BASE_URL+'api/users?page='+currentPage, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
@@ -34,9 +39,12 @@ function UserList(){
                 setTotalRecord(response.data.totalRecord)
                 //pageNumber(response.data.totalRecord)
                 setLoader(false)
+                dispatch(userList({
+                    'userList': response.data.data
+
+                }))
             }
-        })
-            .catch(function (error) {
+        }).catch(function (error) {
                 // handle error
                 console.log(error.response.data);
                 if (error.response.data.message == 'Authentication Fail'){
@@ -93,7 +101,7 @@ function UserList(){
                                     </thead>
                                     <tbody  style={{minHeight: '200px'}}>
                                     {!loader ?
-                                            users.map((user,index) =>
+                                        userList1.map((user,index) =>
                                                 <tr key={user._id}>
                                                     <td>{((currentPage-1)*10)+index+1}</td>
                                                     <td>{user.name}</td>
