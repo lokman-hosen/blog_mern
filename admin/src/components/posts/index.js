@@ -158,7 +158,7 @@ function PostList(){
     }
 
     function getCategoryList(){
-        axios.get(API_BASE_URL+'api/categories?page=1', {
+        axios.get(API_BASE_URL+'api/categories?page=all', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer '+token
