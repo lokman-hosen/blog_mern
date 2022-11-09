@@ -1,32 +1,36 @@
 <template>
   <AppNavbar/>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div class="main-wrapper">
+  <HomeBanner/>
+  <BlogContainer/>
+  </div>
   <AppFooter/>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
 import AppNavbar from "@/components/AppNavbar";
 import AppFooter from "@/components/AppFooter";
+import HomeBanner from "@/components/HomeBanner";
+import BlogContainer from "@/components/BlogContainer";
 
 export default {
   name: 'App',
   components: {
+    BlogContainer,
+    HomeBanner,
     AppFooter,
     AppNavbar,
-    HelloWorld
   }
 }
 </script>
 
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+/*#app {*/
+/*  font-family: Avenir, Helvetica, Arial, sans-serif;*/
+/*  -webkit-font-smoothing: antialiased;*/
+/*  -moz-osx-font-smoothing: grayscale;*/
+/*  text-align: center;*/
+/*  color: #2c3e50;*/
+/*  margin-top: 60px;*/
+/*}*/
 </style>
