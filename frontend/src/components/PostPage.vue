@@ -1,4 +1,5 @@
 <template>
+  <HomeBanner caption="Blog Article"/>
   <section class="section blog-wrap bg-gray">
     <div class="container">
       <div class="row">
@@ -135,8 +136,10 @@
 </template>
 
 <script>
+import HomeBanner from "@/components/HomeBanner";
 export default {
-  name: 'BlogContainer',
+  name: 'PostDetailPage',
+  components: {HomeBanner},
 }
 </script>
 

@@ -1,0 +1,41 @@
+<template>
+  <div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+      <form id="contact-form" class="contact__form" method="post" action="mail.php">
+        <!-- form message -->
+        <div class="row">
+          <div class="col-12">
+            <div class="alert alert-success contact__msg" style="display: none" role="alert">
+              Your message was sent successfully.
+            </div>
+          </div>
+        </div>
+        <!-- end message -->
+        <span class="text-color">Send a message</span>
+        <h3 class="text-md mb-4">Contact Form</h3>
+        <div class="form-group">
+          <input name="name" type="text" class="form-control" placeholder="Your Name">
+        </div>
+        <div class="form-group">
+          <input name="email" type="email" class="form-control" placeholder="Email Address">
+        </div>
+        <div class="form-group-2 mb-4">
+          <textarea name="message" class="form-control" rows="4" placeholder="Your Message"></textarea>
+        </div>
+        <button class="btn btn-main" name="submit" type="submit">Send Message</button>
+      </form>
+    </div>
+  </div>
+
+</template>
+
+<script>
+export default {
+  name: 'LoginPage',
+}
+</script>
+
+<!-- Add "scoped" attribute to limit CSS to this component only -->
+<style scoped>
+
+</style>
