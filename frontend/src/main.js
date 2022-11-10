@@ -6,6 +6,7 @@ import PostPage from "@/components/PostPage";
 import LoginPage from "@/components/LoginPage";
 import RegistrationPage from "@/components/RegistrationPage";
 import PostDetailPage from "@/components/PostDetailPage";
+import ProfilePage from "@/components/ProfilePage";
 const routes = [
     { path: '/', component: PostPage },
     { path: '/post', component: PostPage },
@@ -13,6 +14,7 @@ const routes = [
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegistrationPage },
     { path: '/about', component: AboutPage },
+    { path: '/profile', component: ProfilePage },
 ]
 
 const router = createRouter({
