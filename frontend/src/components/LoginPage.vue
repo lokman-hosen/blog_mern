@@ -1,6 +1,6 @@
 <template>
   <div class="row">
-    <div class="col-lg-6 col-md-12 col-sm-12">
+    <div class="col-lg-6 col-md-12 col-sm-12 m-auto">
       <form id="contact-form" class="contact__form" method="post" action="mail.php">
         <!-- form message -->
         <div class="row">
@@ -11,18 +11,14 @@
           </div>
         </div>
         <!-- end message -->
-        <span class="text-color">Send a message</span>
-        <h3 class="text-md mb-4">Contact Form</h3>
-        <div class="form-group">
-          <input name="name" type="text" class="form-control" placeholder="Your Name">
-        </div>
+        <h3 class="text-md my-5">Login Here</h3>
         <div class="form-group">
           <input name="email" type="email" class="form-control" placeholder="Email Address">
         </div>
-        <div class="form-group-2 mb-4">
-          <textarea name="message" class="form-control" rows="4" placeholder="Your Message"></textarea>
+        <div class="form-group">
+          <input name="password" type="password" class="form-control" placeholder="Password">
         </div>
-        <button class="btn btn-main" name="submit" type="submit">Send Message</button>
+        <button class="btn btn-main" name="submit" type="submit">Submit</button>
       </form>
     </div>
   </div>

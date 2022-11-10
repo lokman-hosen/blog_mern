@@ -8,6 +8,7 @@ import RegistrationPage from "@/components/RegistrationPage";
 import PostDetailPage from "@/components/PostDetailPage";
 const routes = [
     { path: '/', component: PostPage },
+    { path: '/post', component: PostPage },
     { path: '/post/:id', component: PostDetailPage },
     { path: '/login', component: LoginPage },
     { path: '/register', component: RegistrationPage },
