@@ -31,7 +31,7 @@
 
         <div class="collapse navbar-collapse text-center" id="navbarsExample09">
           <ul class="navbar-nav ml-auto">
-            <li class="nav-item active">
+            <li class="nav-item">
               <router-link to="/" class="nav-link">Home</router-link>
 <!--              <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>-->
             </li>

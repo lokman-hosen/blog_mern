@@ -13,13 +13,13 @@
         <!-- end message -->
         <h3 class="text-md my-4">Register Here</h3>
         <div class="form-group">
-          <input name="name" type="text" class="form-control" placeholder="Your Name">
+          <input name="name" v-model="name" type="text" class="form-control" placeholder="Your Name">
         </div>
         <div class="form-group">
-          <input name="email" type="email" class="form-control" placeholder="Email Address">
+          <input name="email" v-model="email" type="email" class="form-control" autocomplete="chrome-off" placeholder="Email Address">
         </div>
         <div class="form-group">
-          <input name="password" type="password" class="form-control" placeholder="Password">
+          <input name="password" v-model="password" type="password" class="form-control" placeholder="Password">
         </div>
         <div class="form-group-2 mb-4">
           <textarea name="message" class="form-control" rows="4" placeholder="Your Message"></textarea>
@@ -33,6 +33,13 @@
 <script>
 export default {
   name: 'RegistrationPage',
+  data(){
+    return{
+      'name' : '',
+      'email' : '',
+      'password' : '',
+    }
+  }
 }
 </script>
 
