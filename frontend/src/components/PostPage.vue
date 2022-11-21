@@ -1,3 +1,48 @@
+<script>
+import HomeBanner from "@/components/HomeBanner";
+import axios from "axios";
+import {API_BASE_URL} from "@/config";
+export default {
+  name: 'PostDetailPage',
+  components: {HomeBanner},
+  data(){
+    return{
+      baseUrl: API_BASE_URL,
+      currentPage: 1,
+      totalRecord: 0,
+      totalPage: 1,
+      posts: [],
+    }
+  },
+
+  methods: {
+    getData(){
+
+      //axios.get(API_BASE_URL+'api/posts?page='+this.currentPage, {
+      axios.get(API_BASE_URL+'api/posts?page='+this.currentPage, {
+     // axios.get(`${API_BASE_URL}api/posts`, {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5MDEzNTIyLCJleHAiOjE2NjkwMzE1MjJ9.MkILXfk2SmuZy2TY0XMP7ZL27i86HHWOaz9NA7ojkUw'
+        },
+      })
+          .then(response => {
+            this.posts = response.data.data;
+            this.totalRecord = response.data.totalRecord;
+            this.totalPage = Number.isInteger(response.data.totalRecord/10) ? response.data.totalRecord/10 : response.data.totalRecord/10 +1
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          });
+    }
+  },
+  created() {
+    this.getData()
+  }
+}
+</script>
+
 <template>
   <HomeBanner caption="Blog Article"/>
   <section class="section blog-wrap bg-gray">
@@ -5,72 +50,20 @@
       <div class="row">
         <div class="col-lg-8">
           <div class="row">
-            <div class="col-lg-6 col-md-6 mb-5">
-              <div class="blog-item">
-                <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" alt="" class="img-fluid rounded">
+            <div class="col-12">
+              <div class="card-columns">
+                <div class="card" v-for="post in posts" :key="post.id">
+<!--                  <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" class="card-img-top" alt="...">-->
+                  <img :src="baseUrl+post.image" alt="" class="rounded" height="238" width="350">
 
-                <div class="blog-item-content bg-white p-4">
-                  <div class="blog-item-meta  py-1 px-2">
-                    <span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i>Creativity</span>
+                  <div class="card-body">
+                    <h5 class="card-title">{{post.title}}</h5>
+                    <p class="card-text">{{post.description}}</p>
                   </div>
-
-                  <h3 class="mt-3 mb-3"><a href="blog-single.html">Improve design with typography?</a></h3>
-                  <p class="mb-4">Non illo quas blanditiis repellendus laboriosam minima animi. Consectetur accusantium pariatur repudiandae!</p>
-
-                  <a href="blog-single.html" class="btn btn-small btn-main btn-round-full">Learn More</a>
                 </div>
               </div>
             </div>
 
-            <div class="col-lg-6 col-md-6 mb-5">
-              <div class="blog-item">
-                <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" alt="" class="img-fluid rounded">
-
-                <div class="blog-item-content bg-white p-4">
-                  <div class="blog-item-meta py-1 px-2">
-                    <span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i>Design</span>
-                  </div>
-
-                  <h3 class="mt-3 mb-3"><a href="blog-single.html">Interactivity connect consumer</a></h3>
-                  <p class="mb-4">Non illo quas blanditiis repellendus laboriosam minima animi. Consectetur accusantium pariatur repudiandae!</p>
-
-                  <a href="blog-single.html" class="btn btn-small btn-main btn-round-full">Learn More</a>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6 col-md-6 mb-5">
-              <div class="blog-item">
-                <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" alt="" class="img-fluid rounded">
-
-                <div class="blog-item-content bg-white p-4">
-                  <div class="blog-item-meta py-1 px-2">
-                    <span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i>Community</span>
-                  </div>
-
-                  <h3 class="mt-3 mb-3"><a href="blog-single.html">Marketing Strategy to bring more affect</a></h3>
-                  <p class="mb-4">Non illo quas blanditiis repellendus laboriosam minima animi. Consectetur accusantium pariatur repudiandae!</p>
-
-                  <a href="blog-single.html" class="btn btn-small btn-main btn-round-full">Learn More</a>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-6 col-md-6 mb-5">
-              <div class="blog-item">
-                <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" alt="" class="img-fluid rounded">
-
-                <div class="blog-item-content bg-white p-4">
-                  <div class="blog-item-meta py-1 px-2">
-                    <span class="text-muted text-capitalize mr-3"><i class="ti-pencil-alt mr-2"></i>Marketing</span>
-                  </div>
-
-                  <h3 class="mt-3 mb-3"><a href="blog-single.html">Marketing Strategy to bring more affect</a></h3>
-                  <p class="mb-4">Non illo quas blanditiis repellendus laboriosam minima animi. Consectetur accusantium pariatur repudiandae!</p>
-
-                  <a href="blog-single.html" class="btn btn-small btn-main btn-round-full">Learn More</a>
-                </div>
-              </div>
-            </div>
           </div>
         </div>
         <div class="col-lg-4">
@@ -135,15 +128,19 @@
   </section>
 </template>
 
-<script>
-import HomeBanner from "@/components/HomeBanner";
-export default {
-  name: 'PostDetailPage',
-  components: {HomeBanner},
-}
-</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+@media (min-width: 576px){
+  .card-columns {
+    -webkit-column-count: 2;
+    -moz-column-count: 2;
+    column-count: 2;
+    -webkit-column-gap: 1.25rem;
+    -moz-column-gap: 1.25rem;
+    column-gap: 1.25rem;
+    orphans: 1;
+    widows: 1;
+  }
+}
 </style>

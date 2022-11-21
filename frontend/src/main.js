@@ -7,6 +7,7 @@ import LoginPage from "@/components/LoginPage";
 import RegistrationPage from "@/components/RegistrationPage";
 import PostDetailPage from "@/components/PostDetailPage";
 import ProfilePage from "@/components/ProfilePage";
+
 const routes = [
     { path: '/', component: PostPage },
     { path: '/post', component: PostPage },
