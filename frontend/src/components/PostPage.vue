@@ -23,7 +23,7 @@ export default {
      // axios.get(`${API_BASE_URL}api/posts`, {
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5MDEzNTIyLCJleHAiOjE2NjkwMzE1MjJ9.MkILXfk2SmuZy2TY0XMP7ZL27i86HHWOaz9NA7ojkUw'
+          'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5MDgyNjQ2LCJleHAiOjE2NjkxMDA2NDZ9.BLA5BOijV3vW0j5NLiaqK8bWdmmUl56SfJoCwKZw53M'
         },
       })
           .then(response => {
@@ -58,6 +58,7 @@ export default {
 
                   <div class="card-body">
                     <h5 class="card-title">{{post.title}}</h5>
+                    <p>Post By: {{post.author.name +', '+post.createdAt}}</p>
                     <p class="card-text">{{post.description}}</p>
                   </div>
                 </div>
