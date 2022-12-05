@@ -1,47 +1,31 @@
 <script>
 import HomeBanner from "@/components/HomeBanner";
-import axios from "axios";
-import {API_BASE_URL} from "@/config";
+//import axios from "axios";
+//import {API_BASE_URL} from "@/config";
+import {usePostStore} from "@/stores/post";
+//import {storeToRefs} from "pinia/dist/pinia";
 export default {
   name: 'PostDetailPage',
   components: {HomeBanner},
-  data(){
-    return{
-      baseUrl: API_BASE_URL,
-      currentPage: 1,
-      totalRecord: 0,
-      totalPage: 1,
-      posts: [],
-    }
+  setup() {
+    //console.log('Hello')
+    const postStore = usePostStore()
+    //const { name, doubleCount, count} = storeToRefs(postStore)
+    //const  increment = store
+
+    // return {
+    //   name,
+    //   doubleCount,
+    //   count
+    // }
   },
 
-  methods: {
-    getData(){
-
-      //axios.get(API_BASE_URL+'api/posts?page='+this.currentPage, {
-      axios.get(API_BASE_URL+'api/posts?page='+this.currentPage, {
-     // axios.get(`${API_BASE_URL}api/posts`, {
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjY5MDgyNjQ2LCJleHAiOjE2NjkxMDA2NDZ9.BLA5BOijV3vW0j5NLiaqK8bWdmmUl56SfJoCwKZw53M'
-        },
-      })
-          .then(response => {
-            this.posts = response.data.data;
-            this.totalRecord = response.data.totalRecord;
-            this.totalPage = Number.isInteger(response.data.totalRecord/10) ? response.data.totalRecord/10 : response.data.totalRecord/10 +1
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-          });
-    }
-  },
   created() {
-    this.getData()
+    //this.getData()
   }
 }
 </script>
+
 
 <template>
   <HomeBanner caption="Blog Article"/>
@@ -52,16 +36,9 @@ export default {
           <div class="row">
             <div class="col-12">
               <div class="card-columns">
-                <div class="card" v-for="post in posts" :key="post.id">
-<!--                  <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" class="card-img-top" alt="...">-->
-                  <img :src="baseUrl+post.image" alt="" class="rounded" height="238" width="350">
+                <p>Name {{postStore.doubleCount}}</p>
+                <p>Count {{postStore.count}}</p>
 
-                  <div class="card-body">
-                    <h5 class="card-title">{{post.title}}</h5>
-                    <p>Post By: {{post.author.name +', '+post.createdAt}}</p>
-                    <p class="card-text">{{post.description}}</p>
-                  </div>
-                </div>
               </div>
             </div>
 
@@ -128,7 +105,6 @@ export default {
     </div>
   </section>
 </template>
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

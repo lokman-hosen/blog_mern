@@ -8,6 +8,8 @@ import RegistrationPage from "@/components/RegistrationPage";
 import PostDetailPage from "@/components/PostDetailPage";
 import ProfilePage from "@/components/ProfilePage";
 
+import { createPinia } from 'pinia'
+
 const routes = [
     { path: '/', component: PostPage },
     { path: '/post', component: PostPage },
@@ -17,6 +19,7 @@ const routes = [
     { path: '/about', component: AboutPage },
     { path: '/profile', component: ProfilePage },
 ]
+const pinia = createPinia()
 
 const router = createRouter({
     // 4. Provide the history implementation to use. We are using the hash history for simplicity here.
@@ -25,4 +28,4 @@ const router = createRouter({
     linkExactActiveClass: "active"
 })
 
-createApp(App).use(router).mount('#app')
+createApp(App).use(router).use(pinia).mount('#app')
