@@ -6,6 +6,7 @@ import {API_BASE_URL} from "@/config";
 export const usePostStore = defineStore('post', () => {
     let posts = ref({});
     let currentPage = ref(1);
+    let pageNumbers = ref([1,2,3,4,5]);
     function getPost(){
         axios.get(API_BASE_URL+'api/posts?page='+currentPage.value, {
             headers: {
@@ -24,5 +25,11 @@ export const usePostStore = defineStore('post', () => {
 
     }
 
-    return { posts, getPost}
+    function pagination (pageNumber){
+        console.log('current page-'+ pageNumber)
+        currentPage.value = pageNumber;
+        getPost();
+    }
+
+    return { posts, getPost, pageNumbers, pagination}
 })

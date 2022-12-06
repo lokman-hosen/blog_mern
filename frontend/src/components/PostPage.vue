@@ -11,19 +11,24 @@ export default {
   setup() {
      let  baseUrl= API_BASE_URL;
     const postStore = usePostStore()
-    const {posts} = storeToRefs(postStore)
-    const { getPost } = postStore
+    const {posts, pageNumbers} = storeToRefs(postStore)
+    const { getPost, pagination } = postStore
 
     return {
       getPost,
       posts,
+      pageNumbers,
+      pagination,
       baseUrl
     }
   },
   methods: {
     getPostList() {
-      this.getPost()
+      this.getPost();
     },
+    changePage(page){
+      this.pagination(page);
+    }
   },
 
   created() {
@@ -108,7 +113,7 @@ export default {
             <div class="nav-links">
               <a class="prev page-numbers" href="#">Prev</a>
               <span aria-current="page" class="page-numbers current">1</span>
-              <a class="page-numbers" href="#">2</a>
+              <a role="button" v-for="page in pageNumbers" :key="page" @click="changePage(page)" class="page-numbers">{{page}}</a>
               <a class="next page-numbers" href="#">Next</a>
             </div>
           </nav>
