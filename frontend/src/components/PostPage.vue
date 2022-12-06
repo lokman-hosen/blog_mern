@@ -3,25 +3,41 @@ import HomeBanner from "@/components/HomeBanner";
 //import axios from "axios";
 //import {API_BASE_URL} from "@/config";
 import {usePostStore} from "@/stores/post";
-//import {storeToRefs} from "pinia/dist/pinia";
+import {storeToRefs} from "pinia";
+import {API_BASE_URL} from "@/config";
 export default {
   name: 'PostDetailPage',
   components: {HomeBanner},
   setup() {
-    //console.log('Hello')
+     let  baseUrl= API_BASE_URL;
     const postStore = usePostStore()
-    //const { name, doubleCount, count} = storeToRefs(postStore)
-    //const  increment = store
+    const { name, doubleCount, count, postsList} = storeToRefs(postStore)
+    const { increment, getPost } = postStore
 
-    // return {
-    //   name,
-    //   doubleCount,
-    //   count
-    // }
+    return {
+      name,
+      doubleCount,
+      count,
+      increment,
+      getPost,
+      postsList,
+      baseUrl
+    }
+  },
+  methods: {
+    incrementAndPrint() {
+      this.increment()
+      console.log('New Count:', this.count)
+    },
+    getPostList() {
+      this.getPost()
+      console.log('Total Post Count:')
+    },
+
   },
 
   created() {
-    //this.getData()
+    this.getPostList();
   }
 }
 </script>
@@ -36,8 +52,16 @@ export default {
           <div class="row">
             <div class="col-12">
               <div class="card-columns">
-                <p>Name {{postStore.doubleCount}}</p>
-                <p>Count {{postStore.count}}</p>
+                <div class="card" v-for="post in postsList" :key="post.id">
+<!--                                    <img src="https://technext.github.io/megakit-2/images/blog/1.jpg" class="card-img-top" alt="...">-->
+                  <img :src="baseUrl+post.image" alt="" class="rounded" height="238" width="350">
+
+                  <div class="card-body">
+                    <h5 class="card-title">{{post.title}}</h5>
+                    <p>Post By: {{post.author.name +', '+post.createdAt}}</p>
+                    <p class="card-text">{{post.description}}</p>
+                  </div>
+                </div>
 
               </div>
             </div>
