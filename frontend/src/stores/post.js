@@ -6,7 +6,8 @@ import {API_BASE_URL} from "@/config";
 export const usePostStore = defineStore('post', () => {
     let posts = ref({});
     let currentPage = ref(1);
-    let pageNumbers = ref([1,2,3,4,5]);
+    //let pageNumbers = ref([1,2,3,4,5]);
+    let totalRecord = ref(0);
     function getPost(){
         axios.get(API_BASE_URL+'api/posts?page='+currentPage.value, {
             headers: {
@@ -15,7 +16,7 @@ export const usePostStore = defineStore('post', () => {
             },
         }).then(response => {
                 posts.value = response.data.data;
-                //this.totalRecord = response.data.totalRecord;
+                totalRecord.value = response.data.totalRecord;
                 //this.totalPage = Number.isInteger(response.data.totalRecord/10) ? response.data.totalRecord/10 : response.data.totalRecord/10 +1
             })
             .catch(function (error) {
@@ -31,5 +32,5 @@ export const usePostStore = defineStore('post', () => {
         getPost();
     }
 
-    return { posts, getPost, pageNumbers, pagination}
+    return { posts, getPost, totalRecord, pagination, currentPage}
 })

@@ -227,13 +227,13 @@ export const postDetail = async (req, res)=>{
 }
 
 export const postList = async (req, res)=>{
-    const skipRecord = req.query.page*10;
+    const skipRecord = req.query.page*5;
     try {
         const posts = await Post.find().sort('-createdAt').populate([
             // take limited column from relation
             {path:"author", select:"name email"},
             {path:"categories", select:"title"}
-        ]).skip(skipRecord -10).limit(10);
+        ]).skip(skipRecord -5).limit(5);
         const totalRecord = await Post.countDocuments({});
         res.status(200).json({
             'status': true,

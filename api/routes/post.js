@@ -19,7 +19,7 @@ router.delete("/:id", checkLogin, deletePost);
 //detail
 router.get("/:id", postDetail);
 //get all
-router.get("/", checkLogin, postList);
-//router.get("/", postList);
+//router.get("/", checkLogin, postList);
+router.get("/", postList);
 
 export default router

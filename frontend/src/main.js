@@ -2,7 +2,7 @@ import { createApp } from 'vue'
 import App from './App.vue'
 import {createRouter, createWebHistory} from 'vue-router'
 import AboutPage from "@/components/AboutPage";
-import PostPage from "@/components/PostPage";
+import PostPage from "@/components/post/PostPage";
 import LoginPage from "@/components/LoginPage";
 import RegistrationPage from "@/components/RegistrationPage";
 import PostDetailPage from "@/components/PostDetailPage";
