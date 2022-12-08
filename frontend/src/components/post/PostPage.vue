@@ -7,9 +7,10 @@ import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
 import PaginationPage from "@/components/PaginationPage";
 import PageLoader from "@/components/PageLoader";
+import PostComponent from "@/components/post/PostComponent";
 export default {
   name: 'PostDetailPage',
-  components: {PageLoader, PaginationPage, HomeBanner},
+  components: {PostComponent, PageLoader, PaginationPage, HomeBanner},
   setup() {
     let  baseUrl= API_BASE_URL;
     const postStore = usePostStore();
@@ -49,16 +50,12 @@ export default {
         <div class="col-lg-8">
           <div class="row">
             <div class="col-12">
-              <div class="card-columns" v-if="posts.length > 0">
-                <div class="card" v-for="post in posts" :key="post.id">
-                  <img :src="baseUrl+post.image" alt="" class="rounded" height="238" width="350">
-                  <div class="card-body">
-                    <h5 class="card-title">{{post.title}}</h5>
-                    <p>Post By: {{post.author.name +', '+post.createdAt}}</p>
-                    <p class="card-text">{{post.description}}</p>
-                  </div>
+              <template v-if="posts.length > 0">
+                <div class="card-columns">
+                  <PostComponent :posts="posts" :baseUrl="baseUrl"/>
                 </div>
-              </div>
+                <PaginationPage :totalRecord="totalRecord" @change-page="changePage" :currentPage="currentPage"/>
+              </template>
               <div v-else>
               <PageLoader/>
               </div>
@@ -114,17 +111,6 @@ export default {
 
       <div class="row mt-5">
         <div class="col-lg-8">
-          <PaginationPage :totalRecord="totalRecord" @change-page="changePage" :currentPage="currentPage"/>
-<!--          <nav class="navigation pagination py-2 d-inline-block">-->
-<!--            <div class="nav-links">-->
-<!--              <a class="prev page-numbers" href="#">Prev</a>-->
-<!--              <a role="button" v-for="page in pageNumbers" :key="page" @click="changePage(page)" class="page-numbers">-->
-<!--                <span aria-current="page" :class="`page-numbers ${page == currentPage ? 'current' : ''}`">{{page}}</span>-->
-
-<!--              </a>-->
-<!--              <a class="next page-numbers" href="#">Next</a>-->
-<!--            </div>-->
-<!--          </nav>-->
         </div>
       </div>
     </div>

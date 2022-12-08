@@ -5,7 +5,7 @@ import AboutPage from "@/components/AboutPage";
 import PostPage from "@/components/post/PostPage";
 import LoginPage from "@/components/LoginPage";
 import RegistrationPage from "@/components/RegistrationPage";
-import PostDetailPage from "@/components/PostDetailPage";
+import PostDetailPage from "@/components/post/PostDetailPage";
 import ProfilePage from "@/components/ProfilePage";
 
 import { createPinia } from 'pinia'
