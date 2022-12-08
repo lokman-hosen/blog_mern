@@ -6,14 +6,15 @@ import {usePostStore} from "@/stores/post";
 import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
 import PaginationPage from "@/components/PaginationPage";
+import PageLoader from "@/components/PageLoader";
 export default {
   name: 'PostDetailPage',
-  components: {PaginationPage, HomeBanner},
+  components: {PageLoader, PaginationPage, HomeBanner},
   setup() {
-     let  baseUrl= API_BASE_URL;
-    const postStore = usePostStore()
-    const {posts, totalRecord, currentPage} = storeToRefs(postStore)
-    const { getPost, pagination } = postStore
+    let  baseUrl= API_BASE_URL;
+    const postStore = usePostStore();
+    const {posts, totalRecord, currentPage} = storeToRefs(postStore);
+    const { getPost, pagination } = postStore;
 
     return {
       getPost,
@@ -29,7 +30,6 @@ export default {
       this.getPost();
     },
     changePage(page){
-      console.log('function called'+JSON.stringify(page))
       this.pagination(page);
     }
   },
@@ -49,7 +49,7 @@ export default {
         <div class="col-lg-8">
           <div class="row">
             <div class="col-12">
-              <div class="card-columns">
+              <div class="card-columns" v-if="posts.length > 0">
                 <div class="card" v-for="post in posts" :key="post.id">
                   <img :src="baseUrl+post.image" alt="" class="rounded" height="238" width="350">
                   <div class="card-body">
@@ -58,7 +58,9 @@ export default {
                     <p class="card-text">{{post.description}}</p>
                   </div>
                 </div>
-
+              </div>
+              <div v-else>
+              <PageLoader/>
               </div>
             </div>
 
