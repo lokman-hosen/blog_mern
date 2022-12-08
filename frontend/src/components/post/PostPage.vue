@@ -29,6 +29,7 @@ export default {
       this.getPost();
     },
     changePage(page){
+      console.log('function called'+JSON.stringify(page))
       this.pagination(page);
     }
   },
@@ -111,7 +112,7 @@ export default {
 
       <div class="row mt-5">
         <div class="col-lg-8">
-          <PaginationPage :totalRecord="totalRecord" :currentPage="currentPage"/>
+          <PaginationPage :totalRecord="totalRecord" @change-page="changePage" :currentPage="currentPage"/>
 <!--          <nav class="navigation pagination py-2 d-inline-block">-->
 <!--            <div class="nav-links">-->
 <!--              <a class="prev page-numbers" href="#">Prev</a>-->
