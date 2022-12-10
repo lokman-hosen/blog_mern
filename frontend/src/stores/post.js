@@ -4,8 +4,8 @@ import axios from "axios";
 import {API_BASE_URL} from "@/config";
 
 export const usePostStore = defineStore('post', () => {
-    let posts = ref({});
-    //let post = ref({});
+    let posts = ref([]);
+    let post = ref({});
     let currentPage = ref(1);
     let totalRecord = ref(0);
     // get post list
@@ -28,15 +28,29 @@ export const usePostStore = defineStore('post', () => {
     }
 
     function postDetail(postId){
-        console.log(postId)
-        //return posts;
+        //return postId;
+       // const value = posts.value
+        //return posts.find((post) => post.id === postId);
+        // return {
+        //     'name': 'Lokman',
+        //     'age' : 50
+        // };
+
+        console.log( 'ID'+postId)
+       // console.log( 'posts'+JSON.stringify(posts.value[0]))
+        //console.log( 'posts'+JSON.stringify(posts.value[0]._id))
+        const myPost = posts.value[0];
+        post.value = myPost;
+        //console.log('post:'+myPost.title)
+       //  post.value = posts.value[0];
+        //return posts.value[0]
+        return myPost;
     }
 
     function pagination (pageNumber){
-        console.log('current page-'+ pageNumber)
         currentPage.value = pageNumber;
         getPost();
     }
 
-    return { posts, getPost, totalRecord, pagination, currentPage, postDetail}
+    return { posts, getPost, totalRecord, pagination, currentPage, postDetail, post}
 })
