@@ -23,9 +23,11 @@ export default {
     getSinglePost(){
       this.postDetail(this.$route.params.id)
     },
-
+    // load new post detail when click on sidebar Latest post
     singlePost(postId){
-      this.postDetail(postId)
+      // change url
+      this.$router.push("/post/"+postId);
+      this.postDetail(postId);
     }
   },
 
@@ -193,8 +195,6 @@ export default {
     </div>
   </section>
 </template>
-
-
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
