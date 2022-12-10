@@ -28,23 +28,19 @@ export const usePostStore = defineStore('post', () => {
     }
 
     function postDetail(postId){
-        //return postId;
-       // const value = posts.value
-        //return posts.find((post) => post.id === postId);
-        // return {
-        //     'name': 'Lokman',
-        //     'age' : 50
-        // };
-
-        console.log( 'ID'+postId)
-       // console.log( 'posts'+JSON.stringify(posts.value[0]))
-        //console.log( 'posts'+JSON.stringify(posts.value[0]._id))
-        const myPost = posts.value[0];
-        post.value = myPost;
-        //console.log('post:'+myPost.title)
-       //  post.value = posts.value[0];
-        //return posts.value[0]
-        return myPost;
+        //const myPost = posts.value[0];
+         posts.value.find(post1=>{
+             if (post1._id === postId){
+                 //console.log('Hello'+JSON.stringify(post1._id))
+                 post.value = post1;
+                 //console.log('Hello'+typeof(post1))
+             }
+            //console.log('title'+post1._id, postId)
+            //return post1._id == postId
+        });
+        //post.value = myPost;
+        //console.log(postId, myPost)
+        //return myPost;
     }
 
     function pagination (pageNumber){
