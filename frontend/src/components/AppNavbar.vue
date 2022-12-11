@@ -44,6 +44,7 @@
 
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
             <router-link to="/register" class="nav-link">Register</router-link>
+            <router-link to="/login" class="nav-link">Login</router-link>
           </ul>
 
           <form class="form-lg-inline my-2 my-md-0 ml-lg-4 text-center">
