@@ -1,3 +1,16 @@
+<script>
+import {useAuthStore} from "@/stores/auth";
+
+export default {
+  name: 'AppNavbar',
+  setup(){
+    const authStore = useAuthStore();
+    const {user} = authStore;
+    return {user};
+  }
+}
+</script>
+
 <template>
   <header class="navigation">
     <div class="header-top ">
@@ -44,7 +57,7 @@
 
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
             <router-link to="/register" class="nav-link">Register</router-link>
-            <router-link to="/login" class="nav-link">Login</router-link>
+            <router-link to="/login" class="nav-link">Login {{user.name}}</router-link>
           </ul>
 
           <form class="form-lg-inline my-2 my-md-0 ml-lg-4 text-center">
@@ -56,11 +69,6 @@
   </header>
 </template>
 
-<script>
-export default {
-  name: 'AppNavbar',
-}
-</script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

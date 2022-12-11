@@ -15,7 +15,7 @@ export const useAuthStore = defineStore('auth', {
             }
         }),
     getters: {
-        doubleCount: (state) => state.count * 2,
+        //doubleCount: (state) => state.count * 2,
     },
     actions: {
         // user registration
