@@ -9,15 +9,31 @@ export const useAuthStore = defineStore('auth', {
         baseUrl: API_BASE_URL,
         loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : false,
         user:{
-                name: localStorage.getItem('name'),
-                email: localStorage.getItem('email'),
-                token: localStorage.getItem('token'),
+            name: localStorage.getItem('name'),
+            email: localStorage.getItem('email'),
+            token: localStorage.getItem('token')
             }
         }),
     getters: {
         doubleCount: (state) => state.count * 2,
     },
     actions: {
+        // user registration
+        register(formData){
+            axios.post(this.baseUrl+'api/auth/register', {
+                name: formData.name,
+                email: formData.email,
+                password: formData.password,
+            }).then((response) => {
+                if (response.data.status) {
+                    router.push("/login")
+                }
+            }).catch((err) => {
+                console.log(err)
+
+            })
+        },
+        // user login
         login(formData) {
             axios.post(this.baseUrl+'api/auth/login', {
                 email: formData.email,

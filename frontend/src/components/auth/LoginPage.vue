@@ -14,8 +14,8 @@ export default {
   methods:{
     handleSubmit(){
       this.login({
-        email:this.email,
-        password:this.password,
+        email: this.email,
+        password: this.password,
       })
     }
   }

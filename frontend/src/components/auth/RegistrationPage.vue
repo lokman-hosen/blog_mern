@@ -1,7 +1,35 @@
+<script>
+import {useAuthStore} from "@/stores/auth";
+import {ref} from "vue";
+
+export default {
+  name: 'RegistrationPage',
+  setup(){
+    const authStore = useAuthStore();
+    const {register} = authStore;
+    const name = ref('')
+    const email = ref('')
+    const password = ref('')
+    return {name, email, password, register}
+  },
+  methods:{
+    handleSubmit(){
+      this.register({
+        name: this.name,
+        email: this.email,
+        password: this.password,
+      })
+    }
+  }
+}
+</script>
+
 <template>
   <div class="row">
     <div class="col-lg-6 col-md-12 col-sm-12 m-auto">
-      <form id="contact-form" class="contact__form" method="post" action="mail.php">
+      <form id="contact-form" class="contact__form"
+            @submit.prevent="handleSubmit"
+      >
         <!-- form message -->
         <div class="row">
           <div class="col-12">
@@ -21,27 +49,13 @@
         <div class="form-group">
           <input name="password" v-model="password" type="password" class="form-control" placeholder="Password">
         </div>
-        <div class="form-group-2 mb-4">
-          <textarea name="message" class="form-control" rows="4" placeholder="Your Message"></textarea>
-        </div>
         <button class="btn btn-main" name="submit" type="submit">Submit</button>
       </form>
     </div>
   </div>
 </template>
 
-<script>
-export default {
-  name: 'RegistrationPage',
-  data(){
-    return{
-      'name' : '',
-      'email' : '',
-      'password' : '',
-    }
-  }
-}
-</script>
+
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>

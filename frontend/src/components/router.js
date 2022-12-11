@@ -3,7 +3,7 @@ import PostDetailPage from "@/components/post/PostDetailPage";
 import LoginPage from "@/components/auth/LoginPage";
 import RegistrationPage from "@/components/auth/RegistrationPage";
 import AboutPage from "@/components/AboutPage";
-import ProfilePage from "@/components/ProfilePage";
+import ProfilePage from "@/components/auth/ProfilePage";
 import {createRouter, createWebHistory} from "vue-router/dist/vue-router";
 
 const routes = [
