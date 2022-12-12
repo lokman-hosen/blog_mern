@@ -5,8 +5,8 @@ export default {
   name: 'AppNavbar',
   setup(){
     const authStore = useAuthStore();
-    const {user} = authStore;
-    return {user};
+    const {user, loggedIn} = authStore;
+    return {user, loggedIn};
   }
 }
 </script>
@@ -56,8 +56,14 @@ export default {
             <li class="nav-item"><a class="nav-link" href="project.html">Portfolio</a></li>
 
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-            <router-link to="/register" class="nav-link">Register</router-link>
-            <router-link to="/login" class="nav-link">Login {{user.name}}</router-link>
+            <li class="nav-item" v-if="!loggedIn">
+              <router-link to="/register" class="nav-link">Register</router-link>
+            </li>
+
+            <li class="nav-item" >
+              <router-link v-if="loggedIn" to="/profile" class="nav-link">Profile</router-link>
+              <router-link v-else to="/login" class="nav-link">Login</router-link>
+            </li>
           </ul>
 
           <form class="form-lg-inline my-2 my-md-0 ml-lg-4 text-center">
