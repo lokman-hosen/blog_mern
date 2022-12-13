@@ -9,6 +9,7 @@ export const useAuthStore = defineStore('auth', {
         baseUrl: API_BASE_URL,
         loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : false,
         user:{
+            id: localStorage.getItem('id'),
             name: localStorage.getItem('name'),
             email: localStorage.getItem('email'),
             token: localStorage.getItem('token')
@@ -52,5 +53,14 @@ export const useAuthStore = defineStore('auth', {
 
                 })
         },
+
+        logoutUser(){
+            localStorage.setItem('id', '')
+            localStorage.setItem('name', '')
+            localStorage.setItem('email', '')
+            localStorage.setItem('loggedIn', false)
+            localStorage.setItem('token', '')
+            router.push("/")
+        }
     },
 })

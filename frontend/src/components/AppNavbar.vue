@@ -55,14 +55,16 @@ export default {
             <router-link to="/post" class="nav-link">Blog</router-link>
             <li class="nav-item"><a class="nav-link" href="project.html">Portfolio</a></li>
 
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
-            <li class="nav-item" v-if="!loggedIn">
+            <li class="nav-item"><a class="nav-link" href="contact.html">Contact {{loggedIn}}</a></li>
+            <li class="nav-item" v-if="loggedIn == 'false'">
               <router-link to="/register" class="nav-link">Register</router-link>
             </li>
 
-            <li class="nav-item" >
-              <router-link v-if="loggedIn" to="/profile" class="nav-link">Profile</router-link>
-              <router-link v-else to="/login" class="nav-link">Login</router-link>
+            <li class="nav-item" v-if="loggedIn == 'true'">
+              <router-link  to="/profile" class="nav-link">Profile</router-link>
+            </li>
+            <li class="nav-item" v-if="loggedIn == 'false'">
+              <router-link to="/login" class="nav-link">Login</router-link>
             </li>
           </ul>
 

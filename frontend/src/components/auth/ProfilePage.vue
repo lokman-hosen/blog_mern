@@ -7,15 +7,18 @@ export default {
   setup(){
     const authStore = useAuthStore();
     const {user} = authStore;
+    const {logoutUser} = authStore;
     const activeTab = ref('profile')
     const name = ref('')
     const email = ref('')
-    return {activeTab, user, name, email}
+    return {activeTab, user, name, email, logoutUser}
   },
   methods:{
     handleTab(currentTab){
       this.activeTab = currentTab
-
+    },
+    logout(){
+      this.logoutUser();
     }
   },
   created() {
@@ -46,7 +49,7 @@ export default {
                   :class="{ active: activeTab == 'post' }"
                   @click="handleTab('post')"
                   id="v-pills-post-tab" data-toggle="pill" data-target="#v-pills-post" type="button" role="tab" aria-controls="v-pills-post" aria-selected="true">Post</li>
-              <li class="nav-link" id="v-pills-settings-tab" data-toggle="pill" data-target="#v-pills-settings" type="button" role="tab" aria-controls="v-pills-settings" aria-selected="false">Logout</li>
+              <button class="btn btn-info" @click="logout">Logout</button>
             </ul>
           </div>
           <div class="col-9">
@@ -111,7 +114,6 @@ export default {
                   </tbody>
                 </table>
               </div>
-              <div class="tab-pane fade" id="v-pills-settings" role="tabpanel" aria-labelledby="v-pills-settings-tab">...</div>
             </div>
           </div>
         </div>
