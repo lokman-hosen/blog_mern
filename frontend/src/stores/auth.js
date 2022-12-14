@@ -42,18 +42,18 @@ export const useAuthStore = defineStore('auth', {
             }).then((response) => {
                 if (response.data.status) {
                     //save to local store because if user refresh page then lost stare data and take from local store
-                    localStorage.setItem('id', response.data.data._id)
-                    localStorage.setItem('name', response.data.data.name)
-                    localStorage.setItem('email', response.data.data.email)
-                    localStorage.setItem('loggedIn', 'yes')
-                    localStorage.setItem('token', response.data.token)
+                    localStorage.setItem('id', response.data.data._id);
+                    localStorage.setItem('name', response.data.data.name);
+                    localStorage.setItem('email', response.data.data.email);
+                    localStorage.setItem('loggedIn', 'yes');
+                    localStorage.setItem('token', response.data.token);
 
-                    // set to state
-                    this.user.id = response.data.data._id,
-                    this.user.name = response.data.data.name,
-                    this.user.email = response.data.data.email,
-                    this.user.token = response.data.token,
-                    this.loggedIn = 'yes',
+                    // set to state to get instance change
+                    this.user.id = response.data.data._id;
+                    this.user.name = response.data.data.name;
+                    this.user.email = response.data.data.email;
+                    this.user.token = response.data.token;
+                    this.loggedIn = 'yes';
 
                     router.push("/profile")
                 }

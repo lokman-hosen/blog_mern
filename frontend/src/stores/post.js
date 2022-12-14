@@ -18,7 +18,6 @@ export const usePostStore = defineStore('post', () => {
         }).then(response => {
                 posts.value = response.data.data;
                 totalRecord.value = response.data.totalRecord;
-                //this.totalPage = Number.isInteger(response.data.totalRecord/10) ? response.data.totalRecord/10 : response.data.totalRecord/10 +1
             })
             .catch(function (error) {
                 // handle error
@@ -28,19 +27,11 @@ export const usePostStore = defineStore('post', () => {
     }
 
     function postDetail(postId){
-        //const myPost = posts.value[0];
-         posts.value.find(post1=>{
-             if (post1._id === postId){
-                 //console.log('Hello'+JSON.stringify(post1._id))
-                 post.value = post1;
-                 //console.log('Hello'+typeof(post1))
+         posts.value.find(currentPost=>{
+             if (currentPost._id === postId){
+                 post.value = currentPost;
              }
-            //console.log('title'+post1._id, postId)
-            //return post1._id == postId
         });
-        //post.value = myPost;
-        //console.log(postId, myPost)
-        //return myPost;
     }
 
     function pagination (pageNumber){
