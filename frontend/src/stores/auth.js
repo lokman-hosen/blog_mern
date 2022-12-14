@@ -85,8 +85,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         getLoginUserPost(){
-            console.log('Reached to function')
-            axios.get(API_BASE_URL+'api/posts?page='+this.currentPage, {
+            axios.get(API_BASE_URL+'api/posts?page='+this.currentPage+'&userId='+this.user.id, {
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjcwMzIwNDM3LCJleHAiOjE2NzAzMzg0Mzd9.DTF3KetVK7OltfCC3KfR0MdvUmwp0lRZLNsUoVkySAo'
@@ -100,6 +99,11 @@ export const useAuthStore = defineStore('auth', {
                     console.log(error);
                 });
         },
+
+        pagination (pageNumber){
+            this.currentPage = pageNumber;
+            this.getLoginUserPost();
+        }
 
     },
 })

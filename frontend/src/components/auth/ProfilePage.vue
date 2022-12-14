@@ -3,19 +3,21 @@ import {ref} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
+import PaginationPage from "@/components/PaginationPage";
 
 export default {
   name: 'ProfilePage',
+  components: {PaginationPage},
   setup(){
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
-    const {user, userPosts} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost} = authStore;
+    const {user, userPosts, totalRecord, currentPage} = storeToRefs(authStore);
+    const {logoutUser, getLoginUserPost, pagination} = authStore;
     const activeTab = ref('profile')
     const name = ref('')
     const email = ref('')
 
-    return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl}
+    return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage, pagination}
   },
   methods:{
     handleTab(currentTab){
@@ -27,6 +29,10 @@ export default {
     },
     logout(){
       this.logoutUser();
+    },
+    changePage(page){
+      console.log(page)
+      this.pagination(page);
     }
   },
   created() {
@@ -114,6 +120,7 @@ export default {
                   </tr>
                   </tbody>
                 </table>
+                <PaginationPage :totalRecord="totalRecord" @change-page="changePage" :currentPage="currentPage"/>
               </div>
             </div>
           </div>

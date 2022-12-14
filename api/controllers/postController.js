@@ -228,7 +228,8 @@ export const postDetail = async (req, res)=>{
 
 export const postList = async (req, res)=>{
     const skipRecord = req.query.page*5;
-    let posts = []
+    let posts = [];
+    let totalRecord = 0;
     try {
         if (req.query.userId){
             posts = await Post.find({author: req.query.userId}).sort('-createdAt').populate([
@@ -236,19 +237,20 @@ export const postList = async (req, res)=>{
                 {path:"author", select:"name email"},
                 {path:"categories", select:"title"}
             ]).skip(skipRecord -5).limit(5);
+             totalRecord = await Post.countDocuments({author: req.query.userId});
         }else {
             posts = await Post.find().sort('-createdAt').populate([
                 // take limited column from relation
                 {path:"author", select:"name email"},
                 {path:"categories", select:"title"}
             ]).skip(skipRecord -5).limit(5);
+             totalRecord = await Post.countDocuments({});
         }
 
-        //totalRecord = posts.length;
         res.status(200).json({
             'status': true,
             'data': posts,
-            'totalRecord': posts.length,
+            'totalRecord': totalRecord,
         })
     }catch (error){
         res.status(500).json(error)
