@@ -107,6 +107,7 @@ export default {
                     <th scope="col">Author</th>
                     <th scope="col">Status</th>
                     <th scope="col">Published At</th>
+                    <th scope="col">Action</th>
                   </tr>
                   </thead>
                   <tbody>
@@ -117,6 +118,9 @@ export default {
                     <td>{{post.author.name}}</td>
                     <td>{{post.status == 1 ? 'Published' : 'Pending'}}</td>
                     <td>{{post.createdAt}}</td>
+                    <td>
+                      <router-link :to="'post/' + post._id">Show</router-link>
+                    </td>
                   </tr>
                   </tbody>
                 </table>

@@ -27,12 +27,30 @@ export const usePostStore = defineStore('post', () => {
     }
 
     function postDetail(postId){
-         posts.value.find(currentPost=>{
-             if (currentPost._id === postId){
-                 post.value = currentPost;
-             }
-        });
+        //  posts.value.find(currentPost=>{
+        //      if (currentPost._id === postId){
+        //          post.value = currentPost;
+        //      }
+        // });
+
+        axios.get(API_BASE_URL+'api/posts/'+postId, {
+            headers: {
+                'Content-Type': 'application/json',
+                //'Authorization': 'Bearer '+token
+            }
+        }).then( function (response) {
+            // handle success
+            post.value = response.data.data;
+
+        }).catch(function (error) {
+                // handle error
+                console.log(error);
+            })
+            .finally(function () {
+                // always executed
+            });
     }
+
 
     function pagination (pageNumber){
         currentPage.value = pageNumber;
