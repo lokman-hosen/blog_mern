@@ -11,13 +11,22 @@ export default {
   setup(){
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
-    const {user, userPosts, totalRecord, currentPage} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost, pagination} = authStore;
-    const activeTab = ref('profile')
-    const name = ref('')
-    const email = ref('')
+    const {user, userPosts, totalRecord, currentPage, postCategories} = storeToRefs(authStore);
+    const {logoutUser, getLoginUserPost, pagination, getPostCategory} = authStore;
+    const activeTab = ref('post');
+    const name = ref('');
+    const email = ref('');
+    const modalVisibility = ref('none');
+    const postData = ref({
+      'title' : 'A',
+      'description' : 'A',
+      'categories' : 'A',
+      'status' : 0,
+      'image' : '',
+    });
 
-    return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage, pagination}
+    return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
+      pagination, modalVisibility, postData, getPostCategory, postCategories}
   },
   methods:{
     handleTab(currentTab){
@@ -33,6 +42,14 @@ export default {
     changePage(page){
       console.log(page)
       this.pagination(page);
+    },
+    openModal(){
+      if (this.modalVisibility == 'block'){
+        this.modalVisibility = 'none'
+      }else {
+        this.modalVisibility = 'block'
+      }
+      this.getPostCategory()
     }
   },
   created() {
@@ -98,6 +115,9 @@ export default {
               <div class="tab-pane fade"
                    :class="{ 'show active': activeTab == 'post' }"
                    id="v-pills-post" role="tabpanel" aria-labelledby="v-pills-post-tab">
+                <div class="text-right mb-3">
+                  <button class="btn btn-info" @click="openModal">Create New</button>
+                </div>
                 <table class="table table-bordered table-sm">
                   <thead>
                   <tr>
@@ -119,7 +139,9 @@ export default {
                     <td>{{post.status == 1 ? 'Published' : 'Pending'}}</td>
                     <td>{{post.createdAt}}</td>
                     <td>
-                      <router-link :to="'post/' + post._id">Show</router-link>
+                      <router-link :to="'post/' + post._id">
+                        <i class="fa fa-eye"></i>
+                      </router-link>
                     </td>
                   </tr>
                   </tbody>
@@ -130,6 +152,61 @@ export default {
           </div>
         </div>
       </div>
+  </div>
+
+  <!-- Modal -->
+  <div class="modal" :style="{ display: modalVisibility }" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" @click="openModal" aria-label="Close">X</button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+              <div class="form-group mb-3">
+                <label>Title<span class="text-danger">*</span></label>
+                <input type="text" name="title" v-model="postData.title" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label>Categories<span class="text-danger">*</span></label>
+                <select class="form-select form-control multiselect"
+                        name="categories[]"
+                        v-model="postData.categories"
+                        multiple
+                        aria-label="multiple select example">
+                  <option value="">Select A</option>
+                  <option value="">Select B</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label>Description<span class="text-danger">*</span></label>
+                <textarea name="description" class="form-control" v-model="postData.description"></textarea>
+              </div>
+            </div>
+
+            <div class="col-md-12">
+              <div class="form-group mb-3">
+                <label htmlFor="formFile" class="form-label">Image<span class="text-danger">*</span></label>
+                <input class="form-control" name="image" type="file" id="formFile">
+              </div>
+            </div>
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="openModal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 

@@ -18,6 +18,7 @@ export const useAuthStore = defineStore('auth', {
         userPosts: ref([]),
         totalRecord: ref(0),
         currentPage: ref(1),
+        postCategories: ref([]),
 
         }),
     getters: {
@@ -97,6 +98,19 @@ export const useAuthStore = defineStore('auth', {
                 .catch(function (error) {
                     // handle error
                     console.log(error);
+                });
+        },
+
+        getPostCategory(){
+            axios.get(API_BASE_URL+'api/categories?page=all', {
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+            }).then(function (response) {
+                    this.postCategories = response.data.data;
+                }).catch(function (error) {
+                    // handle error
+                console.log(error);
                 });
         },
 
