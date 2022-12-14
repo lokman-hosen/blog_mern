@@ -228,13 +228,25 @@ export const postDetail = async (req, res)=>{
 
 export const postList = async (req, res)=>{
     const skipRecord = req.query.page*5;
+    let posts = []
+    let totalRecord = 0
     try {
-        const posts = await Post.find().sort('-createdAt').populate([
-            // take limited column from relation
-            {path:"author", select:"name email"},
-            {path:"categories", select:"title"}
-        ]).skip(skipRecord -5).limit(5);
-        const totalRecord = await Post.countDocuments({});
+        // get post by userId
+        if (req.query.userId){
+             posts = await Post.find({author: req.query.userId}).sort('-createdAt').populate([
+                // take limited column from relation
+                {path:"author", select:"name email"},
+                {path:"categories", select:"title"}
+            ]).skip(skipRecord -10).limit(10);
+        }else {
+             posts = await Post.find().sort('-createdAt').populate([
+                // take limited column from relation
+                {path:"author", select:"name email"},
+                {path:"categories", select:"title"}
+            ]).skip(skipRecord -10).limit(10);
+        }
+        totalRecord = posts.length;
+
         res.status(200).json({
             'status': true,
             'data': posts,
