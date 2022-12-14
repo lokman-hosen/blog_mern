@@ -2,21 +2,28 @@
 import {ref} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
+import {API_BASE_URL} from "@/config";
 
 export default {
   name: 'ProfilePage',
   setup(){
+    let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
-    const {user} = storeToRefs(authStore);
-    const {logoutUser} = authStore;
+    const {user, userPosts} = storeToRefs(authStore);
+    const {logoutUser, getLoginUserPost} = authStore;
     const activeTab = ref('profile')
     const name = ref('')
     const email = ref('')
-    return {activeTab, user, name, email, logoutUser}
+
+    return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl}
   },
   methods:{
     handleTab(currentTab){
-      this.activeTab = currentTab
+      this.activeTab = currentTab;
+      if (currentTab == 'post'){
+        console.log('Lokman')
+        this.getLoginUserPost()
+      }
     },
     logout(){
       this.logoutUser();
@@ -89,28 +96,21 @@ export default {
                   <thead>
                   <tr>
                     <th scope="col">#</th>
-                    <th scope="col">First</th>
-                    <th scope="col">Last</th>
-                    <th scope="col">Handle</th>
+                    <th scope="col">Img</th>
+                    <th scope="col">Title</th>
+                    <th scope="col">Author</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Published At</th>
                   </tr>
                   </thead>
                   <tbody>
-                  <tr>
-                    <th scope="row">1</th>
-                    <td>Mark</td>
-                    <td>Otto</td>
-                    <td>@mdo</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">2</th>
-                    <td>Jacob</td>
-                    <td>Thornton</td>
-                    <td>@fat</td>
-                  </tr>
-                  <tr>
-                    <th scope="row">3</th>
-                    <td colspan="2">Larry the Bird</td>
-                    <td>@twitter</td>
+                  <tr v-for="(post, index) in userPosts" :key="post._id">
+                    <th scope="row">{{index+1}}</th>
+                    <td><img :src="baseUrl+post.image" alt="" class="rounded" height="50" width="50"></td>
+                    <td>{{post.title}}</td>
+                    <td>{{post.author.name}}</td>
+                    <td>{{post.status == 1 ? 'Published' : 'Pending'}}</td>
+                    <td>{{post.createdAt}}</td>
                   </tr>
                   </tbody>
                 </table>

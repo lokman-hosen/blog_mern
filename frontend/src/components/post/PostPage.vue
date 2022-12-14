@@ -12,7 +12,7 @@ export default {
   name: 'PostDetailPage',
   components: {PostComponent, PageLoader, PaginationPage, HomeBanner},
   setup() {
-    let  baseUrl= API_BASE_URL;
+    let baseUrl= API_BASE_URL;
     const postStore = usePostStore();
     const {posts, totalRecord, currentPage} = storeToRefs(postStore);
     const { getPost, pagination } = postStore;

@@ -2,6 +2,7 @@ import {defineStore} from "pinia";
 import axios from "axios";
 import {API_BASE_URL} from "@/config";
 import router from "@/components/router";
+import {ref} from "vue";
 
 
 export const useAuthStore = defineStore('auth', {
@@ -13,7 +14,11 @@ export const useAuthStore = defineStore('auth', {
             name: localStorage.getItem('name'),
             email: localStorage.getItem('email'),
             token: localStorage.getItem('token')
-            }
+            },
+        userPosts: ref([]),
+        totalRecord: ref(0),
+        currentPage: ref(1),
+
         }),
     getters: {
         //doubleCount: (state) => state.count * 2,
@@ -77,6 +82,24 @@ export const useAuthStore = defineStore('auth', {
             this.loggedIn = 'no';
 
             router.push("/")
-        }
+        },
+
+        getLoginUserPost(){
+            console.log('Reached to function')
+            axios.get(API_BASE_URL+'api/posts?page='+this.currentPage, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjcwMzIwNDM3LCJleHAiOjE2NzAzMzg0Mzd9.DTF3KetVK7OltfCC3KfR0MdvUmwp0lRZLNsUoVkySAo'
+                },
+            }).then(response => {
+                this.userPosts = response.data.data;
+                this.totalRecord = response.data.totalRecord;
+            })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+        },
+
     },
 })
