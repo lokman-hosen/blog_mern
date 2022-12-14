@@ -1,12 +1,13 @@
 <script>
 import {ref} from "vue";
 import {useAuthStore} from "@/stores/auth";
+import {storeToRefs} from "pinia";
 
 export default {
   name: 'ProfilePage',
   setup(){
     const authStore = useAuthStore();
-    const {user} = authStore;
+    const {user} = storeToRefs(authStore);
     const {logoutUser} = authStore;
     const activeTab = ref('profile')
     const name = ref('')

@@ -7,7 +7,7 @@ import router from "@/components/router";
 export const useAuthStore = defineStore('auth', {
     state: () => ({
         baseUrl: API_BASE_URL,
-        loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : false,
+        loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : 'no',
         user:{
             id: localStorage.getItem('id'),
             name: localStorage.getItem('name'),
@@ -44,8 +44,16 @@ export const useAuthStore = defineStore('auth', {
                     localStorage.setItem('id', response.data.data._id)
                     localStorage.setItem('name', response.data.data.name)
                     localStorage.setItem('email', response.data.data.email)
-                    localStorage.setItem('loggedIn', true)
+                    localStorage.setItem('loggedIn', 'yes')
                     localStorage.setItem('token', response.data.token)
+
+                    this.user.id = response.data.data._id,
+                    this.user.name = response.data.data.name,
+                    this.user.email = response.data.data.email,
+                    this.user.token = response.data.token,
+                    this.loggedIn = 'yes',
+
+
                     router.push("/profile")
                 }
             }).catch((err) => {
@@ -58,7 +66,7 @@ export const useAuthStore = defineStore('auth', {
             localStorage.setItem('id', '')
             localStorage.setItem('name', '')
             localStorage.setItem('email', '')
-            localStorage.setItem('loggedIn', false)
+            localStorage.setItem('loggedIn', 'no')
             localStorage.setItem('token', '')
             router.push("/")
         }

@@ -1,11 +1,12 @@
 <script>
 import {useAuthStore} from "@/stores/auth";
+import {storeToRefs} from "pinia";
 
 export default {
   name: 'AppNavbar',
   setup(){
     const authStore = useAuthStore();
-    const {user, loggedIn} = authStore;
+    const {user, loggedIn} = storeToRefs(authStore);
     return {user, loggedIn};
   }
 }
@@ -56,14 +57,14 @@ export default {
             <li class="nav-item"><a class="nav-link" href="project.html">Portfolio</a></li>
 
             <li class="nav-item"><a class="nav-link" href="contact.html">Contact {{loggedIn}}</a></li>
-            <li class="nav-item" v-if="loggedIn == 'false'">
+            <li class="nav-item" v-if="loggedIn == 'no'">
               <router-link to="/register" class="nav-link">Register</router-link>
             </li>
 
-            <li class="nav-item" v-if="loggedIn == 'true'">
+            <li class="nav-item" v-if="loggedIn == 'yes'">
               <router-link  to="/profile" class="nav-link">Profile</router-link>
             </li>
-            <li class="nav-item" v-if="loggedIn == 'false'">
+            <li class="nav-item" v-if="loggedIn == 'no'">
               <router-link to="/login" class="nav-link">Login</router-link>
             </li>
           </ul>
