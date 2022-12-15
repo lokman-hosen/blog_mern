@@ -2,10 +2,11 @@
 import {usePostStore} from "@/stores/post";
 import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
+import PageLoader from "@/components/PageLoader";
 
 export default {
   name: 'PostDetailPage',
-
+  components: {PageLoader},
   setup(){
     let  baseUrl= API_BASE_URL;
     const postStore = usePostStore();
@@ -42,7 +43,7 @@ export default {
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
-          <div class="row">
+          <div class="row" v-if="post.title">
             <div class="col-lg-12 mb-5">
               <div class="single-blog-item">
                 <img :src="baseUrl+post.image" alt="" class="img-fluid rounded">
@@ -143,6 +144,9 @@ export default {
               </form>
             </div>
           </div>
+          <div class="row" v-else>
+            <PageLoader></PageLoader>
+          </div>
         </div>
         <div class="col-lg-4">
           <div class="sidebar-wrap">
@@ -175,17 +179,22 @@ export default {
 
             <div class="sidebar-widget latest-post card border-0 p-4 mb-3">
               <h5>Latest Posts</h5>
-              <p>{{this.$route.params.id}}</p>
 
-              <div class="media border-bottom py-3" v-for="latestPost in posts" :key="latestPost._id">
-                <a @click="singlePost(latestPost._id)">
-                  <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">
+              <template v-if="posts.length > 0">
+                <div class="media border-bottom py-3" v-for="latestPost in posts" :key="latestPost._id">
+                  <a @click="singlePost(latestPost._id)">
+                    <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">
 
-                <div class="media-body">
-                  <h6 class="my-2"><a href="#">{{latestPost.title}}</a></h6>
-                  <span class="text-sm text-muted">{{latestPost.createdAt}}</span>
+                    <div class="media-body">
+                      <h6 class="my-2"><a href="#">{{latestPost.title}}</a></h6>
+                      <span class="text-sm text-muted">{{latestPost.createdAt}}</span>
+                    </div>
+                  </a>
                 </div>
-                </a>
+              </template>
+
+              <div v-else>
+                <PageLoader></PageLoader>
               </div>
             </div>
 

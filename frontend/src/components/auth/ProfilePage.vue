@@ -61,8 +61,9 @@ export default {
       this.postData.image = $event.target.files[0];
     },
     // handle post submit to save post
-    handlePostSubmit(){
-      this.savePost(this.postData)
+     handlePostSubmit(){
+       this.savePost(this.postData);
+      this.modalVisibility = 'none'
     }
   },
   created() {
@@ -190,8 +191,8 @@ export default {
           <button type="button" class="btn-close" data-bs-dismiss="modal" @click="openModal" aria-label="Close">X</button>
         </div>
         <form @submit.prevent="handlePostSubmit">
-        <div class="modal-body">
-            <div class="row">
+        <div class="modal-body" style="min-height: 30rem">
+            <div class="row" v-if="postCategories.length > 0">
               <div class="col-12">
                 <div class="form-group mb-3">
                   <label>Title<span class="text-danger">*</span></label>
@@ -229,7 +230,11 @@ export default {
               </div>
 
             </div>
+            <div class="row" v-else>
+              <PageLoader></PageLoader>
+            </div>
         </div>
+
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="openModal">Close</button>
           <button type="submit" class="btn btn-primary">Save changes</button>

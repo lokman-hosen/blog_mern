@@ -123,7 +123,7 @@ export const useAuthStore = defineStore('auth', {
                 }
             }).then((response) => {
                 if (response.data.status) {
-                   console.log('Post Saved')
+                   this.getLoginUserPost()
                 }
             }).catch((err) => {
                 console.log(err)
