@@ -85,6 +85,7 @@ export const useAuthStore = defineStore('auth', {
             router.push("/")
         },
 
+
         getLoginUserPost(){
             axios.get(API_BASE_URL+'api/posts?page='+this.currentPage+'&userId='+this.user.id, {
                 headers: {
@@ -106,13 +107,31 @@ export const useAuthStore = defineStore('auth', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-            }).then(function (response) {
-                    this.postCategories = response.data.data;
-                }).catch(function (error) {
-                    // handle error
+            }).then(response => {
+                this.postCategories = response.data.data;
+            }).catch(function (error) {
+                // handle error
                 console.log(error);
-                });
+            });
         },
+
+        savePost(postData){
+            axios.post(API_BASE_URL+'api/posts', postData,{
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    //'Authorization': 'Bearer '+token
+                }
+            }).then((response) => {
+                if (response.data.status) {
+                   console.log('Post Saved')
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+
+        },
+
+
 
         pagination (pageNumber){
             this.currentPage = pageNumber;

@@ -12,27 +12,27 @@ export default {
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
     const {user, userPosts, totalRecord, currentPage, postCategories} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost, pagination, getPostCategory} = authStore;
-    const activeTab = ref('post');
+    const {logoutUser, getLoginUserPost, pagination, getPostCategory, savePost} = authStore;
+    const activeTab = ref('profile');
     const name = ref('');
     const email = ref('');
     const modalVisibility = ref('none');
     const postData = ref({
       'title' : 'A',
       'description' : 'A',
-      'categories' : 'A',
+      'categories' : [],
       'status' : 0,
       'image' : '',
+      'author' : '634e7c93b654f301477aba01'
     });
 
     return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
-      pagination, modalVisibility, postData, getPostCategory, postCategories}
+      pagination, modalVisibility, postData, getPostCategory, postCategories, savePost}
   },
   methods:{
     handleTab(currentTab){
       this.activeTab = currentTab;
       if (currentTab == 'post'){
-        console.log('Lokman')
         this.getLoginUserPost()
       }
     },
@@ -40,7 +40,6 @@ export default {
       this.logoutUser();
     },
     changePage(page){
-      console.log(page)
       this.pagination(page);
     },
     openModal(){
@@ -50,6 +49,13 @@ export default {
         this.modalVisibility = 'block'
       }
       this.getPostCategory()
+    },
+    handleFile($event){
+      console.log($event.target.files[0])
+      this.postData.image = $event.target.files[0];
+    },
+    handlePostSubmit(){
+      this.savePost(this.postData)
     }
   },
   created() {
@@ -162,49 +168,54 @@ export default {
           <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" @click="openModal" aria-label="Close">X</button>
         </div>
+        <form @submit.prevent="handlePostSubmit">
         <div class="modal-body">
-          <div class="row">
-            <div class="col-12">
-              <div class="form-group mb-3">
-                <label>Title<span class="text-danger">*</span></label>
-                <input type="text" name="title" v-model="postData.title" class="form-control">
+
+            <div class="row">
+              <div class="col-12">
+                <div class="form-group mb-3">
+                  <label>Title<span class="text-danger">*</span></label>
+                  <input type="text" name="title" v-model="postData.title" class="form-control">
+                </div>
               </div>
+
+              <div class="col-md-12">
+                <div class="form-group mb-3">
+                  <label>Categories<span class="text-danger">*</span></label>
+                  <select class="form-select form-control multiselect"
+                          name="categories[]"
+                          v-model="postData.categories"
+                          multiple
+                          aria-label="multiple select example">
+                    <option value="">Select A</option>
+                    <option v-for="category in postCategories" :value=category._id :key="category._id">{{category.title}}</option>
+                  </select>
+
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group mb-3">
+                  <label>Description<span class="text-danger">*</span></label>
+                  <textarea name="description" class="form-control" v-model="postData.description"></textarea>
+                </div>
+              </div>
+
+              <div class="col-md-12">
+                <div class="form-group mb-3">
+                  <label htmlFor="formFile" class="form-label">Image<span class="text-danger">*</span></label>
+                  <input class="form-control" name="image" @change="handleFile($event)" type="file" id="formFile">
+                </div>
+              </div>
+
             </div>
 
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label>Categories<span class="text-danger">*</span></label>
-                <select class="form-select form-control multiselect"
-                        name="categories[]"
-                        v-model="postData.categories"
-                        multiple
-                        aria-label="multiple select example">
-                  <option value="">Select A</option>
-                  <option value="">Select B</option>
-                </select>
-              </div>
-            </div>
-
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label>Description<span class="text-danger">*</span></label>
-                <textarea name="description" class="form-control" v-model="postData.description"></textarea>
-              </div>
-            </div>
-
-            <div class="col-md-12">
-              <div class="form-group mb-3">
-                <label htmlFor="formFile" class="form-label">Image<span class="text-danger">*</span></label>
-                <input class="form-control" name="image" type="file" id="formFile">
-              </div>
-            </div>
-
-          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @click="openModal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
+          <button type="submit" class="btn btn-primary">Save changes</button>
         </div>
+        </form>
       </div>
     </div>
   </div>
