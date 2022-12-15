@@ -23,13 +23,14 @@ export default {
       'categories' : [],
       'status' : 0,
       'image' : '',
-      'author' : '634e7c93b654f301477aba01'
+      'author' : ''
     });
 
     return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
       pagination, modalVisibility, postData, getPostCategory, postCategories, savePost}
   },
   methods:{
+    // tab activation
     handleTab(currentTab){
       this.activeTab = currentTab;
       if (currentTab == 'post'){
@@ -39,21 +40,26 @@ export default {
     logout(){
       this.logoutUser();
     },
+    // pagination
     changePage(page){
       this.pagination(page);
     },
+    // post create modal
     openModal(){
       if (this.modalVisibility == 'block'){
         this.modalVisibility = 'none'
       }else {
+        // set author and get post category list
+        this.postData.author = this.user.id
+        this.getPostCategory()
         this.modalVisibility = 'block'
       }
-      this.getPostCategory()
     },
+    // handle post file
     handleFile($event){
-      console.log($event.target.files[0])
       this.postData.image = $event.target.files[0];
     },
+    // handle post submit to save post
     handlePostSubmit(){
       this.savePost(this.postData)
     }
