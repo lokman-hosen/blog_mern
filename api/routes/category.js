@@ -18,6 +18,6 @@ router.delete("/:id", checkLogin, deleteCategory);
 //detail
 router.get("/:id", checkLogin, categoryDetail);
 //get all
-router.get("/", checkLogin, categoryList);
+router.get("/", categoryList);
 
 export default router

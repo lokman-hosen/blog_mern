@@ -26,14 +26,22 @@ export const createPost = async (req, res)=>{
 
     upload(req, res, (err) =>{
         // process category id array
-        const requestBody = req.body;
-        const categoryIds = [];
-        const asArray = Object.entries(requestBody);
-        const filtered = asArray.filter(([key, value]) =>{
-            if (key.includes("categories")){
-                categoryIds.push(value)
-            }
-        })
+        let categoryIds = [];
+        // when request come from react end
+        if (typeof(req.body.categories) == 'undefined'){
+            const requestBody = req.body;
+            //console.log(requestBody)
+            const asArray = Object.entries(requestBody);
+            const filtered = asArray.filter(([key, value]) =>{
+                if (key.includes("categories")){
+                    categoryIds.push(value)
+                }
+            })
+        }else {
+            // when request come from vue end
+            categoryIds = req.body.categories
+        }
+
         if (err){
             res.status(500).json({'status': false, 'data':"Something Went wrong"})
         }else {
@@ -43,6 +51,7 @@ export const createPost = async (req, res)=>{
                 'image': fileNameFinal,
                 'author': req.body.author,
                 'categories': categoryIds,
+                //'categories': req.body.categories,
                 'status': req.body.status,
             })
 
