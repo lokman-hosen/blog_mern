@@ -9,19 +9,20 @@ export const useAuthStore = defineStore('auth', {
     state: () => ({
         baseUrl: API_BASE_URL,
         loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : 'no',
-        user:{
+        user:ref({
             id: localStorage.getItem('id'),
             name: localStorage.getItem('name'),
             email: localStorage.getItem('email'),
             token: localStorage.getItem('token')
-            },
+            }),
         userPosts: ref([]),
         totalRecord: ref(0),
         currentPage: ref(1),
         categories: ref([]),
         post : ref({
-            'title' : 'A',
-            'description' : 'A',
+            'id' : '',
+            'title' : '',
+            'description' : '',
             'categories' : [],
             'status' : 0,
             'image' : '',
@@ -136,7 +137,21 @@ export const useAuthStore = defineStore('auth', {
             }).catch((err) => {
                 console.log(err)
             })
+        },
 
+        updatePost(){
+            axios.put(API_BASE_URL+'api/posts/'+this.post.id, this.post,{
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'Authorization': 'Bearer '+this.user.token
+                }
+            }).then((response) => {
+                if (response.data.status) {
+                    this.getLoginUserPost()
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
         },
 
         getPostById(postId){
@@ -147,19 +162,26 @@ export const useAuthStore = defineStore('auth', {
                 }
             }).then((response) => {
                 if (response.data.status) {
+                    this.post.id = response.data.data._id;
                     this.post.title = response.data.data.title;
                     this.post.description = response.data.data.description;
-                    this.post.categories = response.data.categories;
-                    this.post.status = response.data.status;
-                    this.post.author = '';
+                    this.post.categories = this.processCategoryId(response.data.data.categories);
+                    this.post.status = response.data.status == true ? 1 : 0;
+                    this.post.author = response.data.data.author._id;
                 }
             }).catch((err) => {
                 console.log(err)
             })
-
         },
 
-
+        // make categoryId array
+        processCategoryId(categories){
+            const categoryIds = []
+            categories.forEach(function (category){
+                categoryIds.push(category._id)
+            })
+            return categoryIds;
+        },
 
         pagination (pageNumber){
             this.currentPage = pageNumber;

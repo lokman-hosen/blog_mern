@@ -14,7 +14,7 @@ export default {
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
     const {user, userPosts, totalRecord, currentPage, categories, post} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById} = authStore;
+    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost} = authStore;
 
     //const postStore = usePostStore();
     //const {post} = storeToRefs(postStore);
@@ -26,8 +26,10 @@ export default {
     const email = ref('');
     const modalVisibility = ref('none');
 
+    const editMode = ref('no');
+
     return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
-      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById}
+      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode}
   },
   methods:{
     // tab activation
@@ -61,10 +63,15 @@ export default {
     },
     // handle post submit to save post
      handlePostSubmit(){
-       this.savePost(this.post);
+      if (this.editMode == 'no'){
+        this.savePost(this.post);
+      }else{
+        this.updatePost();
+      }
       this.modalVisibility = 'none'
     },
     editPost(postId){
+      this.editMode = 'yes'
       this.getCategory()
       this.getPostById(postId);
       // this.post = {
@@ -92,7 +99,7 @@ export default {
 
       <div class="container">
         <div class="card">
-          <h5 class="card-header">DashBoard: Welcome Back {{user.name}} !!</h5>
+          <h5 class="card-header">DashBoard: Welcome Back, {{user.name}} !!</h5>
           <div class="card-body">
             <div class="row">
               <div class="col-3">
@@ -198,7 +205,7 @@ export default {
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title {{post.title}}</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" @click="openModal" aria-label="Close">X</button>
         </div>
         <form @submit.prevent="handlePostSubmit">
@@ -207,7 +214,7 @@ export default {
               <div class="col-md-6">
                 <div class="form-group mb-3">
                   <label>Title<span class="text-danger">*</span></label>
-                  <input type="text" name="title" v-model="post.title" class="form-control">
+                  <input type="text" name="title" v-model="post.title" class="form-control" placeholder="Enter Title">
                 </div>
               </div>
 
@@ -220,14 +227,13 @@ export default {
 
               <div class="col-md-12">
                 <div class="form-group mb-3">
-                  <label>Categories<span class="text-danger">*</span></label>
+                  <label>Select Categories<span class="text-danger">*</span></label>
                   <select class="form-select form-control multiselect"
                           name="categories[]"
                           v-model="post.categories"
                           multiple
                           aria-label="multiple select example">
-                    <option value="">Select A</option>
-                    <option v-for="category in categories" :value=category._id :key="category._id">{{category.title}}</option>
+                    <option v-for="category in categories" :value=category._id :key="category._id" style="padding-top: 4px">{{category.title}}</option>
                   </select>
 
                 </div>
@@ -236,7 +242,7 @@ export default {
               <div class="col-md-12">
                 <div class="form-group mb-3">
                   <label>Description<span class="text-danger">*</span></label>
-                  <textarea name="description" class="form-control" v-model="post.description"></textarea>
+                  <textarea name="description" class="form-control" v-model="post.description" placeholder="Enter Description"></textarea>
                 </div>
               </div>
 
@@ -260,5 +266,12 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+  .multiselect option{
+    padding-top: 3px;
+    padding-bottom: 3px;
+    border-bottom: 1px solid #dddddda1;
+  }
+  .multiselect option:hover{
+    background: #dddddda1;
+  }
 </style>

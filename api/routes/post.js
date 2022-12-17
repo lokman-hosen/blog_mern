@@ -13,6 +13,7 @@ const router = express.Router();
 //create
  router.post("/", createPost)
 //update
+//router.put("/:id", checkLogin, updatePost);
 router.put("/:id", checkLogin, updatePost);
  //delete
 router.delete("/:id", checkLogin, deletePost);

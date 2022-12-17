@@ -92,6 +92,7 @@ export const updatePost = async (req, res)=>{
     // this user get from token from checkLogin middleware
     const loginUser = req.user;
     const post = await Post.findById(req.params.id).populate('author');
+    //console.log(post)
 
     // admin post owner can edit post
     if (post.author._id == loginUser.id || loginUser.user_type == 'admin'){
@@ -134,14 +135,18 @@ export const updatePost = async (req, res)=>{
 
            upload(req, res, (err) =>{
                // process category id array
-               const requestBody = req.body;
-               const categoryIds = [];
-               const asArray = Object.entries(requestBody);
-               const filtered = asArray.filter(([key, value]) =>{
-                   if (key.includes("categories")){
-                       categoryIds.push(value)
-                   }
-               })
+               let categoryIds = [];
+               if (typeof(req.body.categories) == 'undefined'){
+                   const requestBody = req.body;
+                   const asArray = Object.entries(requestBody);
+                   const filtered = asArray.filter(([key, value]) =>{
+                       if (key.includes("categories")){
+                           categoryIds.push(value)
+                       }
+                   })
+               }else {
+                   categoryIds = req.body.categories
+               }
                if (err){
                    res.status(500).json({'status': false, 'data':"Something Went wrong"})
                }else {
