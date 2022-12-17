@@ -18,7 +18,15 @@ export const useAuthStore = defineStore('auth', {
         userPosts: ref([]),
         totalRecord: ref(0),
         currentPage: ref(1),
-        postCategories: ref([]),
+        categories: ref([]),
+        post : ref({
+            'title' : 'A',
+            'description' : 'A',
+            'categories' : [],
+            'status' : 0,
+            'image' : '',
+            'author' : ''
+        }),
 
         }),
     getters: {
@@ -102,21 +110,21 @@ export const useAuthStore = defineStore('auth', {
                 });
         },
 
-        getPostCategory(){
+        getCategory(){
             axios.get(API_BASE_URL+'api/categories?page=all', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
             }).then(response => {
-                this.postCategories = response.data.data;
+                this.categories = response.data.data;
             }).catch(function (error) {
                 // handle error
                 console.log(error);
             });
         },
 
-        savePost(postData){
-            axios.post(API_BASE_URL+'api/posts', postData,{
+        savePost(post){
+            axios.post(API_BASE_URL+'api/posts', post,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
                     //'Authorization': 'Bearer '+token
@@ -124,6 +132,26 @@ export const useAuthStore = defineStore('auth', {
             }).then((response) => {
                 if (response.data.status) {
                    this.getLoginUserPost()
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
+
+        },
+
+        getPostById(postId){
+            axios.get(API_BASE_URL+'api/posts/'+postId, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    //'Authorization': 'Bearer '+token
+                }
+            }).then((response) => {
+                if (response.data.status) {
+                    this.post.title = response.data.data.title;
+                    this.post.description = response.data.data.description;
+                    this.post.categories = response.data.categories;
+                    this.post.status = response.data.status;
+                    this.post.author = '';
                 }
             }).catch((err) => {
                 console.log(err)

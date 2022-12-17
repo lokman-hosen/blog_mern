@@ -5,6 +5,7 @@ import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
 import PaginationPage from "@/components/PaginationPage";
 import PageLoader from "@/components/PageLoader";
+//import {usePostStore} from "@/stores/post";
 
 export default {
   name: 'ProfilePage',
@@ -12,23 +13,21 @@ export default {
   setup(){
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
-    const {user, userPosts, totalRecord, currentPage, postCategories} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost, pagination, getPostCategory, savePost} = authStore;
+    const {user, userPosts, totalRecord, currentPage, categories, post} = storeToRefs(authStore);
+    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById} = authStore;
+
+    //const postStore = usePostStore();
+    //const {post} = storeToRefs(postStore);
+   // const {getPostById} = postStore;
+
+
     const activeTab = ref('profile');
     const name = ref('');
     const email = ref('');
     const modalVisibility = ref('none');
-    const postData = ref({
-      'title' : 'A',
-      'description' : 'A',
-      'categories' : [],
-      'status' : 0,
-      'image' : '',
-      'author' : ''
-    });
 
     return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
-      pagination, modalVisibility, postData, getPostCategory, postCategories, savePost}
+      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById}
   },
   methods:{
     // tab activation
@@ -48,22 +47,36 @@ export default {
     // post create modal
     openModal(){
       if (this.modalVisibility == 'block'){
-        this.modalVisibility = 'none'
+        this.modalVisibility = 'none';
       }else {
         // set author and get post category list
-        this.postData.author = this.user.id
-        this.getPostCategory()
-        this.modalVisibility = 'block'
+        this.post.author = this.user.id;
+        this.getCategory();
+        this.modalVisibility = 'block';
       }
     },
     // handle post file
     handleFile($event){
-      this.postData.image = $event.target.files[0];
+      this.post.image = $event.target.files[0];
     },
     // handle post submit to save post
      handlePostSubmit(){
-       this.savePost(this.postData);
+       this.savePost(this.post);
       this.modalVisibility = 'none'
+    },
+    editPost(postId){
+      this.getCategory()
+      this.getPostById(postId);
+      // this.post = {
+      //   'title' : this.post.title,
+      //   'description' : this.post.description,
+      //   'categories' : [],
+      //   'status' : this.post.status,
+      //   'image' : '',
+      //   'author' : JSON.stringify(this.post.author._id)
+      // }
+
+      this.modalVisibility = 'block'
     }
   },
   created() {
@@ -125,7 +138,6 @@ export default {
                       <div class="form-group">
                         <input name="password" type="password" class="form-control" placeholder="Password">
                       </div>
-
                       <button class="btn btn-main" name="submit" type="submit">Update Profile</button>
                     </form>
                   </div>
@@ -159,8 +171,9 @@ export default {
                           <td>{{post.createdAt}}</td>
                           <td>
                             <router-link :to="'post/' + post._id">
-                              <i class="fa fa-eye"></i>
+                              <button class="btn btn-sm btn-info p-1"><i class="fa fa-eye"></i></button>
                             </router-link>
+                            <button class="btn btn-sm btn-warning p-1 ml-1" @click="editPost(post._id)"><i class="fa fa-edit"></i></button>
                           </td>
                         </tr>
                         </tbody>
@@ -170,8 +183,6 @@ export default {
                     <div v-else>
                       <PageLoader></PageLoader>
                     </div>
-
-
                   </div>
                 </div>
               </div>
@@ -187,16 +198,23 @@ export default {
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title</h1>
+          <h1 class="modal-title fs-5" id="exampleModalLabel">Modal title {{post.title}}</h1>
           <button type="button" class="btn-close" data-bs-dismiss="modal" @click="openModal" aria-label="Close">X</button>
         </div>
         <form @submit.prevent="handlePostSubmit">
-        <div class="modal-body" style="min-height: 30rem">
-            <div class="row" v-if="postCategories.length > 0">
-              <div class="col-12">
+        <div class="modal-body" style="min-height: 25rem">
+            <div class="row" v-if="categories.length > 0">
+              <div class="col-md-6">
                 <div class="form-group mb-3">
                   <label>Title<span class="text-danger">*</span></label>
-                  <input type="text" name="title" v-model="postData.title" class="form-control">
+                  <input type="text" name="title" v-model="post.title" class="form-control">
+                </div>
+              </div>
+
+              <div class="col-md-6">
+                <div class="form-group mb-3">
+                  <label htmlFor="formFile" class="form-label">Image<span class="text-danger">*</span></label>
+                  <input class="form-control" name="image" @change="handleFile($event)" type="file" id="formFile">
                 </div>
               </div>
 
@@ -205,11 +223,11 @@ export default {
                   <label>Categories<span class="text-danger">*</span></label>
                   <select class="form-select form-control multiselect"
                           name="categories[]"
-                          v-model="postData.categories"
+                          v-model="post.categories"
                           multiple
                           aria-label="multiple select example">
                     <option value="">Select A</option>
-                    <option v-for="category in postCategories" :value=category._id :key="category._id">{{category.title}}</option>
+                    <option v-for="category in categories" :value=category._id :key="category._id">{{category.title}}</option>
                   </select>
 
                 </div>
@@ -218,14 +236,7 @@ export default {
               <div class="col-md-12">
                 <div class="form-group mb-3">
                   <label>Description<span class="text-danger">*</span></label>
-                  <textarea name="description" class="form-control" v-model="postData.description"></textarea>
-                </div>
-              </div>
-
-              <div class="col-md-12">
-                <div class="form-group mb-3">
-                  <label htmlFor="formFile" class="form-label">Image<span class="text-danger">*</span></label>
-                  <input class="form-control" name="image" @change="handleFile($event)" type="file" id="formFile">
+                  <textarea name="description" class="form-control" v-model="post.description"></textarea>
                 </div>
               </div>
 
