@@ -26,7 +26,8 @@ export const useAuthStore = defineStore('auth', {
             'categories' : [],
             'status' : 0,
             'image' : '',
-            'author' : ''
+            'author' : '',
+            'file_upload' : true,
         }),
 
         }),
@@ -128,7 +129,7 @@ export const useAuthStore = defineStore('auth', {
             axios.post(API_BASE_URL+'api/posts', post,{
                 headers: {
                     'Content-Type': 'multipart/form-data',
-                    //'Authorization': 'Bearer '+token
+                    'Authorization': 'Bearer '+this.user.token
                 }
             }).then((response) => {
                 if (response.data.status) {
@@ -142,12 +143,21 @@ export const useAuthStore = defineStore('auth', {
         updatePost(){
             axios.put(API_BASE_URL+'api/posts/'+this.post.id, this.post,{
                 headers: {
-                    'Content-Type': 'multipart/form-data',
+                    'Content-Type': this.post.file_upload ? 'multipart/form-data' : 'application/json',
                     'Authorization': 'Bearer '+this.user.token
                 }
             }).then((response) => {
                 if (response.data.status) {
-                    this.getLoginUserPost()
+                    // reset post
+                    this.post.id = '';
+                    this.post.title = '';
+                    this.post.description = '';
+                    this.post.categories = '';
+                    this.post.status = '';
+                    this.post.author = '';
+                    this.post.file_upload = true;
+                    // get updated posts
+                    this.getLoginUserPost();
                 }
             }).catch((err) => {
                 console.log(err)
@@ -168,6 +178,7 @@ export const useAuthStore = defineStore('auth', {
                     this.post.categories = this.processCategoryId(response.data.data.categories);
                     this.post.status = response.data.status == true ? 1 : 0;
                     this.post.author = response.data.data.author._id;
+                    this.post.file_upload = false;
                 }
             }).catch((err) => {
                 console.log(err)

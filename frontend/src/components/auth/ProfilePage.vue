@@ -60,6 +60,7 @@ export default {
     // handle post file
     handleFile($event){
       this.post.image = $event.target.files[0];
+      this.post.file_upload = true;
     },
     // handle post submit to save post
      handlePostSubmit(){
