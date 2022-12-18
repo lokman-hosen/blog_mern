@@ -12,7 +12,7 @@ export default {
   setup(){
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
-    const {user, userPosts, totalRecord, currentPage, categories, post} = storeToRefs(authStore);
+    const {user, userPosts, totalRecord, currentPage, categories, post, showLoading} = storeToRefs(authStore);
     const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost, resetFormValue} = authStore;
 
     const activeTab = ref('profile');
@@ -23,7 +23,7 @@ export default {
     const editMode = ref('no');
 
     return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
-      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode, resetFormValue}
+      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode, resetFormValue, showLoading}
   },
   methods:{
     // tab activation
@@ -144,9 +144,13 @@ export default {
                        :class="{ 'show active': activeTab == 'post' }"
                        id="v-pills-post" role="tabpanel" aria-labelledby="v-pills-post-tab">
                     <div class="text-right mb-3">
-                      <button class="btn btn-info" @click="openModal">Create New</button>
+                      <button class="btn btn-info" @click="openModal">Create New {{this.showLoading}}</button>
                     </div>
-                    <div v-if="userPosts.length > 0">
+                    <div v-if="this.showLoading === 'yes' ">
+                      <PageLoader></PageLoader>
+                    </div>
+
+                    <div v-else>
                       <table class="table table-bordered table-sm">
                         <thead>
                         <tr>
@@ -178,9 +182,7 @@ export default {
                       </table>
                       <PaginationPage :totalRecord="totalRecord" @change-page="changePage" :currentPage="currentPage"/>
                     </div>
-                    <div v-else>
-                      <PageLoader></PageLoader>
-                    </div>
+
                   </div>
                 </div>
               </div>
@@ -201,7 +203,7 @@ export default {
         </div>
         <form @submit.prevent="handlePostSubmit">
         <div class="modal-body" style="min-height: 25rem">
-            <div class="row" v-if="categories.length > 0">
+            <div class="row" v-if="this.showLoading == 'no'">
               <div class="col-md-6">
                 <div class="form-group mb-3">
                   <label>Title<span class="text-danger">*</span></label>

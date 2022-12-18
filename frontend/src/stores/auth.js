@@ -8,6 +8,7 @@ import {ref} from "vue";
 export const useAuthStore = defineStore('auth', {
     state: () => ({
             baseUrl: API_BASE_URL,
+            showLoading: 'yes',
             loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : 'no',
             user:ref({
                 id: localStorage.getItem('id'),
@@ -104,6 +105,7 @@ export const useAuthStore = defineStore('auth', {
             }).then(response => {
                 this.userPosts = response.data.data;
                 this.totalRecord = response.data.totalRecord;
+                this.showLoading = 'no'
             })
                 .catch(function (error) {
                     // handle error
@@ -112,12 +114,14 @@ export const useAuthStore = defineStore('auth', {
         },
 
         getCategory(){
+            this.showLoading = 'yes';
             axios.get(API_BASE_URL+'api/categories?page=all', {
                 headers: {
                     'Content-Type': 'application/json'
                 },
             }).then(response => {
                 this.categories = response.data.data;
+                this.showLoading = 'no';
             }).catch(function (error) {
                 // handle error
                 console.log(error);
@@ -161,6 +165,7 @@ export const useAuthStore = defineStore('auth', {
         },
 
         getPostById(postId){
+            this.showLoading = 'yes';
             axios.get(API_BASE_URL+'api/posts/'+postId, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
@@ -176,6 +181,8 @@ export const useAuthStore = defineStore('auth', {
                     this.post.author = response.data.data.author._id;
                     this.post.image = '';
                     this.post.file_upload = false;
+
+                    this.showLoading = 'no';
                 }
             }).catch((err) => {
                 console.log(err)
