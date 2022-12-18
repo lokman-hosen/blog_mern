@@ -42,7 +42,6 @@ export default {
     },
     // post create modal
     openModal(){
-      //this.$refs.inputFile.value = null;
       if (this.modalVisibility == 'block'){
         this.resetFormValue(this.editMode);
         this.modalVisibility = 'none';
@@ -53,6 +52,9 @@ export default {
         this.getCategory();
         this.modalVisibility = 'block';
       }
+      // reset file field
+      this.$refs.inputFile.reset()
+
     },
     // handle post file
     handleFile($event){
