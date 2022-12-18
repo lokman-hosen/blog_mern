@@ -46,9 +46,9 @@ export default {
         this.resetFormValue(this.editMode);
         this.modalVisibility = 'none';
       }else {
-        // set author and get post category list
+        // reset form values
         this.resetFormValue(this.editMode);
-          //this.post.file_upload = true;
+        // get post categories
         this.getCategory();
         this.modalVisibility = 'block';
       }
@@ -74,15 +74,6 @@ export default {
       this.editMode = 'yes'
       this.getCategory()
       this.getPostById(postId);
-      // this.post = {
-      //   'title' : this.post.title,
-      //   'description' : this.post.description,
-      //   'categories' : [],
-      //   'status' : this.post.status,
-      //   'image' : '',
-      //   'author' : JSON.stringify(this.post.author._id)
-      // }
-
       this.modalVisibility = 'block'
     }
   },
