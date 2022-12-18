@@ -7,29 +7,28 @@ import {ref} from "vue";
 
 export const useAuthStore = defineStore('auth', {
     state: () => ({
-        baseUrl: API_BASE_URL,
-        loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : 'no',
-        user:ref({
-            id: localStorage.getItem('id'),
-            name: localStorage.getItem('name'),
-            email: localStorage.getItem('email'),
-            token: localStorage.getItem('token')
+            baseUrl: API_BASE_URL,
+            loggedIn: localStorage.getItem('loggedIn') ? localStorage.getItem('loggedIn') : 'no',
+            user:ref({
+                id: localStorage.getItem('id'),
+                name: localStorage.getItem('name'),
+                email: localStorage.getItem('email'),
+                token: localStorage.getItem('token')
+                }),
+            userPosts: ref([]),
+            totalRecord: ref(0),
+            currentPage: ref(1),
+            categories: ref([]),
+            post : ref({
+                'id' : '',
+                'title' : '',
+                'description' : '',
+                'categories' : [],
+                'status' : 0,
+                'image' : '',
+                'author' : '',
+                'file_upload' : true,
             }),
-        userPosts: ref([]),
-        totalRecord: ref(0),
-        currentPage: ref(1),
-        categories: ref([]),
-        post : ref({
-            'id' : '',
-            'title' : '',
-            'description' : '',
-            'categories' : [],
-            'status' : 0,
-            'image' : '',
-            'author' : '',
-            'file_upload' : true,
-        }),
-
         }),
     getters: {
         //doubleCount: (state) => state.count * 2,
@@ -133,7 +132,10 @@ export const useAuthStore = defineStore('auth', {
                 }
             }).then((response) => {
                 if (response.data.status) {
-                   this.getLoginUserPost()
+                    // reset form value
+                    this.resetFormValue();
+                    // get updated post list
+                    this.getLoginUserPost()
                 }
             }).catch((err) => {
                 console.log(err)
@@ -149,13 +151,7 @@ export const useAuthStore = defineStore('auth', {
             }).then((response) => {
                 if (response.data.status) {
                     // reset post
-                    this.post.id = '';
-                    this.post.title = '';
-                    this.post.description = '';
-                    this.post.categories = '';
-                    this.post.status = '';
-                    this.post.author = '';
-                    this.post.file_upload = true;
+                   this.resetFormValue();
                     // get updated posts
                     this.getLoginUserPost();
                 }
@@ -176,8 +172,9 @@ export const useAuthStore = defineStore('auth', {
                     this.post.title = response.data.data.title;
                     this.post.description = response.data.data.description;
                     this.post.categories = this.processCategoryId(response.data.data.categories);
-                    this.post.status = response.data.status == true ? 1 : 0;
+                    this.post.status = response.data.data.status == 1 ? 1 : 0;
                     this.post.author = response.data.data.author._id;
+                    this.post.image = '';
                     this.post.file_upload = false;
                 }
             }).catch((err) => {
@@ -197,6 +194,18 @@ export const useAuthStore = defineStore('auth', {
         pagination (pageNumber){
             this.currentPage = pageNumber;
             this.getLoginUserPost();
+        },
+
+        // Reset form value
+        resetFormValue(editMode){
+            this.post.id = '';
+            this.post.title = '';
+            this.post.description = '';
+            this.post.categories = [];
+            this.post.status = editMode == 'no' ? 0 : this.post.status;
+            this.post.author = editMode == 'no' ? this.user.id : this.post.author;
+            this.post.image = '';
+            this.post.file_upload = true;
         }
 
     },

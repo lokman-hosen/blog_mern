@@ -5,7 +5,6 @@ import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
 import PaginationPage from "@/components/PaginationPage";
 import PageLoader from "@/components/PageLoader";
-//import {usePostStore} from "@/stores/post";
 
 export default {
   name: 'ProfilePage',
@@ -14,12 +13,7 @@ export default {
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
     const {user, userPosts, totalRecord, currentPage, categories, post} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost} = authStore;
-
-    //const postStore = usePostStore();
-    //const {post} = storeToRefs(postStore);
-   // const {getPostById} = postStore;
-
+    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost, resetFormValue} = authStore;
 
     const activeTab = ref('profile');
     const name = ref('');
@@ -29,7 +23,7 @@ export default {
     const editMode = ref('no');
 
     return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
-      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode}
+      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode, resetFormValue}
   },
   methods:{
     // tab activation
@@ -48,11 +42,14 @@ export default {
     },
     // post create modal
     openModal(){
+      //this.$refs.inputFile.value = null;
       if (this.modalVisibility == 'block'){
+        this.resetFormValue(this.editMode);
         this.modalVisibility = 'none';
       }else {
         // set author and get post category list
-        this.post.author = this.user.id;
+        this.resetFormValue(this.editMode);
+          //this.post.file_upload = true;
         this.getCategory();
         this.modalVisibility = 'block';
       }
@@ -222,7 +219,10 @@ export default {
               <div class="col-md-6">
                 <div class="form-group mb-3">
                   <label htmlFor="formFile" class="form-label">Image<span class="text-danger">*</span></label>
-                  <input class="form-control" name="image" @change="handleFile($event)" type="file" id="formFile">
+                  <input class="form-control" name="image"
+                         ref="inputFile"
+                         @change="handleFile($event)"
+                         type="file" id="formFile">
                 </div>
               </div>
 
