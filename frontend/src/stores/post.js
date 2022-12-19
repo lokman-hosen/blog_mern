@@ -4,6 +4,7 @@ import axios from "axios";
 import {API_BASE_URL} from "@/config";
 
 export const usePostStore = defineStore('post', () => {
+    const showLoading = ref('yes');
     let posts = ref([]);
     let post = ref({});
     let currentPage = ref(1);
@@ -32,6 +33,7 @@ export const usePostStore = defineStore('post', () => {
         //          post.value = currentPost;
         //      }
         // });
+        showLoading.value = 'yes';
 
         axios.get(API_BASE_URL+'api/posts/'+postId, {
             headers: {
@@ -41,6 +43,7 @@ export const usePostStore = defineStore('post', () => {
         }).then( function (response) {
             // handle success
             post.value = response.data.data;
+            showLoading.value = 'no';
 
         }).catch(function (error) {
                 // handle error
@@ -57,5 +60,5 @@ export const usePostStore = defineStore('post', () => {
         getPost();
     }
 
-    return { posts, getPost, totalRecord, pagination, currentPage, postDetail, post}
+    return { posts, getPost, totalRecord, pagination, currentPage, postDetail, post, showLoading}
 })

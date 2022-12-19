@@ -11,12 +11,13 @@ export default {
     let  baseUrl= API_BASE_URL;
     const postStore = usePostStore();
     const { postDetail } = postStore;
-    const { post, posts } = storeToRefs(postStore);
+    const { post, posts, showLoading } = storeToRefs(postStore);
     return{
       postDetail,
       post,
       baseUrl,
-      posts
+      posts,
+      showLoading
     }
   },
 
@@ -43,7 +44,7 @@ export default {
     <div class="container">
       <div class="row">
         <div class="col-lg-8">
-          <div class="row" v-if="post.title">
+          <div class="row" v-if="showLoading == 'no' ">
             <div class="col-lg-12 mb-5">
               <div class="single-blog-item">
                 <img :src="baseUrl+post.image" alt="" class="img-fluid rounded">
@@ -144,6 +145,7 @@ export default {
               </form>
             </div>
           </div>
+
           <div class="row" v-else>
             <PageLoader></PageLoader>
           </div>
@@ -180,7 +182,7 @@ export default {
             <div class="sidebar-widget latest-post card border-0 p-4 mb-3">
               <h5>Latest Posts</h5>
 
-              <template v-if="posts.length > 0">
+              <div v-if="posts.length > 0">
                 <div class="media border-bottom py-3" v-for="latestPost in posts" :key="latestPost._id">
                   <a @click="singlePost(latestPost._id)">
                     <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">
@@ -191,7 +193,7 @@ export default {
                     </div>
                   </a>
                 </div>
-              </template>
+              </div>
 
               <div v-else>
                 <PageLoader></PageLoader>
