@@ -11,7 +11,7 @@ export default {
   methods: {
       totalPages() {
        const pageNumbers = [];
-       let totalPageNumber = Number.isInteger(this.totalRecord/5) ? this.totalRecord/5 : (this.totalRecord/5 +1).toString().split(".")[0];
+       let totalPageNumber = Number.isInteger(this.totalRecord/10) ? this.totalRecord/10 : (this.totalRecord/10 +1).toString().split(".")[0];
        for (let i = 1; i <= totalPageNumber; i++) {
          pageNumbers.push(i);
       }

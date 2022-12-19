@@ -11,6 +11,7 @@ export const usePostStore = defineStore('post', () => {
     let totalRecord = ref(0);
     // get post list
     function getPost(){
+        showLoading.value = 'yes';
         axios.get(API_BASE_URL+'api/posts?page='+currentPage.value, {
             headers: {
                 'Content-Type': 'application/json',
@@ -19,6 +20,7 @@ export const usePostStore = defineStore('post', () => {
         }).then(response => {
                 posts.value = response.data.data;
                 totalRecord.value = response.data.totalRecord;
+            showLoading.value = 'no';
             })
             .catch(function (error) {
                 // handle error

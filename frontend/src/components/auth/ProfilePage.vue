@@ -88,12 +88,12 @@ export default {
 <template>
   <div class="section blog-wrap bg-gray">
 
-      <div class="container">
+      <div class="container-fluid">
         <div class="card">
           <h5 class="card-header">DashBoard: Welcome Back, {{user.name}} !!</h5>
           <div class="card-body">
             <div class="row">
-              <div class="col-3">
+              <div class="col-2">
                 <ul class="nav flex-column nav-pills border" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                   <div>
                     <img src="https://technext.github.io/megakit-2/images/blog/blog-author.jpg" class="card-img-top" alt="...">

@@ -156,7 +156,7 @@ export default {
               <img src="https://technext.github.io/megakit-2/images/blog/blog-author.jpg" alt="" class="img-fluid">
               <div class="card-body p-4 text-center">
                 <h5 class="mb-0 mt-4">{{post.author.name}}</h5>
-                <p>Blogger</p>
+                <p>Author</p>
                 <p>Email: {{post.author.email}}</p>
 
                 <ul class="list-inline author-socials">
@@ -179,26 +179,26 @@ export default {
               </div>
             </div>
 
-<!--            <div class="sidebar-widget latest-post card border-0 p-4 mb-3">-->
-<!--              <h5>Latest Posts</h5>-->
+            <div class="sidebar-widget latest-post card border-0 p-4 mb-3">
+              <h5>Latest Posts</h5>
 
-<!--              <div v-if="posts.length > 0">-->
-<!--                <div class="media border-bottom py-3" v-for="latestPost in posts" :key="latestPost._id">-->
-<!--                  <a @click="singlePost(latestPost._id)">-->
-<!--                    <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">-->
+              <div v-if="posts.length > 0">
+                <div class="media border-bottom py-3" v-for="(latestPost, index) in posts" :key="latestPost._id" >
+                  <a v-if="index <= 4" @click="singlePost(latestPost._id)">
+                    <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">
 
-<!--                    <div class="media-body">-->
-<!--                      <h6 class="my-2"><a href="#">{{latestPost.title}}</a></h6>-->
-<!--                      <span class="text-sm text-muted">{{latestPost.createdAt}}</span>-->
-<!--                    </div>-->
-<!--                  </a>-->
-<!--                </div>-->
-<!--              </div>-->
+                    <div class="media-body">
+                      <h6 class="my-2"><a href="#">{{latestPost.title}}</a></h6>
+                      <span class="text-sm text-muted">{{latestPost.createdAt}}</span>
+                    </div>
+                  </a>
+                </div>
+              </div>
 
-<!--              <div v-else>-->
-<!--                <PageLoader></PageLoader>-->
-<!--              </div>-->
-<!--            </div>-->
+              <div v-else>
+                <PageLoader></PageLoader>
+              </div>
+            </div>
 
           </div>
         </div>

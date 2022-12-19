@@ -14,7 +14,7 @@ export default {
   setup() {
     let baseUrl= API_BASE_URL;
     const postStore = usePostStore();
-    const {posts, totalRecord, currentPage} = storeToRefs(postStore);
+    const {posts, totalRecord, currentPage, showLoading} = storeToRefs(postStore);
     const { getPost, pagination } = postStore;
 
     return {
@@ -23,7 +23,8 @@ export default {
       totalRecord,
       pagination,
       currentPage,
-      baseUrl
+      baseUrl,
+      showLoading
     }
   },
   methods: {
@@ -50,7 +51,7 @@ export default {
         <div class="col-lg-8">
           <div class="row">
             <div class="col-12">
-              <template v-if="posts.length > 0">
+              <template v-if="showLoading == 'no' ">
                 <div class="card-columns">
                   <PostComponent :posts="posts" :baseUrl="baseUrl"/>
                 </div>

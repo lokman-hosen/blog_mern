@@ -97,6 +97,7 @@ export const useAuthStore = defineStore('auth', {
 
 
         getLoginUserPost(){
+            this.showLoading = 'yes';
             axios.get(API_BASE_URL+'api/posts?page='+this.currentPage+'&userId='+this.user.id, {
                 headers: {
                     'Content-Type': 'application/json',
