@@ -42,8 +42,11 @@ export const usePostStore = defineStore('post', () => {
             }
         }).then( function (response) {
             // handle success
-            post.value = response.data.data;
-            showLoading.value = 'no';
+            console.log(response.data.status)
+            if (response.data.status){
+                post.value = response.data.data;
+                showLoading.value = 'no';
+            }
 
         }).catch(function (error) {
                 // handle error

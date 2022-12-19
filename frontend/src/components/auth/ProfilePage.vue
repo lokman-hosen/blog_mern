@@ -3,8 +3,8 @@ import {ref} from "vue";
 import {useAuthStore} from "@/stores/auth";
 import {storeToRefs} from "pinia";
 import {API_BASE_URL} from "@/config";
-import PaginationPage from "@/components/PaginationPage";
-import PageLoader from "@/components/PageLoader";
+import PaginationPage from "@/components/common/PaginationPage";
+import PageLoader from "@/components/common/PageLoader";
 
 export default {
   name: 'ProfilePage',
