@@ -6,6 +6,7 @@ import {API_BASE_URL} from "@/config";
 export const usePostStore = defineStore('post', () => {
     const showLoading = ref('yes');
     let posts = ref([]);
+    let latestPosts = ref([]);
     let post = ref({});
     let currentPage = ref(1);
     let totalRecord = ref(0);
@@ -15,11 +16,30 @@ export const usePostStore = defineStore('post', () => {
         axios.get(API_BASE_URL+'api/posts?page='+currentPage.value, {
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjcwMzIwNDM3LCJleHAiOjE2NzAzMzg0Mzd9.DTF3KetVK7OltfCC3KfR0MdvUmwp0lRZLNsUoVkySAo'
+                //'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjcwMzIwNDM3LCJleHAiOjE2NzAzMzg0Mzd9.DTF3KetVK7OltfCC3KfR0MdvUmwp0lRZLNsUoVkySAo'
             },
         }).then(response => {
                 posts.value = response.data.data;
                 totalRecord.value = response.data.totalRecord;
+            showLoading.value = 'no';
+            })
+            .catch(function (error) {
+                // handle error
+                console.log(error);
+            });
+
+    }
+
+    // get latest post list
+    function getLatestPost(){
+        showLoading.value = 'yes';
+        axios.get(API_BASE_URL+'api/posts?latestPost=yes', {
+            headers: {
+                'Content-Type': 'application/json',
+                //'Authorization': 'Bearer '+'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjYzNGU3YzkzYjY1NGYzMDE0NzdhYmEwMSIsInVzZXJfdHlwZSI6ImFkbWluIiwiaWF0IjoxNjcwMzIwNDM3LCJleHAiOjE2NzAzMzg0Mzd9.DTF3KetVK7OltfCC3KfR0MdvUmwp0lRZLNsUoVkySAo'
+            },
+        }).then(response => {
+            latestPosts.value = response.data.data;
             showLoading.value = 'no';
             })
             .catch(function (error) {
@@ -65,5 +85,5 @@ export const usePostStore = defineStore('post', () => {
         getPost();
     }
 
-    return { posts, getPost, totalRecord, pagination, currentPage, postDetail, post, showLoading}
+    return { posts, getPost, totalRecord, pagination, currentPage, postDetail, post, showLoading, getLatestPost, latestPosts}
 })
