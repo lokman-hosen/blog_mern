@@ -35,7 +35,12 @@ export default {
 
   created() {
     this.getSinglePost(this.$route.params.id)
+    window.scrollTo(0,0)
   },
+  updated() {
+    // move to page top for any change
+    window.scrollTo(0,0)
+  }
 }
 </script>
 
