@@ -252,7 +252,14 @@ export const postList = async (req, res)=>{
                 {path:"categories", select:"title"}
             ]).skip(skipRecord -10).limit(10);
              totalRecord = await Post.countDocuments({author: req.query.userId});
-        }else {
+        }else if (req.query.latestPost == 'yes'){
+            // get latest 6 post
+            posts = await Post.find().sort('-createdAt').populate([
+                // take limited column from relation
+                {path:"author", select:"name email"},
+                {path:"categories", select:"title"}
+            ]).limit(6);
+        } else {
             posts = await Post.find().sort('-createdAt').populate([
                 // take limited column from relation
                 {path:"author", select:"name email"},

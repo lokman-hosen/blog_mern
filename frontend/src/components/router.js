@@ -5,9 +5,10 @@ import RegistrationPage from "@/components/auth/RegistrationPage";
 import AboutPage from "@/components/AboutPage";
 import ProfilePage from "@/components/auth/ProfilePage";
 import {createRouter, createWebHistory} from "vue-router/dist/vue-router";
+import HomePage from "@/components/HomePage";
 
 const routes = [
-    { path: '/', component: PostPage },
+    { path: '/', component: HomePage },
     { path: '/post', component: PostPage },
     { path: '/post/:id', component: PostDetailPage },
     { path: '/login', component: LoginPage },
