@@ -97,8 +97,23 @@ export const useAuthStore = defineStore('auth', {
         },
 
         updateUser(){
-            console.log(this.user)
-            axios.put(API_BASE_URL+'api/users/'+this.user.id, this.user,{
+            let user = {};
+            // update with password
+            if (this.user.password != ''){
+                 user = {
+                     name: this.user.name,
+                     email: this.user.email,
+                     password: this.user.password,
+                 }
+            }else {
+                // update without password
+                 user = {
+                    name: this.user.name,
+                    email: this.user.email,
+                }
+            }
+            console.log(user)
+            axios.put(API_BASE_URL+'api/users/'+this.user.id, user,{
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer '+this.user.token

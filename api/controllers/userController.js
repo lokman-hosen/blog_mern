@@ -17,7 +17,8 @@ export const createUser = async (req, res)=>{
 
 export const updateUser = async (req, res)=>{
     try {
-        if (req.body.password){
+        console.log(typeof(req.body.password))
+        if (typeof(req.body.password) != 'undefined' && req.body.password != ''){
             let salt = bcrypt.genSaltSync(10);
             let hash = bcrypt.hashSync(req.body.password, salt);
             req.body.password = hash
@@ -28,9 +29,12 @@ export const updateUser = async (req, res)=>{
             {$set: req.body},
              {new:true, runValidators: true}
         );
+
+        const {password, ...otherDetails} = updateUser._doc
         res.status(200).json({
+
             'status': true,
-            'data':updateUser,
+            'data':otherDetails,
         })
     }catch (error){
         res.status(500).json(error)

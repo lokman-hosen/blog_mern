@@ -141,7 +141,7 @@ export default {
                         <input name="email" type="email" v-model="user.email" class="form-control" placeholder="Email Address">
                       </div>
                       <div class="form-group">
-                        <input name="password" type="password" v-model="user.password" class="form-control" placeholder="Password">
+                        <input name="password" type="password" v-model="user.password" autocomplete="nope" class="form-control" placeholder="Password">
                       </div>
                       <button class="btn btn-main" name="submit" type="submit">Update Profile</button>
                     </form>

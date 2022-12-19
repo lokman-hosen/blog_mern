@@ -15,10 +15,10 @@ export const registration = async (req, res)=>{
         "status": 1,
     })
     try {
-        const savedCategory = await newUser.save()
+        const savedUser = await newUser.save()
         res.status(200).json({
             'status' : true,
-            'data': savedCategory,
+            'data': savedUser,
         })
     }catch (error){
         res.status(500).json(error)
