@@ -188,16 +188,18 @@ export default {
               <h5>Latest Posts</h5>
 
               <div v-if="posts.length > 0">
-                <div class="media border-bottom py-3" v-for="(latestPost, index) in posts" :key="latestPost._id" >
-                  <a v-if="index <= 4" @click="singlePost(latestPost._id)">
-                    <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">
+                <template v-for="(latestPost, index) in posts" :key="latestPost._id" >
+                  <div v-if="index <= 4" class="media border-bottom py-3">
+                    <a @click="singlePost(latestPost._id)">
+                      <img class="mr-4" :src="baseUrl+latestPost.image" width="87" height="70" alt="">
 
-                    <div class="media-body">
-                      <h6 class="my-2"><a href="#">{{latestPost.title}}</a></h6>
-                      <span class="text-sm text-muted">{{latestPost.createdAt}}</span>
-                    </div>
-                  </a>
-                </div>
+                      <div class="media-body">
+                        <h6 class="my-2"><a href="#">{{latestPost.title}} {{index}}</a></h6>
+                        <span class="text-sm text-muted">{{latestPost.createdAt}}</span>
+                      </div>
+                    </a>
+                  </div>
+                </template>
               </div>
 
               <div v-else>
@@ -214,5 +216,7 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
-
+.media:hover{
+  cursor: pointer;
+}
 </style>
