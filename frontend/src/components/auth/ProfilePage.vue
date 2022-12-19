@@ -13,17 +13,18 @@ export default {
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
     const {user, userPosts, totalRecord, currentPage, categories, post, showLoading} = storeToRefs(authStore);
-    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost, resetFormValue} = authStore;
+    const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost, resetFormValue, updateUser} = authStore;
 
     const activeTab = ref('profile');
-    const name = ref('');
-    const email = ref('');
+    //const name = ref('');
+    //const email = ref('');
     const modalVisibility = ref('none');
 
     const editMode = ref('no');
 
-    return {activeTab, user, name, email, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
-      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode, resetFormValue, showLoading}
+    return { activeTab, user, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
+      pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode,
+      resetFormValue, showLoading, updateUser}
   },
   methods:{
     // tab activation
@@ -75,6 +76,10 @@ export default {
       this.getCategory()
       this.getPostById(postId);
       this.modalVisibility = 'block'
+    },
+
+    updateUserInfo(){
+      this.updateUser()
     }
   },
   created() {
@@ -117,7 +122,9 @@ export default {
                   <div class="tab-pane fade"
                        :class="{ 'show active': activeTab == 'profile' }"
                        id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
-                    <form id="contact-form" class="contact__form" method="post" action="mail.php">
+                    <form id="contact-form" class="contact__form"
+                          @submit.prevent="updateUserInfo"
+                    >
                       <!-- form message -->
                       <div class="row">
                         <div class="col-12">
@@ -128,13 +135,13 @@ export default {
                       </div>
                       <!-- end message -->
                       <div class="form-group">
-                        <input name="name" type="text" v-model="name" class="form-control" placeholder="Your Name">
+                        <input name="name" type="text" v-model="user.name" class="form-control" placeholder="Your Name">
                       </div>
                       <div class="form-group">
-                        <input name="email" type="email" v-model="email" class="form-control" placeholder="Email Address">
+                        <input name="email" type="email" v-model="user.email" class="form-control" placeholder="Email Address">
                       </div>
                       <div class="form-group">
-                        <input name="password" type="password" class="form-control" placeholder="Password">
+                        <input name="password" type="password" v-model="user.password" class="form-control" placeholder="Password">
                       </div>
                       <button class="btn btn-main" name="submit" type="submit">Update Profile</button>
                     </form>

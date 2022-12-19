@@ -14,7 +14,8 @@ export const useAuthStore = defineStore('auth', {
                 id: localStorage.getItem('id'),
                 name: localStorage.getItem('name'),
                 email: localStorage.getItem('email'),
-                token: localStorage.getItem('token')
+                password: '',
+                token: localStorage.getItem('token'),
                 }),
             userPosts: ref([]),
             totalRecord: ref(0),
@@ -93,6 +94,29 @@ export const useAuthStore = defineStore('auth', {
             this.loggedIn = 'no';
 
             router.push("/")
+        },
+
+        updateUser(){
+            console.log(this.user)
+            axios.put(API_BASE_URL+'api/users/'+this.user.id, this.user,{
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer '+this.user.token
+                }
+            }).then((response) => {
+                if (response.data.status) {
+                   // set data to local storage
+                    localStorage.setItem('name', response.data.data.name);
+                    localStorage.setItem('email', response.data.data.email);
+
+                    // set data to local state
+                    this.user.name = response.data.data.name;
+                    this.user.email = response.data.data.email;
+                    this.user.password = '';
+                }
+            }).catch((err) => {
+                console.log(err)
+            })
         },
 
 

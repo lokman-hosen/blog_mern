@@ -1,5 +1,6 @@
 import User from "../model/User.js";
 import Category from "../model/Category.js";
+import bcrypt from "bcryptjs";
 
 export const createUser = async (req, res)=>{
     const newUser = new User(req.body)
@@ -16,6 +17,12 @@ export const createUser = async (req, res)=>{
 
 export const updateUser = async (req, res)=>{
     try {
+        if (req.body.password){
+            let salt = bcrypt.genSaltSync(10);
+            let hash = bcrypt.hashSync(req.body.password, salt);
+            req.body.password = hash
+        }
+        console.log(req.body);
         const updateUser = await User.findByIdAndUpdate(
             req.params.id,
             {$set: req.body},
