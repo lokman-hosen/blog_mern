@@ -1,6 +1,6 @@
 <script>
 import {useAuthStore} from "@/stores/auth";
-import {storeToRefs} from "pinia/dist/pinia.mjs";
+import {storeToRefs} from "pinia";
 
 export default {
   name: 'RegistrationPage',

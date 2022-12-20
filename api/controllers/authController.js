@@ -30,6 +30,20 @@ export const registration = async (req, res)=>{
 
 export const login = async (req, res)=>{
     try {
+        // if (req.body.email == ''){
+        //     res.status(500).json({
+        //         'status': false,
+        //         'email' : 'Email field is required',
+        //         'password' : '',
+        //     })
+        // }
+        // if(req.body.password == ''){
+        //     res.status(500).json({
+        //         'status': false,
+        //         'email' : '',
+        //         'password' : 'Password field is required',
+        //     })
+        // }
         const user = await User.findOne({email:req.body.email});
         if (user){
             const passwordCorrect = await bcrypt.compare(req.body.password, user.password)
