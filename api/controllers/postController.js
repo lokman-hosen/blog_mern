@@ -50,7 +50,7 @@ export const createPost = async (req, res)=>{
                 'description': req.body.description,
                 'image': fileNameFinal,
                 'author': req.body.author,
-                'categories': categoryIds,
+                'categories': '',
                 //'categories': req.body.categories,
                 'status': req.body.status,
             })

@@ -185,6 +185,8 @@ export const useAuthStore = defineStore('auth', {
                 }
             }).catch((err) => {
                 console.log(err)
+                this.validationErrors = [];
+                this.validationErrors = err.response.data.errors
             })
         },
 

@@ -12,7 +12,7 @@ export default {
   setup(){
     let baseUrl= API_BASE_URL;
     const authStore = useAuthStore();
-    const {user, userPosts, totalRecord, currentPage, categories, post, showLoading} = storeToRefs(authStore);
+    const {user, userPosts, totalRecord, currentPage, categories, post, showLoading, validationErrors} = storeToRefs(authStore);
     const {logoutUser, getLoginUserPost, pagination, getCategory, savePost, getPostById, updatePost, resetFormValue, updateUser} = authStore;
 
     const activeTab = ref('profile');
@@ -24,7 +24,7 @@ export default {
 
     return { activeTab, user, logoutUser, getLoginUserPost, userPosts, baseUrl, totalRecord, currentPage,
       pagination, modalVisibility, post, getCategory, categories, savePost, getPostById, updatePost, editMode,
-      resetFormValue, showLoading, updateUser}
+      resetFormValue, showLoading, updateUser, validationErrors}
   },
   methods:{
     // tab activation
@@ -69,7 +69,8 @@ export default {
       }else{
         this.updatePost();
       }
-      this.modalVisibility = 'none'
+
+      this.modalVisibility = 'block'
     },
     editPost(postId){
       this.editMode = 'yes'
@@ -80,7 +81,10 @@ export default {
 
     updateUserInfo(){
       this.updateUser()
-    }
+    },
+    validationMessage(message){
+      return 'The '+ message.replace(/[`"]+/g, '');
+    },
   },
   created() {
     this.name = this.user.name;
@@ -214,7 +218,17 @@ export default {
               <div class="col-md-6">
                 <div class="form-group mb-3">
                   <label>Title<span class="text-danger">*</span></label>
-                  <input type="text" name="title" v-model="post.title" class="form-control" placeholder="Enter Title">
+                  <input type="text"
+                         name="title"
+                         v-model="post.title"
+                         class="form-control"
+                         :class="{ 'is-invalid': validationErrors.title }"
+                         placeholder="Enter Title">
+                  <span v-if="validationErrors.title"
+                        id="exampleInputEmail1-error"
+                        class="error invalid-feedback">
+                       {{validationMessage(validationErrors.title.message.substring(4))}}
+                  </span>
                 </div>
               </div>
 
@@ -224,7 +238,12 @@ export default {
                   <input class="form-control" name="image"
                          ref="inputFile"
                          @change="handleFile($event)"
+                         :class="{ 'is-invalid': validationErrors.image }"
                          type="file" id="formFile">
+                  <span v-if="validationErrors.image"
+                        class="error invalid-feedback">
+                       {{validationMessage(validationErrors.image.message.substring(4))}}
+                  </span>
                 </div>
               </div>
 
@@ -245,7 +264,15 @@ export default {
               <div class="col-md-12">
                 <div class="form-group mb-3">
                   <label>Description<span class="text-danger">*</span></label>
-                  <textarea name="description" class="form-control" v-model="post.description" placeholder="Enter Description"></textarea>
+                  <textarea name="description"
+                            class="form-control"
+                            v-model="post.description"
+                            :class="{ 'is-invalid': validationErrors.description }"
+                            placeholder="Enter Description"></textarea>
+                  <span v-if="validationErrors.description"
+                        class="error invalid-feedback">
+                       {{validationMessage(validationErrors.description.message.substring(4))}}
+                  </span>
                 </div>
               </div>
 

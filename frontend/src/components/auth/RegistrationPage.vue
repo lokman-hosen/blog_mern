@@ -29,8 +29,14 @@ export default {
       <form id="contact-form" class="contact__form" @submit.prevent="handleSubmit">
         <h3 class="text-md my-4">Register Here</h3>
         <div class="form-group">
-          <input name="name" v-model="user.name" type="text" class="form-control" :class="{ 'is-invalid': validationErrors.name }" placeholder="Your Name">
-          <span v-if="validationErrors.name" id="exampleInputEmail1-error" class="error invalid-feedback">
+          <input name="name"
+                 v-model="user.name"
+                 type="text" class="form-control"
+                 :class="{ 'is-invalid': validationErrors.name }"
+                 placeholder="Your Name">
+          <span v-if="validationErrors.name"
+                id="exampleInputEmail1-error"
+                class="error invalid-feedback">
             {{validationMessage(validationErrors.name.message.substring(4))}}
           </span>
         </div>
