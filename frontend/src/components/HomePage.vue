@@ -1,10 +1,12 @@
 <script>
 import {usePostStore} from "@/stores/post";
 import {storeToRefs} from "pinia/dist/pinia";
+import {API_BASE_URL} from "@/config";
 
 export default {
   name: "HomePage",
   setup(){
+    let  baseUrl= API_BASE_URL;
     const postStore = usePostStore();
     const {getLatestPost } = postStore;
     const {showLoading, latestPosts } = storeToRefs(postStore);
@@ -12,7 +14,8 @@ export default {
     return{
       showLoading,
       getLatestPost,
-      latestPosts
+      latestPosts,
+      baseUrl
     }
   },
 
@@ -62,18 +65,16 @@ export default {
                v-for="latestPost in latestPosts" :key="latestPost._id"
           >
             <div class="card bg-transparent border-0">
-              <img src="https://themewagon.github.io/megakit-2/images/blog/2.jpg" alt="" class="img-fluid rounded">
+              <img :src="baseUrl+latestPost.image" height="238" width="350"  alt="" class="rounded">
 
               <div class="card-body mt-2">
                 <div class="blog-item-meta">
-                  <a href="#" class="text-white-50">Design<span class="ml-2 mr-2">/</span></a>
-                  <a href="#" class="text-white-50">Ui/Ux<span class="ml-2">/</span></a>
-                  <a href="#" class="text-white-50 ml-2"><i class="fa fa-user mr-2"></i>admin</a>
+                  <a href="#" class="text-white-50 ml-2"><i class="fa fa-user mr-2"></i>{{latestPost.author.name}}<span class="ml-2 mr-2">/</span></a>
+                  <a href="#" class="text-white-50"><i class="fa fa-clock mr-2"></i> {{latestPost.createdAt}}</a>
                 </div>
 
                 <h3 class="mt-3 mb-5 lh-36"><a href="#" class="text-white ">{{limitSentence(latestPost.title)}}</a></h3>
-
-                <a href="blog-single.html" class="btn btn-small btn-solid-border btn-round-full text-white">Learn More</a>
+                <router-link class="btn btn-small btn-solid-border btn-round-full text-white" :to="'post/' + latestPost._id">Read More</router-link>
               </div>
             </div>
           </div>
