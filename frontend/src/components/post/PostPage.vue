@@ -44,7 +44,7 @@ export default {
 
 
 <template>
-  <HomeBanner caption="Blog Article"/>
+  <HomeBanner caption="Our blog" title="Blog Articles" breadCamp="Our blog"></HomeBanner>
   <section class="section blog-wrap bg-gray">
     <div class="container">
       <div class="row">

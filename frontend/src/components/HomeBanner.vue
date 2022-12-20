@@ -4,12 +4,12 @@
       <div class="row">
         <div class="col-md-12">
           <div class="block text-center">
-            <span class="text-white">Our Blog</span>
-            <h1 class="text-capitalize mb-4 text-lg">{{caption}}</h1>
+            <span class="text-white">{{caption}}</span>
+            <h1 class="text-capitalize mb-4 text-lg">{{title}}</h1>
             <ul class="list-inline">
               <li class="list-inline-item"><a href="index.html" class="text-white">Home</a></li>
               <li class="list-inline-item"><span class="text-white">/</span></li>
-              <li class="list-inline-item"><a href="#" class="text-white-50">Our blog</a></li>
+              <li class="list-inline-item"><a href="#" class="text-white-50">{{breadCamp}}</a></li>
             </ul>
           </div>
         </div>
@@ -22,7 +22,9 @@
 export default {
   name: 'HomeBanner',
   props: {
-    caption: String
+    caption: String,
+    title: String,
+    breadCamp: String,
   }
 }
 </script>

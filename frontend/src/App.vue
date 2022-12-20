@@ -7,8 +7,8 @@
 </template>
 
 <script>
-import AppNavbar from "@/components/AppNavbar";
-import AppFooter from "@/components/AppFooter";
+import AppNavbar from "@/components/common/AppNavbar";
+import AppFooter from "@/components/common/AppFooter";
 
 export default {
   name: 'App',

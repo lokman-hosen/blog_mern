@@ -54,9 +54,7 @@ export default {
 
             </li>
             <router-link to="/post" class="nav-link">Blog</router-link>
-            <li class="nav-item"><a class="nav-link" href="project.html">Portfolio</a></li>
-
-            <li class="nav-item"><a class="nav-link" href="contact.html">Contact {{loggedIn}}</a></li>
+            <router-link to="/contact" class="nav-link">Contact</router-link>
             <li class="nav-item" v-if="loggedIn == 'no'">
               <router-link to="/register" class="nav-link">Register</router-link>
             </li>
@@ -70,7 +68,7 @@ export default {
           </ul>
 
           <form class="form-lg-inline my-2 my-md-0 ml-lg-4 text-center">
-            <a href="contact.html" class="btn btn-solid-border btn-round-full">Get a Quote</a>
+            <router-link to="/contact" class="btn btn-solid-border btn-round-full">Get a Quote</router-link>
           </form>
         </div>
       </div>

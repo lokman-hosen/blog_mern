@@ -6,6 +6,7 @@ import AboutPage from "@/components/AboutPage";
 import ProfilePage from "@/components/auth/ProfilePage";
 import {createRouter, createWebHistory} from "vue-router/dist/vue-router";
 import HomePage from "@/components/HomePage";
+import ContactPage from "@/components/ContactPage";
 
 const routes = [
     { path: '/', component: HomePage },
@@ -15,6 +16,7 @@ const routes = [
     { path: '/register', component: RegistrationPage },
     { path: '/about', component: AboutPage },
     { path: '/profile', component: ProfilePage },
+    { path: '/contact', component: ContactPage },
 ]
 
 const router = createRouter({
