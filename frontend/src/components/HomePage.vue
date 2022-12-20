@@ -73,7 +73,7 @@ export default {
                   <a href="#" class="text-white-50"><i class="fa fa-clock mr-2"></i> {{latestPost.createdAt}}</a>
                 </div>
 
-                <h3 class="mt-3 mb-5 lh-36"><a href="#" class="text-white ">{{limitSentence(latestPost.title)}}</a></h3>
+                <h3 class="mt-3 mb-3 lh-36"><a href="#" class="text-white ">{{limitSentence(latestPost.title)}}</a></h3>
                 <router-link class="btn btn-small btn-solid-border btn-round-full text-white" :to="'post/' + latestPost._id">Read More</router-link>
               </div>
             </div>

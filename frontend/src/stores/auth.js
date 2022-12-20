@@ -31,23 +31,25 @@ export const useAuthStore = defineStore('auth', {
                 'author' : '',
                 'file_upload' : true,
             }),
+        validationErrors: [],
         }),
     getters: {
         //doubleCount: (state) => state.count * 2,
     },
     actions: {
         // user registration
-        register(formData){
+        register(){
             axios.post(this.baseUrl+'api/auth/register', {
-                name: formData.name,
-                email: formData.email,
-                password: formData.password,
+                name: this.user.name,
+                email: this.user.email,
+                password: this.user.password,
             }).then((response) => {
                 if (response.data.status) {
                     router.push("/login")
                 }
             }).catch((err) => {
                 console.log(err)
+                this.validationErrors = err.response.data.errors
 
             })
         },
